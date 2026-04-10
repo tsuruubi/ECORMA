@@ -1,0 +1,76 @@
+---
+title: "Rename_cds_file"
+author: "Tsuru"
+date: "`r format(Sys.time(), '%Y/%m/%d')`"
+output: html_document
+---
+# General Settings
+### Library loading
+```{r library,warning=FALSE, message=FALSE}
+library(readr)
+library(dplyr)
+library(Biostrings)
+library(stringr)
+```
+### versatile user functions
+The [qw](https://ja.coder.work/so/r/240447) function in Perl.  
+The [createEmptyDf](https://htsuda.net/archives/2560) function.
+```{r functions}
+qw <- function(...) {
+  sapply(match.call()[-1], deparse)
+}
+
+createEmptyDf = function( nrow, ncol, colnames = c() ){
+  data.frame( matrix( vector(), nrow, ncol, dimnames = list( c(), colnames ) ) )
+}
+```
+
+# Format
+```{r}
+# 1. Setup metadata and directories
+my_strains <- c("11", "31", "32", "38", "50", "55", "71")
+my_meta <- data.frame(
+  strain = paste0("ECOR", my_strains),
+  faa    = paste0("ECOR", my_strains, ".faa")
+)
+
+dir_root <- dirname(getwd())
+dir_in   <- file.path(dir_root, "cds", "original")
+dir_out  <- file.path(dir_root, "cds", "renamed")
+
+# 2. Iterate through each strain for renaming
+for(i in seq_len(nrow(my_meta))){
+  my_st  <- my_meta$strain[i]
+  path_in <- file.path(dir_in, my_meta$faa[i])
+  
+  # Read FASTA file
+  my_aaset <- readAAStringSet(path_in)
+  
+  # 3. Use a tibble for cleaner string manipulation
+  my_df <- tibble(full_name = names(my_aaset)) %>%
+    mutate(
+      # Extract IDs and attributes using tidyr/stringr
+      old_id   = str_extract(full_name, "^\\S+"),
+      atrb     = str_remove(full_name, paste0("^", old_id, "\\s+")) %>% 
+                 str_remove(" \\[Escherichia coli\\]"),
+      
+      # Generate new IDs: ECORXX_cds_0001
+      new_id   = sprintf("%s_cds_%04d", my_st, row_number()),
+      
+      # Construct standardized header
+      new_header = sprintf("%s cds_id=%s;old_id=%s;old_atrb=%s;strain=%s",
+                           new_id, new_id, old_id, atrb, my_st)
+    )
+  
+  # 4. Check for ID uniqueness and forbidden characters (;)
+  if (n_distinct(my_df$old_id) == nrow(my_df) && !any(str_detect(my_df$atrb, ";"))) {
+    
+    names(my_aaset) <- my_df$new_header
+    
+    # Save the renamed FASTA
+    path_out <- file.path(dir_out, my_meta$faa[i])
+    max_len <- max(width(my_aaset))
+    writeXStringSet(my_aaset, filepath = path_out, format = "fasta", width = max_len + 1)
+  }
+}
+```

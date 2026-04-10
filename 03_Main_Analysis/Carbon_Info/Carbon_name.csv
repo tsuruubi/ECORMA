@@ -1,0 +1,33 @@
+﻿Carbon,Abb,Category
+glucose,Glc,Upper Glycolysis
+ribose,Rib,Pentose Phosphate
+maltose,Malt,Upper Glycolysis
+galactose,Gal,Upper Glycolysis
+mannose,Man,Upper Glycolysis
+trehalose,Tre,Upper Glycolysis
+lactose,Lcts,Upper Glycolysis
+melibiose,Melib,Upper Glycolysis
+fructose,Fru,Upper Glycolysis
+rhamnose,Rmn,Lower Glycolysis
+xylose,Xyl,Pentose Phosphate
+n-acetyl-d-glucosamine,GlcNAc,Upper Glycolysis
+glycerol,Gly,Lower Glycolysis
+sorbitol,Sor,Upper Glycolysis
+mannitol,Mnl,Upper Glycolysis
+gluconate,Glcn,Entner Doudoroff
+acetate,Ace,TCA cycle
+l-lactic_acid,Lac,Lower Glycolysis
+fumarate,Fum,TCA cycle
+malic_acid,Mal,TCA cycle
+succinate,Succ,TCA cycle
+citrate,Cit,TCA cycle
+pyruvate,Pyr,Lower Glycolysis
+alanine,Ala,Lower Glycolysis
+proline,Pro,Amino acid-derived TCA input
+aspartic_acid,Asp,Amino acid-derived TCA input
+glutamic_acid,Glu,Amino acid-derived TCA input
+serine,Ser,Lower Glycolysis
+threonine,Thr,Amino acid-derived TCA input
+arginine,Arg,Amino acid-derived TCA input
+histidine,His,Amino acid-derived TCA input
+lysine,Lys,Amino acid-derived TCA input

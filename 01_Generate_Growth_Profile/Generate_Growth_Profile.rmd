@@ -1,0 +1,1225 @@
+---
+title: '#Generate_Growth_Profile'
+output: html_document
+date: "2026-01-07"
+---
+# 0. General settings
+## 0.1. Library loading
+```{r,warning=FALSE, message=FALSE}
+library(tidyverse)
+library(readr)
+library(Hmisc)
+library(growthcurver)
+library(ggrepel)
+library(ggpubr)
+library(zoo) #　running median
+
+Sys.time()
+```
+## 0.2. visalization settings
+```{r}
+rep_levels <- c("rep1","rep2","rep3","rep4")
+rep_colors <- c("rep1"="#4F6D8A","rep2"="#6B8F71","rep3"="#B07D62","rep4"="#7B6D8D")
+gr_ctlg_colors<-c("Growth"="#00468BFF","Slow/Partial growth"="#0099B4FF","No growth"="#ED0000FF","Unstable"="#925E9FFF")
+
+Sys.time()
+```
+
+
+
+# 1. Common datasets between ECOR and MA
+## 1.1. Carbon sources
+```{r}
+carbon_df<-paste(getwd(),"Carbon_Info","Carbon_name.csv",sep="/") %>% read_csv() 
+Sys.time()
+```
+## 1.2. Load raw od data
+```{r, fig.height=4, fig.width=8, warning=FALSE}
+#　read data without specific carbons
+ecor_raw_growth_data <- 
+  paste(getwd(),"OD_raw_data","rawod_ecor_with_carbon.csv",sep="/") %>%
+  read_csv()
+
+ma_anc_raw_growth_data <-
+  paste(getwd(),"OD_raw_data","rawod_ma_anc_with_carbon.csv",sep="/") %>%
+  read_csv()
+
+ma_round_raw_growth_data<-
+  paste(getwd(),"OD_raw_data","rawod_ma_progeny_with_carbon.csv",sep="/") %>%
+  read_csv() 
+
+# check data
+head(ecor_raw_growth_data)
+head(ma_anc_raw_growth_data)
+head(ma_round_raw_growth_data)
+
+Sys.time()
+```
+
+
+
+# 2. ECOR
+## 2.1. fliter
+```{r}
+dat_ecor <- ecor_raw_growth_data %>%
+  mutate(
+    time = suppressWarnings(as.numeric(time)),
+    rep  = factor(rep, levels = rep_levels)
+  ) %>%
+  filter(!is.na(time), !is.na(od), !is.na(rep), !is.na(carbon), !is.na(strain)) %>%
+  filter(od > 0, !time %in% c(1, 2, 3)) %>%
+  mutate(
+    growth = od > 0.1,
+    log10_od = log10(od)
+  )
+Sys.time()
+```
+## 2.2. define a function to extract r^2 in curve fitting
+```{r}
+# Define a custom function to calculate the Coefficient of Determination (R-squared)
+# based on the model fit from growthcurver.
+calc_r2 <- function(gc) {
+  # Return NA if the model failed to converge or does not exist
+  if (is.null(gc$model)) {
+    return(NA_real_)
+  }
+  
+  # Extract observed OD values (N) from the growthcurver object
+  obs <- gc$data$N
+  
+  # Extract predicted values from the model; handle potential errors during extraction
+  pred <- tryCatch(stats::fitted(gc$model), error = function(e) NULL)
+  
+  # Ensure predicted values exist and match the length of observations
+  # Also check for non-zero variance in observations to avoid division by zero
+  if (!is.null(pred) && length(obs) == length(pred) && stats::var(obs, na.rm = TRUE) > 0) {
+    # Calculate Residual Sum of Squares (SS_res)
+    ss_res <- sum((obs - pred)^2, na.rm = TRUE)
+    # Calculate Total Sum of Squares (SS_tot)
+    ss_tot <- sum((obs - mean(obs, na.rm = TRUE))^2, na.rm = TRUE)
+    
+    # R^2 = 1 - (SS_res / SS_tot)
+    return(1 - ss_res/ss_tot)
+  } else {
+    return(NA_real_)
+  }
+}
+Sys.time()
+```
+## 2.3. execute curve fitting
+```{r}
+fit_results_ecor <- dat_ecor %>%
+  group_by(strain, carbon, rep) %>%
+  group_modify(~{
+    d <- .x %>% arrange(time)
+    n_rows <- nrow(d)
+    
+    # 1. Calculate rolling median with a 5-point window to smooth noise
+    # k=5 includes the target point and two points before/after
+    d$rolling_med <- zoo::rollmedian(d$od, k = 5, fill = "extend")
+    
+    # 2. Identify the maximum rolling median value and its corresponding time
+    max_med_val <- max(d$rolling_med, na.rm = TRUE)
+    idx_max_med <- which.max(d$rolling_med)
+    t_max_med   <- d$time[idx_max_med]
+    
+    
+    # 3. Data pruning: Find the first point that drops below 90% of the maximum rolling median
+    # Only data points after the time of maximum growth (t_max_med) are considered
+    cutoff_indices <- which(d$time > t_max_med & d$od < (max_med_val * 0.90))
+    
+    use_data <- d
+    is_death_filtered <- FALSE
+    
+    if (length(cutoff_indices) > 0) {
+      # Extract data up to the point just before dropping below the threshold
+      cutoff_idx <- min(cutoff_indices)
+      use_data <- d[1:(cutoff_idx - 1), ]
+      is_death_filtered <- TRUE
+    }
+
+    
+    # 4. Growth curve fitting using the growthcurver package
+    # Note: bg_val subtraction is handled internally by SummarizeGrowth
+    gc <- growthcurver::SummarizeGrowth(use_data$time, use_data$od)
+    
+    
+    # 5. Extract standard errors for model parameters if the fit was successful
+    se_k <- NA_real_; se_r <- NA_real_; se_n0 <- NA_real_
+    if (!is.null(gc$model)) {
+      sum_mod <- tryCatch(summary(gc$model)$coefficients, error = function(e) NULL)
+      if (!is.null(sum_mod)) {
+        # Extract SE by parameter name (k, r, n0)
+        if("k" %in% rownames(sum_mod)) se_k <- sum_mod["k", "Std. Error"]
+        if("r" %in% rownames(sum_mod)) se_r <- sum_mod["r", "Std. Error"]
+        if("n0" %in% rownames(sum_mod)) se_n0 <- sum_mod["n0", "Std. Error"]
+      }
+    }
+
+    
+    # Summarize fit parameters and metadata into a tibble
+    dplyr::tibble(
+      # Core parameters for curve reconstruction
+      k      = gc$vals$k %||% NA_real_,
+      n0     = gc$vals$n0 %||% NA_real_,
+      r      = gc$vals$r %||% NA_real_,
+      bg     = gc$vals$bg %||% 0,         # Returns 0 as internal minimum is subtracted
+      # Statistical confidence metrics
+      se_k   = se_k,
+      se_r   = se_r,
+      se_n0  = se_n0,
+      r2     = calc_r2(gc),
+      # Metadata for analysis and QC
+      t_mid  = gc$vals$t_mid %||% NA_real_,
+      t_cutoff = max(use_data$time), # Record the end time of the data used
+      is_death_filtered = (nrow(use_data) < n_rows),
+      od_max = max(.x$od, na.rm = TRUE),
+      od_min = min(.x$od, na.rm = TRUE),
+      od_ini = use_data$od[1],
+      od_max_runmed = max_med_val,
+      note   = gc$vals$note %||% NA_character_
+    )
+  })%>%
+  dplyr::ungroup()
+
+# Classify growth patterns based on OD thresholds and fit results
+fit_results_ecor <- fit_results_ecor %>%
+  dplyr::mutate(growth_category = case_when(
+    is.na(od_max) ~ "Unknown",
+    od_max <= 0.1 ~ "No growth",
+    !is.na(k) & od_max < 0.8 * k ~ "Slow/Partial growth",
+    !is.na(k) & od_max >= 0.8 * k ~ "Growth",
+    TRUE ~ "Unclassified"
+  ))
+
+Sys.time()
+
+```
+## 2.4. reconstruct theoretical datasets using estimated parameters
+```{r}
+# Generate a smooth time axis within the range of the raw data and calculate predicted OD values.
+predict_dat_ecor <- fit_results_ecor %>%
+  filter(!is.na(k), !is.na(r), !is.na(n0), !is.na(od_min)) %>%
+  group_by(strain, carbon, rep) %>%
+  # Create a time column with 0.1 increments for each group up to the cutoff point
+  reframe(time = seq(0, t_cutoff, by = 0.1),
+          k = k, n0 = n0, r = r, od_min = od_min) %>% # Carry over estimated parameters
+  # Apply the logistic growth equation using vectorized operations
+  # Formula: OD(t) = min_OD + (K * N0) / (N0 + (K - N0) * e^(-r * t))
+  mutate(
+    od_pred = od_min + (k * n0) / (n0 + (k - n0) * exp(-r * time))
+  )
+Sys.time()
+```
+## 2.5. visualize growth curve (log scale)
+```{r, fig.width=16,fig.height=16}
+my_vis<-FALSE # Set to TRUE to generate plots
+if(my_vis){
+  # Iterate through carbon sources for visualization
+  for(i in 1:nrow(carbon_df)){
+    target_carbon <- carbon_df$carbon[i]
+    my_length<-dat_ecor[dat_ecor$carbon==target_carbon,] %>% nrow()
+    if(my_length>0){
+        p<-ggplot() +
+        # Raw Data: Background points representing all replicates in gray
+        geom_point(data = dat_ecor %>% filter(carbon == target_carbon), 
+                   aes(x = time, y = od), 
+                   color = "grey50", alpha = 0.4, size = 0.5) +
+        
+        # Fitted Curves: Solid lines for each replicate model fit
+        geom_line(data = predict_dat_ecor %>% filter(carbon == target_carbon), 
+                  aes(x = time, y = od_pred, color = as.factor(rep)), 
+                  size = 0.8) +
+        
+        # Facet by strain to compare growth dynamics across different genetic backgrounds
+        facet_wrap(~ strain) +
+        
+        # Plot styling and axis labeling
+        scale_color_manual(values = rep_colors, name = "Replicate") +
+        scale_x_continuous(breaks = get_breaks(from = 0,to = 80,by = 40))+
+        labs(title = paste("Growth Fit - Carbon Source:", target_carbon),
+             subtitle = "Dots: Raw Data (Gray), Lines: Model Fits (by Rep)",
+             x = "Time (hours)", 
+             y = "OD (Absorbance)") +
+          
+        # Apply log10 transformation to the Y-axis to better visualize the exponential phase
+        yscale(.scale ="log10", .format = TRUE)+
+          
+        # Reference line at OD 0.1 for growth detection threshold
+        geom_hline(yintercept = 0.1,color="red",linetype=2)+
+        theme_pubr() +
+        theme(strip.text = element_text(face = "bold"))
+        
+        # Set fixed limits for the log-scaled Y-axis
+        p<-ggpar(p,ylim=c(0.03,1))
+        print(p)
+    }
+  }
+}
+
+
+Sys.time()
+```
+## 2.6. visualize growth curve (linear scale)
+### 2.6.1. all carbons
+```{r, fig.width=16,fig.height=16}
+my_vis <- FALSE # Set to TRUE to generate plots
+if(my_vis){
+  # 1. Loop through each carbon source for visualization
+  for(i in 1:nrow(carbon_df)){
+    target_carbon <- carbon_df$carbon[i]
+    my_length<-dat_ecor[dat_ecor$carbon==target_carbon,] %>% nrow()
+    if(my_length>0){
+        p<-ggplot() +
+        # Raw Data: Plot all replicates as light gray dots in the background
+        geom_point(data = dat_ecor %>% filter(carbon == target_carbon), 
+                   aes(x = time, y = od), 
+                   color = "grey50", alpha = 0.4, size = 0.5) +
+        
+        # Fitted Curves: Plot predicted lines colored by replicate
+        geom_line(data = predict_dat_ecor %>% filter(carbon == target_carbon), 
+                  aes(x = time, y = od_pred, color = as.factor(rep)), 
+                  size = 0.8) +
+        
+        # Create separate panels for each bacterial strain
+        facet_wrap(~ strain) +
+        
+        # Visual adjustments and labeling
+        scale_color_manual(values = rep_colors, name = "Replicate") +
+        scale_x_continuous(breaks = get_breaks(from = 0,to = 80,by = 40))+
+        labs(title = paste("Growth Fit - Carbon Source:", target_carbon),
+             subtitle = "Dots: Raw Data (Gray), Lines: Model Fits (by Rep)",
+             x = "Time (hours)", 
+             y = "OD (Absorbance)") +
+          
+        # Add a horizontal dashed line at OD = 0.1 as a growth threshold reference
+        geom_hline(yintercept = 0.1,color="red",linetype=2)+
+        scale_y_continuous(breaks = get_breaks(from = 0,to=0.8,by=0.4))+
+        theme_pubr() +
+        theme(strip.text = element_text(face = "bold")) # Bold panel titles
+        
+        # Set uniform Y-axis limits
+        p<-ggpar(p,ylim=c(0,1))
+        print(p)
+    }
+  }
+}
+
+
+Sys.time()
+```
+### 2.6.2. subset carbons
+```{r, fig.width=16,fig.height=16,dpi=300}
+# Define the subset of carbon sources to visualize
+my_cbs<-c("Glc","Succ","Lac")
+my_vis<-TRUE # TRUE
+
+if(my_vis){
+  # Iterate through carbon sources and filter for the specified subset
+  for(i in 1:nrow(carbon_df)){
+    target_carbon <- carbon_df$carbon[i]
+    
+    # Check if the current carbon source is in the target subset
+    if (length(my_cbs[my_cbs %in% target_carbon])>0){
+      my_length<-dat_ecor[dat_ecor$carbon==target_carbon,] %>% nrow()
+      if(my_length>0){
+          p<-ggplot() +
+            
+          # Raw Data: Plot all replicates as light gray points to provide context
+          geom_point(data = dat_ecor %>% filter(carbon == target_carbon), 
+                     aes(x = time, y = od), 
+                     color = "grey50", alpha = 0.4, size = 0.5) +
+          
+         # Fitted Curves: Plot predicted growth curves colored by replicate
+          geom_line(data = predict_dat_ecor %>% filter(carbon == target_carbon), 
+                    aes(x = time, y = od_pred, color = as.factor(rep)), 
+                    size = 0.8) +
+          
+          # Facet by bacterial strain for multi-panel comparison
+          facet_wrap(~ strain) +
+          
+          # Visual styling and labeling
+          scale_color_manual(values = rep_colors, name = "Replicate") +
+          scale_x_continuous(breaks = get_breaks(from = 0,to = 80,by = 40))+
+          labs(title = paste("Growth Fit - Carbon Source:", target_carbon),
+               subtitle = "Dots: Raw Data (Gray), Lines: Model Fits (by Rep)",
+               x = "Time (hours)", 
+               y = "OD (Absorbance)") +
+            
+          # Reference line for growth detection threshold
+          geom_hline(yintercept = 0.1,color="red",linetype=2)+
+          scale_y_continuous(breaks = get_breaks(from = 0,to=0.8,by=0.4))+
+          theme_pubr() +
+          theme(strip.text = element_text(face = "bold")) 
+          
+          # Fix Y-axis limits for consistent comparison across plots
+          p<-ggpar(p,ylim=c(0,1))
+          print(p)
+      }
+    }
+  }
+}
+
+
+Sys.time()
+```
+## 2.7. growth curves for each strain for each carbon
+```{r read_data, fig.height=3, fig.width=4}
+# 1. Specify the carbon source (e.g., "glucose") and strain (e.g., "ECOR01") to visualize
+target_carbon <- carbon_df$carbon[1]
+target_strain <- "ECOR01"
+
+## Filter experimental (raw) data
+df_c_ex <- dat_ecor %>% filter(carbon == target_carbon)
+df_c_ex <- df_c_ex %>% filter(strain == target_strain)
+
+## Filter theoretical (fitted) data
+df_c_th<-predict_dat_ecor %>% filter(carbon == target_carbon)
+df_c_th <- df_c_th %>% filter(strain == target_strain)
+
+# Visualization 1: Logarithmic scale (useful for observing the exponential phase)
+ggscatter(df_c_ex, x = "time", y = "od",
+          ylim=c(0.03,1),
+               color = "rep",palette = rep_colors,alpha=0.8,
+               title = paste(target_strain," on ",target_carbon,sep=""),
+               legend.title="",legend="right")+
+  geom_line(data = df_c_th, aes(x = time, y = od_pred,color = rep), size = 1)+
+  yscale("log10", .format = TRUE)+
+  scale_x_continuous(breaks = get_breaks(from=0,to=80,by=40))
+
+# Visualization 2: Linear scale (useful for observing carrying capacity and overall yield)
+ggscatter(df_c_ex, x = "time", y = "od",
+          ylim=c(0.03,1),
+               color = "rep",palette = rep_colors,alpha=0.8,
+               title = paste(target_strain," on ",target_carbon,sep=""),
+               legend.title="",legend="right")+
+  geom_line(data = df_c_th, aes(x = time, y = od_pred,color = rep), size = 1)+
+  scale_y_continuous(breaks = get_breaks(from = 0,to=0.8,by=0.4))+
+  scale_x_continuous(breaks = get_breaks(from=0,to=80,by=40))
+  
+Sys.time()
+```
+## 2.8. determine best fit
+```{r}
+best_fit_ecor <- fit_results_ecor %>%
+  dplyr::group_by(strain, carbon) %>%
+  dplyr::group_modify(~{
+    df   <- .x
+    # Identify unique growth categories present in the current group (strain x carbon)
+    cats <- unique(df$growth_category)
+
+    if (length(cats) == 1) {
+      # Case 1: All replicates share the same category.
+      # Select the representative replicate with the highest R-squared value.
+      return(df %>% dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE)) 
+    } else { 
+      # Case 2: Mixed categories within the replicates.
+      # Perform a majority vote to determine the consensus growth pattern.
+      n_growth   <- sum(df$growth_category == "Growth", na.rm = TRUE)
+      n_nogrowth <- sum(df$growth_category == "No growth", na.rm = TRUE)
+      n_partial  <- sum(df$growth_category == "Slow/Partial growth", na.rm = TRUE)
+
+      if (n_growth >= 3) {
+        # Majority is "Growth": Select the best fit among growth replicates.
+        df %>% dplyr::filter(growth_category == "Growth") %>%
+          dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE)
+      } else if (n_nogrowth >= 3) {
+        # Majority is "No growth": Select the best fit among no-growth replicates.
+        df %>% dplyr::filter(growth_category == "No growth") %>%
+          dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE)
+      } else if (n_partial >= 3) {
+        # Majority is "Slow/Partial growth": Select the best fit among partial replicates.
+        df %>% dplyr::filter(growth_category == "Slow/Partial growth") %>%
+          dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE)
+      } else { 
+        # Case 3: No clear majority (all categories < 3 reps).
+        # Mark as "Unstable" and select the replicate with the highest R-squared.
+        df %>% dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE) %>%
+          dplyr::mutate(
+            growth_category = "Unstable",
+            note = "conflicting reps (no clear majority)"
+          )
+      }
+    }
+  }) %>%
+  dplyr::ungroup()
+
+Sys.time()
+```
+## 2.9. mean and sd in mu_max and od_max
+### 2.9.1. use top two r2
+```{r}
+stat_fit_ecor <- fit_results_ecor %>%
+  # 1. Identify target replicates for aggregation within each group
+  # Criteria: Must be classified as 'Growth', have a reasonable initial OD (to exclude inoculation errors/bubbles), 
+  # and then rank them by R2 in descending order.
+  group_by(strain, carbon) %>%
+  mutate(
+    is_target = growth_category %in% c("Growth", "Slow/Partial growth") & od_ini < 0.07,
+    r2_rank = if_else(is_target, min_rank(desc(r2)), NA_integer_)
+  ) %>%
+  
+  # 2. Calculate summary statistics
+  summarise(
+    n_growth    = sum(growth_category == "Growth", na.rm = TRUE),
+    n_no_growth = sum(growth_category == "No growth", na.rm = TRUE),
+    n_partial   = sum(growth_category == "Slow/Partial growth", na.rm = TRUE),
+    n_total     = n(),
+    
+    # Store the identifiers (rep) of the selected top 2 replicates as a semicolon-separated string
+    selected_rep = paste(rep[is_target & r2_rank <= 2], collapse = "; "),
+    
+    # Compute mean, median, and SD for r and od_max using only the top 2 ranked replicates
+    across(
+      c(r, od_max, od_max_runmed),
+      list(
+        mean   = ~ mean(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        median = ~ median(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        sd     = ~ sd(.x[is_target & r2_rank <= 2], na.rm = TRUE)
+      ),
+      .names = "{.col}_{.fn}"
+    ),
+    .groups = "drop"
+  ) %>%
+  
+  # 3. Determine the consensus growth category for the strain-carbon combination
+  mutate(growth_category = case_when(
+    n_growth >= 3    ~ "Growth",
+    n_no_growth >= 3 ~ "No growth",
+    n_partial >= 3   ~ "Slow/Partial growth",
+    TRUE             ~ "Unstable"
+  )) %>%
+  
+  # 4. Handle "No growth" or missing values by replacing NaN/NA with 0
+  mutate(across(
+    matches("^(r|od_max)_(mean|median|sd)"),
+        ~ case_when(
+        n_no_growth > 2 ~ 0,           # Set to 0 if confirmed as No Growth
+        is.nan(.x)      ~ 0,           # Set to 0 if no valid replicates were found
+        is.na(.x)       ~ 0,           # Set to 0 if SD calculation resulted in NA
+        TRUE            ~ .x
+      )
+  ))
+
+# Merge with existing best-fit results for comparison
+my_tmp<-best_fit_ecor %>% select(strain,carbon,r,r2,growth_category) %>% 
+  rename(r_bh=r,r2_bh=r2,growth_category_bh=growth_category)
+
+stat_fit_ecor<-stat_fit_ecor %>% left_join(my_tmp,by=c("strain","carbon"))
+
+Sys.time()
+```
+### 2.9.2 relevance of od_ini 
+```{r,fig.width=20}
+ggviolin(fit_results_ecor,x="carbon",y="od_ini",add = "jitter",add.params = list(alpha=0.2))+
+  geom_hline(yintercept = 0.07)
+  rotate_x_text(angle = 90)
+Sys.time()
+```
+## 2.10. Heatmap of OD_max
+```{r, fig.height=6,fig.width=12,dpi=300}
+p<-ggplot(stat_fit_ecor, aes(x = strain, y = carbon, fill = od_max_mean)) +
+  geom_tile() + 
+  scale_fill_gradientn(
+    colors = c("black", "white", "#00468BFF"),
+    values = c(0, 0.0001, 1), 
+    rescaler = scales::rescale
+  )+
+  theme_pubr() + 
+  labs(
+       x = "Strain",
+       y = "Carbon sourcces",
+       fill = "OD_max")+
+  rotate_x_text(angle = 90)
+ggpar(p,legend="right")
+Sys.time()
+```
+## 2.11. Heatmap of mu_max
+```{r, fig.height=6,fig.width=12,dpi=300 }
+my_min<-stat_fit_ecor[stat_fit_ecor$r_mean!=0,]$r_mean %>% min()
+my_max<-stat_fit_ecor$r_mean %>% max()
+p<-ggplot(stat_fit_ecor, aes(x = strain, y = carbon, fill = r_mean)) +
+  geom_tile() + 
+  scale_fill_gradientn(
+    colors = c("black", "white", "#AD002AFF"),
+    values = c(0, my_min/100, 1.3),
+    rescaler = scales::rescale
+  )+
+  theme_pubr() + 
+  labs(
+       x = "Strain",
+       y = "Carbon sourcces",
+       fill = "mu_max")+
+  rotate_x_text(angle = 90)
+ggpar(p,legend="right")
+Sys.time()
+```
+## 2.12. Summary
+### 2.12.1. Strains
+```{r, fig.height=4, fig.width=12,dpi=300}
+# 1. & 2. Summarize the growth categories per strain using count and pivot_wider
+my_df <- stat_fit_ecor %>%
+  group_by(strain, growth_category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  # Spread categories into columns to handle the sorting logic
+  pivot_wider(names_from = growth_category, values_from = Count, values_fill = 0)
+
+# 3. Sort strains by the number of "Growth" cases (descending)
+# Note: Ensure "Growth" column exists even if all values are zero
+if(!"Growth" %in% colnames(my_df)) my_df$Growth <- 0
+my_levels <- my_df %>% arrange(desc(Growth)) %>% pull(strain)
+my_df$strain <- factor(my_df$strain, levels = my_levels)
+
+# 4. & 5. Reshape to long format and refine Category names/levels for plotting
+my_df <- my_df %>%
+  pivot_longer(cols = -strain, names_to = "Category", values_to = "Count") %>%
+  mutate(Category = factor(Category, 
+                           levels = c("No growth", "Growth", "Slow/Partial growth", "Unstable")))
+
+# 6. Generate a stacked bar plot showing the growth profile of each strain
+ggbarplot(my_df,x="strain",y="Count",
+          fill = "Category",linewidth=0,
+          palette = gr_ctlg_colors,
+          xlab="Strain",ylab="Number of carbon sources",
+          legend.title="Growth category")+
+  rotate_x_text(angle = 90)
+Sys.time()
+```
+### 2.12.2. Carbon sources
+```{r, fig.height=3, fig.width=7,dpi=300}
+# 1. & 2. Aggregate growth categories per carbon source using tidyverse functions
+# This replaces the manual for-loop with a more efficient grouping and pivoting approach.
+my_df <- stat_fit_ecor %>%
+  group_by(carbon, growth_category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  # Pivot to wide format to handle sorting and ensure all categories are represented
+  pivot_wider(names_from = growth_category, values_from = Count, values_fill = 0)
+
+# Ensure "Growth" column exists for sorting even if it contains no counts
+if(!"Growth" %in% colnames(my_df)) my_df$Growth <- 0
+
+# 3. Sort carbon sources based on the number of strains that successfully utilized them
+my_levels <- my_df %>% arrange(desc(Growth)) %>% pull(carbon)
+my_df$carbon <- factor(my_df$carbon, levels = my_levels)
+
+# 4. & 5. Reshape data for plotting and standardize category labels/ordering
+my_df <- my_df %>%
+  pivot_longer(cols = -carbon, names_to = "Category", values_to = "Count") %>%
+  mutate(Category = factor(Category, 
+                           levels = c("No growth", "Growth", "Slow/Partial growth", "Unstable")))
+
+# 6. Generate a stacked bar plot visualizing carbon source utilization across all strains
+ggbarplot(my_df,x="carbon",y="Count",fill = "Category",
+          linewidth=0,palette = gr_ctlg_colors,
+          xlab="Carbon sources",ylab="Number of strains",
+          legend.title="Growth category", legend="right")+
+  rotate_x_text(angle = 90)
+Sys.time()
+```
+## 2.13. No-carbon condition
+```{r,fig.height=4,fig.width=16,dpi=300}
+ctrl_ecor_df <- paste(getwd(),"OD_raw_data","rawod_ecor_without_carbon.csv",sep="/") %>% read_csv()
+plot_df<-ctrl_ecor_df %>%
+  filter(time %nin% c(1,2,3))
+g<-ggscatter(plot_df,x="time",y="od",
+             xlab="Time [hours]",ylab="OD [Absorbance]",
+             color="rep",size=0.5, alpha=0.5)+
+  geom_hline(yintercept = 0.1,color="red",linetype=2)+
+  scale_color_manual(values = rep_colors, name = "Replicate") +
+  scale_x_continuous(breaks = get_breaks(from = 0,to = 80,by = 40))+
+  scale_y_continuous(breaks = get_breaks(from = 0,to=0.8,by=0.4),limits = c(0,1))+
+  theme(strip.text = element_text(face = "bold")) 
+facet(g,facet.by = "strain",nrow = 3)
+```
+## 2.14. Sterile condition
+```{r, fig.height=3.5,fig.width=2.5, dpi=300}
+blank_df <- paste(getwd(),"OD_raw_data","rawod_without_strain.csv",sep="/") %>% read_csv()
+
+my_reps<-c("Glc","Succ","Lac")
+
+plot_df<-blank_df %>%
+  filter(time %nin% c(1,2,3)) %>%
+  filter(carbon %in% my_reps)
+g<-ggscatter(plot_df,x="time",y="od",
+             xlab="Time [hours]",ylab="OD [Absorbance]",
+             color="rep",legend="right",size=0.5, alpha=0.5)+
+  geom_hline(yintercept = 0.1,color="red",linetype=2)+
+  scale_color_manual(values = rep_colors, name = "Replicates") +
+  scale_x_continuous(breaks = get_breaks(from = 0,to = 80,by = 40))+
+  scale_y_continuous(breaks = get_breaks(from = 0,to=0.8,by=0.4),limits = c(0,1))+
+  theme(strip.text = element_text(face = "bold")) 
+facet(g,facet.by = "carbon",nrow = 3)
+```
+
+
+
+# 3. MA
+## 3.1. fliter
+```{r}
+dat_ma <-bind_rows(ma_anc_raw_growth_data,ma_round_raw_growth_data) %>%
+  filter(time %nin% c(1,2,3)) %>%
+  mutate(log10_od=log10(od)) %>%
+  mutate(rep=factor(rep, levels = rep_levels))
+Sys.time()
+```
+## 3.2. execute curve fitting
+```{r}
+# Fit growth models using SummarizeGrowth for each combination of colony, carbon source, round, and replicate
+fit_results_ma <- dat_ma %>%
+  group_by(colony, carbon, round, rep,colony_round,lineage) %>%
+  group_modify(~{
+    d <- .x %>% arrange(time)
+    n_rows <- nrow(d)
+    
+    
+    # 1. Smooth OD data using a rolling median (window size k=5)
+    # This helps mitigate high-frequency noise in the growth curve
+    d$rolling_med <- zoo::rollmedian(d$od, k = 5, fill = "extend")
+    
+    # 2. Identify the peak of the smoothed growth curve
+    max_med_val <- max(d$rolling_med, na.rm = TRUE)
+    idx_max_med <- which.max(d$rolling_med)
+    t_max_med   <- d$time[idx_max_med]
+    
+    
+    # 3. Data pruning (Cutoff determination)
+    # Identify the first point where OD drops below 90% of the rolling median maximum
+    # only considering time points after the peak (t_max_med) to avoid fitting death phases.
+    cutoff_indices <- which(d$time > t_max_med & d$od < (max_med_val * 0.90))
+    
+    use_data <- d
+    is_death_filtered <- FALSE
+    
+    if (length(cutoff_indices) > 0) {
+      # Prune dataset to keep only the growth phase up to the cutoff point
+      cutoff_idx <- min(cutoff_indices)
+      use_data <- d[1:(cutoff_idx - 1), ]
+      is_death_filtered <- TRUE
+    }
+
+    
+    # 4. Perform logistic growth curve fitting
+    gc <- growthcurver::SummarizeGrowth(use_data$time, use_data$od)
+    
+    
+    # 5. Extract standard errors (SE) for parameters k, r, and n0 if model converged
+    se_k <- NA_real_; se_r <- NA_real_; se_n0 <- NA_real_
+    if (!is.null(gc$model)) {
+      sum_mod <- tryCatch(summary(gc$model)$coefficients, error = function(e) NULL)
+      if (!is.null(sum_mod)) {
+        if("k" %in% rownames(sum_mod)) se_k <- sum_mod["k", "Std. Error"]
+        if("r" %in% rownames(sum_mod)) se_r <- sum_mod["r", "Std. Error"]
+        if("n0" %in% rownames(sum_mod)) se_n0 <- sum_mod["n0", "Std. Error"]
+      }
+    }
+
+    
+    # Consolidate parameters and analysis metadata into a tibble
+    dplyr::tibble(
+      k      = gc$vals$k %||% NA_real_,
+      n0     = gc$vals$n0 %||% NA_real_,
+      r      = gc$vals$r %||% NA_real_,
+      bg     = gc$vals$bg %||% 0,
+      se_k   = se_k,
+      se_r   = se_r,
+      se_n0  = se_n0,
+      r2     = calc_r2(gc),
+      t_mid  = gc$vals$t_mid %||% NA_real_,
+      t_cutoff = max(use_data$time),
+      is_death_filtered = (nrow(use_data) < n_rows),
+      od_max = max(.x$od, na.rm = TRUE),
+      od_min = min(.x$od, na.rm = TRUE),
+      od_ini = use_data$od[1],
+      od_max_runmed = max_med_val,
+      note   = gc$vals$note %||% NA_character_
+    )
+  })%>%
+  dplyr::ungroup()
+
+# Classify growth based on empirical OD thresholds
+fit_results_ma <- fit_results_ma %>%
+  dplyr::mutate(growth_category = case_when(
+    is.na(od_max) ~ "Unknown",
+    od_max <= 0.1 ~ "No growth",
+    !is.na(k) & od_max < 0.8 * k ~ "Slow/Partial growth",
+    !is.na(k) & od_max >= 0.8 * k ~ "Growth",
+    TRUE ~ "Unclassified"
+  )) 
+
+# Extract lineage information (Ancestors and Sublineages) from colony strings
+fit_results_ma <- fit_results_ma %>%
+  dplyr::mutate(
+    Anc = str_extract(colony, "colony[1-3]"),
+    sublineage = str_extract(colony, "(?<=_).*$") %>% as.numeric() 
+  )
+Sys.time()
+```
+## 3.3. reconstruct theoretical datasets using estimated parameters
+```{r}
+predict_dat_ma <- fit_results_ma %>%
+  filter(!is.na(k), !is.na(r), !is.na(n0), !is.na(od_min)) %>%
+  group_by(colony, carbon,round, rep,colony_round,lineage) %>%
+  reframe(time = seq(0, t_cutoff, by = 0.1),
+          k = k, n0 = n0, r = r, od_min = od_min) %>% 
+  mutate(
+    od_pred = od_min + (k * n0) / (n0 + (k - n0) * exp(-r * time))
+  )
+Sys.time()
+```
+## 3.4. visualize growth curve (log scale)
+```{r, fig.width=16,fig.height=16,dpi=300}
+my_vis<-FALSE # Set to TRUE to generate plots
+if(my_vis){
+  # Iterate through each carbon source to generate multifaceted growth plots
+  for(i in 1:nrow(carbon_df)){
+    target_carbon <- carbon_df$carbon[i]
+    my_length<-dat_ma[dat_ma$carbon==target_carbon,] %>% nrow()
+    if(my_length>0){
+        p<-ggplot() +
+        # Raw Data: Plot all replicates as light gray dots in the background to show variance
+        geom_point(data = dat_ma %>% filter(carbon == target_carbon), 
+                   aes(x = time, y = od), 
+                   color = "grey50", alpha = 0.4, size = 0.5) +
+        
+        # Fitted Curves: Plot modeled logistic curves, color-coded by replicate (rep)
+        geom_line(data = predict_dat_ma %>% filter(carbon == target_carbon), 
+                  aes(x = time, y = od_pred, color = as.factor(rep)), 
+                  size = 0.8) +
+        
+        # Facet by colony_round to compare growth across different experimental lineages/timepoints
+        facet_wrap(~ colony_round) +
+        
+        # Visual adjustments and labeling
+        scale_color_manual(values = rep_colors, name = "Replicate") +
+        scale_x_continuous(breaks = get_breaks(from = 0,to = 80,by = 40))+
+        labs(title = paste("Growth Fit - Carbon Source:", target_carbon),
+             subtitle = "Dots: Raw Data (Gray), Lines: Model Fits (by Rep)",
+             x = "Time (hours)", 
+             y = "OD (Absorbance)") +
+          
+        # Apply log10 scaling to the Y-axis for better visibility of the lag and exponential phases
+        yscale(.scale ="log10", .format = TRUE)+
+          
+        # Reference line for growth detection threshold (OD = 0.1)
+        geom_hline(yintercept = 0.1,color="red",linetype=2)+
+        theme_pubr() +
+        theme(strip.text = element_text(face = "bold"))
+        
+        # Set uniform Y-axis limits for the log scale
+        p<-ggpar(p,ylim=c(0.03,1))
+        print(p)
+    }
+  }
+}
+
+
+Sys.time()
+```
+## 3.5. visualize growth curve (linear scale)
+```{r, fig.width=16,fig.height=16,dpi=300}
+my_vis <- FALSE # Set to TRUE to generate plots
+if(my_vis){
+  # Iterate through each carbon source for visualization
+  for(i in 1:nrow(carbon_df)){
+    target_carbon <- carbon_df$carbon[i]
+    my_length<-dat_ma[dat_ma$carbon==target_carbon,] %>% nrow()
+    if(my_length>0){
+        p<-ggplot() +
+        # Raw Data: Display all replicates as light gray points to serve as a background reference
+        geom_point(data = dat_ma %>% filter(carbon == target_carbon), 
+                   aes(x = time, y = od), 
+                   color = "grey50", alpha = 0.4, size = 0.5) +
+        
+        # Fitted Curves: Draw the reconstructed growth models as solid lines, color-coded by replicate
+        geom_line(data = predict_dat_ma %>% filter(carbon == target_carbon), 
+                  aes(x = time, y = od_pred, color = as.factor(rep)), 
+                  size = 0.8) +
+        
+        # Facet by experimental unit (colony_round)
+        facet_wrap(~ colony_round) +
+        
+        # Visual styling and labeling
+        scale_color_manual(values = rep_colors, name = "Replicate") +
+        scale_x_continuous(breaks = get_breaks(from = 0,to = 80,by = 40))+
+        labs(title = paste("Growth Fit - Carbon Source:", target_carbon),
+             subtitle = "Dots: Raw Data (Gray), Lines: Model Fits (by Rep)",
+             x = "Time (hours)", 
+             y = "OD (Absorbance)") +
+        
+        # Threshold line: Reference for growth (OD = 0.1)
+        geom_hline(yintercept = 0.1,color="red",linetype=2)+
+        scale_y_continuous(breaks = get_breaks(from = 0,to=0.8,by=0.4))+
+        theme_pubr() +
+        theme(strip.text = element_text(face = "bold")) 
+        
+        # Apply uniform plot parameters including Y-axis limits
+        p<-ggpar(p,ylim=c(0,1))
+        print(p)
+    }
+  }
+}
+
+
+Sys.time()
+```
+## 3.6. growth curves for each strain for each carbon
+```{r read_data, fig.height=3, fig.width=4,dpi=300}
+# 1. Specify the target carbon source (e.g., "Glc") and sample (e.g., "colony1_1@4")
+target_carbon <- carbon_df$carbon[12]
+target_lineage_round <- "colony1_1@4"
+
+## Filter experimental (raw) data for the specific sample and carbon source
+df_c_ex <- dat_ma %>% filter(carbon == target_carbon)
+df_c_ex <- df_c_ex %>% filter(colony_round == target_lineage_round)
+
+## Filter theoretical (fitted) data for the specific sample and carbon source
+df_c_th<-predict_dat_ma %>% filter(carbon == target_carbon)
+df_c_th <- df_c_th %>% filter(colony_round == target_lineage_round)
+
+# Visualization 1: Logarithmic scale
+# Ideal for inspecting the exponential growth phase and lag time duration.
+ggscatter(df_c_ex, x = "time", y = "od",
+          xlim=c(0,40),
+          ylim=c(0.03,1),
+               color = "rep",palette = rep_colors,alpha=0.8,size=0.3,
+               title = paste(target_lineage_round," on ",target_carbon,sep=""),
+               legend.title="",legend="right")+
+  geom_line(data = df_c_th, aes(x = time, y = od_pred,color = rep), size = 0.3)+
+  yscale("log10", .format = TRUE)+
+  scale_x_continuous(breaks = get_breaks(from=0,to=80,by=40))
+
+# Visualization 2: Linear scale
+# Useful for visualizing the final biomass yield (carrying capacity) and overall curve shape.
+ggscatter(df_c_ex, x = "time", y = "od",
+          ylim=c(0.03,1),
+               color = "rep",palette = rep_colors,alpha=0.8,
+               title = paste(target_lineage_round," on ",target_carbon,sep=""),
+               legend.title="",legend="right")+
+  geom_line(data = df_c_th, aes(x = time, y = od_pred,color = rep), size = 1)+
+  scale_y_continuous(breaks = get_breaks(from = 0,to=0.8,by=0.4))+
+  scale_x_continuous(breaks = get_breaks(from=0,to=80,by=40))
+  
+Sys.time()
+```
+## 3.7. determine best fit
+```{r}
+best_fit_ma <- fit_results_ma %>%
+  # Grouping by experimental units: colony, carbon source, and evolution round
+  dplyr::group_by(colony, carbon, round, colony_round,lineage) %>%
+  dplyr::group_modify(~{
+    df   <- .x
+    # Identify unique growth categories observed across replicates for this group
+    cats <- unique(df$growth_category)
+
+    if (length(cats) == 1) {
+      # Case 1: All replicates are consistent in their growth category.
+      # Select the best representative replicate based on the highest R-squared value.
+      return(df %>% dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE)) 
+    } else { 
+      # Case 2: Inconsistent results across replicates (mixed categories).
+      # Determine the consensus category via a majority vote (requires at least 3 reps).
+      n_growth   <- sum(df$growth_category == "Growth", na.rm = TRUE)
+      n_nogrowth <- sum(df$growth_category == "No growth", na.rm = TRUE)
+      n_partial  <- sum(df$growth_category == "Slow/Partial growth", na.rm = TRUE)
+
+      if (n_growth >= 3) {
+        # Majority is "Growth": Filter for growth replicates and pick the best fit.
+        df %>% dplyr::filter(growth_category == "Growth") %>%
+          dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE)
+      } else if (n_nogrowth >= 3) { 
+        # Majority is "No growth": Select the best fit among no-growth replicates.
+        df %>% dplyr::filter(growth_category == "No growth") %>%
+          dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE)
+      } else if (n_partial >= 3) { 
+        # Majority is "Slow/Partial growth": Select the best fit among partial replicates.
+        df %>% dplyr::filter(growth_category == "Slow/Partial growth") %>%
+          dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE)
+      } else {
+        # Case 3: No clear majority exists (e.g., highly variable results).
+        # Label the group as "Unstable" and select the replicate with the highest R-squared.
+        df %>% dplyr::slice_max(order_by = r2, n = 1, with_ties = FALSE) %>%
+          dplyr::mutate(
+            growth_category = "Unstable",
+            note = "conflicting reps (no clear majority)"
+          )
+      }
+    }
+  }) %>%
+  dplyr::ungroup()
+
+Sys.time()
+```
+## 3.8. mean and sd in mu_max and od_max
+### 3.8.1. use top two r2
+```{r}
+stat_fit_ma <- fit_results_ma %>%
+  # 1. Identify target replicates for statistical calculation within each group
+  # Criteria: Must show growth/partial growth and have a valid initial OD (excludes errors).
+  # Replicates are then ranked by R-squared in descending order.
+  group_by(colony, carbon, round, colony_round,lineage) %>%
+  mutate(
+    is_target = growth_category %in% c("Growth", "Slow/Partial growth") & od_ini < 0.07, 
+    r2_rank = if_else(is_target, min_rank(desc(r2)), NA_integer_)
+  ) %>%
+  
+  # 2. Aggregation and statistical summary
+  summarise(
+    n_growth    = sum(growth_category == "Growth", na.rm = TRUE),
+    n_no_growth = sum(growth_category == "No growth", na.rm = TRUE),
+    n_partial   = sum(growth_category == "Slow/Partial growth", na.rm = TRUE),
+    n_total     = n(),
+    
+    # Concatenate the identifiers of the selected top 2 replicates
+    selected_rep = paste(rep[is_target & r2_rank <= 2], collapse = "; "),
+    
+    # Calculate mean, median, and SD for key parameters using only the top 2 replicates
+    across(
+      c(r, od_max, od_max_runmed),
+      list(
+        mean   = ~ mean(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        median = ~ median(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        sd     = ~ sd(.x[is_target & r2_rank <= 2], na.rm = TRUE)
+      ),
+      .names = "{.col}_{.fn}"
+    ),
+    .groups = "drop"
+  ) %>%
+  
+  # 3. Determine consensus growth category for the entire group
+  mutate(growth_category = case_when(
+    n_growth >= 3    ~ "Growth",
+    n_no_growth >= 3 ~ "No growth",
+    n_partial >= 3   ~ "Slow/Partial growth",
+    TRUE             ~ "Unstable"
+  )) %>%
+  
+  # 4. Handle "No growth" or non-calculable cases by zeroing out parameters
+  mutate(across(
+    matches("^(r|od_max)_(mean|median|sd)"),
+        ~ case_when(
+        n_no_growth > 2 ~ 0,           
+        is.nan(.x)      ~ 0,           
+        is.na(.x)       ~ 0,           
+        TRUE            ~ .x
+      )
+  ))
+
+# Merge with best-fit data and organize lineage metadata
+my_tmp<-best_fit_ma %>% select(colony_round,carbon,r,r2,growth_category) %>% 
+  rename(r_bh=r,r2_bh=r2,growth_category_bh=growth_category)
+
+stat_fit_ma<-stat_fit_ma %>% 
+  left_join(my_tmp,by=c("colony_round","carbon")) %>%
+  # 5. Extract and sort lineage information for logical ordering in plots
+  mutate(
+    Anc = str_extract(colony, "colony[1-3]"), # 冒頭3文字を抽出
+    sublineage = str_extract(colony, "(?<=_).*$") %>% as.numeric() # _以降を数値として抽出
+  ) %>%
+  # Sort by Ancestor, then Sublineage, then Evolution Round
+  arrange(Anc, sublineage, round) %>%
+  # Fix factor levels for 'colony_round' based on the sorted order
+  mutate(
+    colony_round = factor(colony_round, levels = unique(colony_round))
+  )
+
+
+
+Sys.time()
+```
+### 3.8.2 relevance of od_ini 
+```{r,fig.width=20}
+ggviolin(fit_results_ma,x="carbon",y="od_ini",add = "jitter",add.params = list(alpha=0.2))+
+  geom_hline(yintercept = 0.07)
+  rotate_x_text(angle = 90)
+Sys.time()
+```
+## 3.9. Heatmap of OD_max
+```{r, fig.height=6,fig.width=18,dpi=300}
+p<-ggplot(stat_fit_ma, aes(x = colony_round, y = carbon, fill = od_max_mean)) +
+  geom_tile() +
+  scale_fill_gradientn(
+    colors = c("black", "white", "#00468BFF"),
+    values = c(0, 0.0001, 1), 
+    rescaler = scales::rescale
+  )+
+  theme_pubr() + 
+  labs(
+       x = "Colony@Round",
+       y = "Carbon sourcces",
+       fill = "OD_max")+
+  rotate_x_text(angle = 90)
+ggpar(p,legend="right")
+
+Sys.time()
+```
+## 3.10. Heatmap of mu_max
+```{r, fig.height=6,fig.width=18,dpi=300}
+my_min<-stat_fit_ma[stat_fit_ma$r_mean!=0,]$r_mean %>% min()
+my_max<-stat_fit_ma$r_mean %>% max()
+g<-ggplot(stat_fit_ma, aes(x = colony_round, y = carbon, fill = r_mean)) +
+  geom_tile() + 
+  scale_fill_gradientn(
+    colors = c("black", "white", "#AD002AFF"),
+    values = c(0, my_min/100, 1), 
+    rescaler = scales::rescale
+  )+
+  theme_pubr() + 
+  labs(
+       x = "Colony@Round",
+       y = "Carbon sourcces",
+       fill = "mu_max")+
+  rotate_x_text(angle = 90)
+ggpar(g,legend="right")
+
+
+Sys.time()
+```
+## 3.11. Summary
+### 3.11.1. Colony-Round
+```{r, fig.height=4, fig.width=16,dpi=300}
+# 1. & 2. Aggregate growth categories per colony_round using tidyverse functions
+# This approach is faster and more scalable than manual looping.
+my_df <- stat_fit_ma %>%
+  group_by(colony_round, growth_category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  # Pivot to wide format to handle potential missing categories and maintain consistency
+  pivot_wider(names_from = growth_category, values_from = Count, values_fill = 0)
+
+# 3. Preserve the pre-defined factor levels of colony_round
+# (Assumes stat_fit_ma was already sorted by Anc/sublineage/round in the previous step)
+my_levels <- levels(stat_fit_ma$colony_round)
+my_df$colony_round <- factor(my_df$colony_round, levels = my_levels)
+
+# 4. & 5. Reshape to long format and standardize category names/levels for the legend
+my_df <- my_df %>%
+  pivot_longer(cols = -colony_round, names_to = "Category", values_to = "Count") %>%
+  mutate(Category = factor(Category, 
+                           levels = c("No growth", "Growth", "Slow/Partial growth", "Unstable")))
+
+# 6. Generate a stacked bar plot to visualize the metabolic profile of each evolutionary timepoint
+ggbarplot(my_df, x = "colony_round", y = "Count",
+          fill = "Category", linewidth = 0,
+          palette = gr_ctlg_colors,
+          xlab = "Colony @ Round", ylab = "Number of carbon sources",
+          legend.title = "Growth category") +
+  rotate_x_text(angle = 90)
+
+Sys.time()
+```
+### 3.11.2. Carbon sources
+```{r, fig.height=4, fig.width=8,dpi=300}
+# 1. & 2. Aggregate growth categories per carbon source across all evolutionary lineages
+# Using group_by and n() is more efficient and readable than a manual for-loop.
+my_df <- stat_fit_ma %>%
+  group_by(carbon, growth_category) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  # Pivot to wide format to simplify the sorting logic and ensure consistency
+  pivot_wider(names_from = growth_category, values_from = Count, values_fill = 0)
+
+# 3. Sort carbon sources based on the total number of "Growth" observations
+# Ensure the "Growth" column exists to avoid errors in the ordering process
+if(!"Growth" %in% colnames(my_df)) my_df$Growth <- 0
+my_levels <- my_df %>% arrange(desc(Growth)) %>% pull(carbon)
+my_df$carbon <- factor(my_df$carbon, levels = my_levels)
+
+# 4. & 5. Reshape to long format and standardize category names for plotting
+my_df <- my_df %>%
+  pivot_longer(cols = -carbon, names_to = "Category", values_to = "Count") %>%
+  mutate(Category = factor(Category, 
+                           levels = c("No growth", "Growth", "Slow/Partial growth", "Unstable")))
+
+# 6. Generate a stacked bar plot to compare carbon source utilization across lineages
+ggbarplot(my_df, x = "carbon", y = "Count", 
+          fill = "Category", linewidth = 0,
+          palette = gr_ctlg_colors,
+          xlab = "Carbon sources", ylab = "Number of lineages",
+          legend.title = "Growth category", legend = "right") +
+  rotate_x_text(angle = 90)
+
+Sys.time()
+```
+## 3.12. No-carbon condition
+```{r,fig.height=10,fig.width=12}
+ctrl_ma_df <- paste(getwd(),"OD_raw_data","rawod_ma_without_carbon.csv",sep="/") %>% read_csv()
+plot_df<-ctrl_ma_df %>%
+  filter(time %nin% c(1,2,3)) %>%
+  arrange(colony, round) %>%
+  mutate(colony_round = factor(colony_round, levels = unique(colony_round)))
+g<-ggscatter(plot_df,x="time",y="od",
+             xlab="Time [hours]",ylab="OD [Absorbance]",
+             color="rep",size=0.5, alpha=0.5)+
+  geom_hline(yintercept = 0.1,color="red",linetype=2)+
+  scale_color_manual(values = rep_colors, name = "Replicate") +
+  scale_x_continuous(breaks = get_breaks(from = 0,to = 80,by = 40))+
+  scale_y_continuous(breaks = get_breaks(from = 0,to=0.8,by=0.4),limits = c(0,1))+
+  theme(strip.text = element_text(face = "bold")) 
+facet(g,facet.by = "colony_round")
+```
+
+
+
+# 4. Output
+## 4.1. ECOR
+```{r}
+# Raw od data
+# individual cultures
+my_out_dat<-fit_results_ecor %>%
+  rename(Abb=carbon)
+my_out_dir<-paste(getwd(),"Output","fit_results_ecor.csv",sep="/")
+# write_csv(x = my_out_dat,file = my_out_dir)
+
+# stats
+my_out_dat<-stat_fit_ecor %>%
+  rename(Abb=carbon)
+my_out_dir<-paste(getwd(),"Output","stat_fit_ecor.csv",sep="/")
+# write_csv(x = my_out_dat,file = my_out_dir)
+Sys.time()
+```
+## 4.2. MA
+```{r}
+# Raw od data
+
+# individual cultures
+my_out_dat<-fit_results_ma %>%
+  select(Anc,sublineage,lineage,colony,round,colony_round,rep,everything()) %>%
+  rename(Abb=carbon)
+my_out_dir<-paste(getwd(),"Output","fit_results_ma.csv",sep="/")
+# write_csv(x = my_out_dat,file = my_out_dir)
+
+# stats
+my_out_dat<-stat_fit_ma %>%
+  select(Anc,sublineage,lineage,colony,round,colony_round,everything()) %>%
+  rename(Abb=carbon)
+my_out_dir<-paste(getwd(),"Output","stat_fit_ma.csv",sep="/")
+# write_csv(x = my_out_dat,file = my_out_dir)
+Sys.time()
+```
+
+
+
+# Check
+```{r}
+# my_new_ecor_df<-paste(getwd(),"Output","stat_fit_ecor.csv",sep="/") %>% read_csv()
+# my_new_ecor_df<-my_new_ecor_df %>% select(strain,Abb,r_mean) %>%
+#   rename(r_mean_new=r_mean)
+# my_old_ecor_df<-paste(getwd(),"Old","stat_fit_ecor.csv",sep="/") %>% read_csv()
+# my_old_ecor_df<-my_old_ecor_df %>% select(strain,Abb,r_mean) %>%
+#   rename(r_mean_old=r_mean) 
+# my_ecor_df<-my_new_ecor_df %>% left_join(my_old_ecor_df,by=c("strain","Abb"))
+# 
+# ggscatter(my_ecor_df,x="r_mean_new",y="r_mean_old",size=0.4,alpha=0.2)+
+#   geom_abline(slope = 1,intercept = 0,color="red")
+# 
+# my_new_ma_df<-paste(getwd(),"Output","stat_fit_ma.csv",sep="/") %>% read_csv()
+# my_new_ma_df<-my_new_ma_df %>% select(colony_round,Abb,r_mean) %>%
+#   rename(r_mean_new=r_mean)
+# my_old_ma_df<-paste(getwd(),"Old","stat_fit_ma_sel.csv",sep="/") %>% read_csv()
+# my_old_ma_df<-my_old_ma_df %>% select(colony_round,Abb,r_mean) %>%
+#   rename(r_mean_old=r_mean) %>%
+#   mutate(colony_round=str_remove(string = colony_round,pattern = "\\(Anc\\)"))
+# my_ma_df<-my_new_ma_df %>% left_join(my_old_ma_df,by=c("colony_round","Abb"))
+# 
+# ggscatter(my_ma_df,x="r_mean_new",y="r_mean_old",size=0.4,alpha=0.2)+
+#   geom_abline(slope = 1,intercept = 0,color="red")
+```
+

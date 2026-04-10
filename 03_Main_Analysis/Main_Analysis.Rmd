@@ -1,0 +1,3134 @@
+---
+title: "Growth among carbons"
+author: "tsuru"
+date: "2025-12-15"
+output: html_document
+---
+# 0 Initial settings 
+## 0.1 Load R packages
+```{r setup1}
+library(magrittr)
+library(dendextend)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+library(matrixStats)
+library(Hmisc)
+library(readr)
+library(readxl)
+library(circlize) # colorRamp2
+library(gplots) # heatmap.2
+library(corrplot) # cor.mtest
+library(rstatix)
+library(pheatmap)
+library(RColorBrewer)
+library(dendextend)
+library(reshape2) # melt
+library(patchwork)
+
+library(ggtree) # phylogenetic tree
+library(ape) # phylogenetic tree
+
+library(geomorph) # physignal (kmult)
+library(phytools) # Pagel's lambda
+
+library(factoextra) # biplot in pca
+
+
+library(psych) # pairs.panels
+
+# library(ade4) # プロクラステス分析用（オプション）
+
+library(scales) #
+
+library(VennDiagram)
+# options(VennDiagramKeepLogFile = FALSE)
+Sys.time()
+
+```
+## 0.2 Define generic functions
+```{r setup2}
+# Helper function to quote arguments (similar to Perl's qw)
+qw <- function(...) {
+  sapply(match.call()[-1], deparse)
+}
+
+# Create an empty data frame with specified dimensions and column names
+createEmptyDf = function( nrow, ncol, colnames = c() ){
+  data.frame( matrix( vector(), nrow, ncol, dimnames = list( c(), colnames ) ) )
+}
+
+# Generate a distance dataframe from a distance matrix and a label
+make_dist_dataframe<-function(fn_dist,fn_name){ # distance matrix, name tag
+  fn_cbs<-attr(fn_dist, "Labels") # Extract labels from the distance matrix
+  fn_cbpairs<-carbon_pairs %>% select(carbon1,carbon2,key) # Select key columns from the reference carbon_pairs dataframe
+  fn_tmp1<-dist_long(fn_dist) # Transform distance matrix to long format
+  fn_tmp2<-data.frame(rows=fn_cbs,cols=fn_cbs,distance=0) # Create self-to-self distance (distance = 0)
+  fn_tmp3<-fn_tmp1 %>% select(cols,rows,distance) %>% rename(rows="cols",cols="rows") # Create mirrored pairs to ensure bidirectional coverage
+  fn_tmp<-bind_rows(fn_tmp1,fn_tmp2,fn_tmp3) # Combine all distance entries
+  # fn_tmp<-bind_rows(fn_tmp,fn_tmp3) # Combine all distance entries
+  colnames(fn_tmp)<-c("carbon1","carbon2",paste("dist",fn_name,sep="_"))
+  fn_cbpairs<-left_join(fn_cbpairs,fn_tmp,by=c("carbon1","carbon2")) # Join with the reference dataframe
+  return(fn_cbpairs)
+}
+
+# Generate ggplot2-style colors using HCL scales
+ggColorHue <- function(n, l=65) {
+  hues <- seq(15, 375, length=n+1)
+  hcl(h=hues, l=l, c=100)[1:n]
+}
+
+# Calculate distance based on Spearman's rank correlation (1 - rho)
+spearman_dist <- function(x) {
+  # Use 1 - correlation as distance
+  as.dist(1 - cor(x, method = "spearman", use = "pairwise.complete.obs"))
+}
+
+Sys.time()
+```
+## 0.3 Color palette
+```{r setup3}
+# Standard palettes (Lancet, Blues, Reds)
+mycolpal<-get_palette("lancet",9)
+print(c("#00468BFF","#ED0000FF","#42B540FF","#0099B4FF","#925E9FFF","#FDAF91FF","#AD002AFF","#ADB6B6FF","#1B1919FF"))
+
+# Diverging Blue-Red palette
+mycolpal.BuRd<-c(get_palette(palette = "Blues", 4)[2:4],get_palette(palette = "Reds", 4)[2:4])
+print(c("#FEE5D9","#FCAE91","#FB6A4A","#CB181D"))
+print(c("#EFF3FF","#BDD7E7","#6BAED6","#2171B5"))
+
+# Color-blind friendly palette
+cbbPalette <- c("#0072B2", "#E69F00", "#56B4E9", "#009E73", "#CC79A7","#000000","#8FD926", "#D55E00")
+
+# Phylogenetic group palette
+ggpltPalette<-c("#F8766D","#00BFC4","#7CAE00","#C77CFF")
+pgPalette<-ggColorHue(n=7)
+names(pgPalette)<-qw(A,B1,B2,C,D,E,F)
+
+Sys.time()
+```
+## 0.4 Permutation test settings
+```{r setup4}
+# Set the scale of iterations for the permutation test
+iteration_scale <- "small" 
+
+# For publication-quality results, uncomment the following line.
+# Note: Processing large datasets may take over 60 minutes.
+# iteration_scale <- "large"
+Sys.time()
+```
+
+
+
+# 1 Carbon sources
+## 1.1 Load carbon source metadata and define categories
+```{r Carbon1}
+# Define metabolic categories
+carbon_categories<-c("Upper Glycolysis","Lower Glycolysis","Pentose Phosphate","TCA cycle","Entner Doudoroff","Amino acid-derived TCA input")
+# Load carbon source mapping (Abbreviations and Categories)
+carbon_names<-paste(getwd(),"Carbon_Info","Carbon_name.csv",sep="/") %>% read_csv()
+# Assign colors to each metabolic category using a named vector for efficiency
+category_colors <- c(
+  "Upper Glycolysis" = "#0072B2",
+  "Lower Glycolysis" = "#E69F00",
+  "Pentose Phosphate" = "#56B4E9",
+  "TCA cycle" = "#009E73",
+  "Entner Doudoroff" = "#CC79A7",
+  "Amino acid-derived TCA input" = "#8FD926"
+)
+
+# Map category colors back to the main dataframe
+carbon_names$Category_col <- category_colors[carbon_names$Category]
+
+# Generate all possible carbon source pairs for matrix operations
+# upper triangle (pairwise combinations)
+df_upper <- combn(carbon_names$Abb, 2) %>% t() %>% as.data.frame()
+colnames(df_upper) <- qw(carbon1, carbon2)
+df_upper$key <- "upper"
+
+# diagonal (self-to-self)
+df_diag <- data.frame(carbon1 = carbon_names$Abb, carbon2 = carbon_names$Abb, key = "diag")
+
+# lower triangle (mirrored)
+df_lower <- df_upper %>% rename(carbon1 = "carbon2", carbon2 = "carbon1")
+df_lower$key <- "lower"
+
+# Combine into a comprehensive pairs dataframe
+carbon_pairs_pre <- bind_rows(df_upper, df_diag, df_lower)
+
+# Join category information for both carbons in a pair
+carbon_pairs_pre <- carbon_pairs_pre %>%
+  left_join(carbon_names %>% select(carbon1 = Abb, category1 = Category), by = "carbon1") %>%
+  left_join(carbon_names %>% select(carbon2 = Abb, category2 = Category), by = "carbon2")
+
+# Determine if the pair belongs to the same category or is a "between-category" pair
+carbon_pairs_pre <- carbon_pairs_pre %>%
+  mutate(pair_category = ifelse(category1 == category2, category1, "between"))
+
+# Assign colors to the pair categories
+carbon_pairs_pre <- carbon_pairs_pre %>%
+  left_join(
+    data.frame(pair_category = c(names(category_colors), "between"),
+               category_col = c(as.character(category_colors), "black")),
+    by = "pair_category"
+  )
+
+Sys.time()
+```
+## 1.2 Load essential reactions defined by genome-scale metabolic models (GEMs)
+```{r carbon2, fig.height=8,fig.width=10, dpi=300}
+# Function to read essential reaction data and calculate pairwise distances
+calculate_gem_distances <- function(csv_filename, strain_id) {
+  # Load mapping for carbon abbreviations
+  carbon_map <- read_csv(file.path(getwd(), "FBA","growth_media", "Abb_carbon.csv"))
+  
+  # Load essential reaction list for the specific strain
+  ess_data <- read_csv(file.path(getwd(), "FBA", "output", "essential_by_species", csv_filename))
+  
+  # Join with mapping and filter out unassigned carbons
+  ess_data <- ess_data %>%
+    left_join(carbon_map, by = "carbon") %>%
+    filter(!is.na(Abb))
+  
+  # Identify unique reactions and carbons
+  unique_reactions <- unique(ess_data$reaction_id)
+  unique_carbons <- unique(ess_data$Abb)
+  
+  # Create a binary matrix (Carbon x Reaction)
+  # Initialize with zeros
+  binary_mat <- matrix(0, 
+                       nrow = length(unique_carbons), 
+                       ncol = length(unique_reactions),
+                       dimnames = list(unique_carbons, unique_reactions))
+  
+  # Fill the matrix: Set 1 if the reaction is essential for that carbon source
+  for (carbon in unique_carbons) {
+    active_rxns <- ess_data$reaction_id[ess_data$Abb == carbon]
+    binary_mat[carbon, colnames(binary_mat) %in% active_rxns] <- 1
+  }
+  
+  # Calculate pairwise Manhattan distances between carbon sources
+  dist_mat <- as.matrix(dist(binary_mat, method = "manhattan"))
+  
+  # Convert to long format for easier merging
+  dist_df <- reshape2::melt(dist_mat)
+  colnames(dist_df) <- c("carbon1", "carbon2", paste0("rxndiff_", strain_id))
+  
+  return(dist_df)
+}
+
+# Define filenames and corresponding strain names
+model_files <- c("iML1515__essential_only.csv", "ECOR11__essential_only.csv",
+                 "ECOR31__essential_only.csv", "ECOR32__essential_only.csv",
+                 "ECOR38__essential_only.csv", "ECOR50__essential_only.csv",
+                 "ECOR55__essential_only.csv", "ECOR71__essential_only.csv")
+
+strain_names <- c("MG1655", "ECOR11", "ECOR31", "ECOR32", "ECOR38", "ECOR50", "ECOR55", "ECOR71")
+
+# Iteratively load data and merge into a single dataframe
+combined_dist_df <- NULL
+
+for (i in seq_along(model_files)) {
+  temp_dist <- calculate_gem_distances(model_files[i], strain_names[i])
+  
+  if (is.null(combined_dist_df)) {
+    combined_dist_df <- temp_dist
+  } else {
+    combined_dist_df <- left_join(combined_dist_df, temp_dist, by = c("carbon1", "carbon2"))
+  }
+}
+
+# Calculate median distance across all models (excluding the reference MG1655)
+# This provides a robust representative metabolic distance
+median_calculation_df <- combined_dist_df %>% select(-carbon1, -carbon2, -rxndiff_MG1655)
+combined_dist_df$rxndiff_median <- apply(as.matrix(median_calculation_df), 1, median, na.rm = TRUE)
+
+# Merge back with the primary carbon_pairs dataset
+carbon_pairs_pre_cols <- colnames(carbon_pairs_pre)
+carbon_pairs_updated <- left_join(carbon_pairs_pre, combined_dist_df, by = c("carbon1", "carbon2"))
+
+## --- Visualization: Correlation between models ---
+# Plot a pair-panel to check consistency of metabolic distances across different models
+# Only using 'upper' triangle pairs to avoid redundancy
+carbon_pairs_updated %>%
+  filter(key == "upper") %>%
+  select(starts_with("rxndiff_")) %>%
+  psych::pairs.panels(method = "spearman", 
+                      line.col = "red", 
+                      pch = 21, 
+                      main = "Consistency of Metabolic Distances across GEMs")
+
+# Finalize the carbon_pairs dataframe for subsequent analysis
+carbon_pairs <- carbon_pairs_updated %>%
+  select(all_of(carbon_pairs_pre_cols), rxndiff_median, rxndiff_MG1655)
+
+Sys.time()
+```
+## 1.3 Visualization of Model Consistency
+```{r Carbon3, fig.width=3,fig.height=3, dpi=300}
+# Filter for unique pairs (upper triangle) for plotting
+plot_df <- carbon_pairs %>% filter(key == "upper")
+
+# 1. Compare MG1655 (iML1515) with the median distance of 7 ECOR models
+# This confirms if MG1655 is a representative model for E. coli diversity
+ggscatter(plot_df, x = "rxndiff_MG1655", y = "rxndiff_median", 
+          alpha = 0.5, size = 1,
+          cor.coef = TRUE, cor.method = "spearman", cor.coef.coord = c(0, 45),
+          xlab = "Metabolic pathway distance\nbased on MG1655 (iML1515)",
+          ylab = "Metabolic pathway distance\nbased on 7 ECOR strains",
+          xlim = c(0, 50), ylim = c(0, 50)) +
+  geom_abline(slope = 1, intercept = 0, color = "red")
+
+# 2. Exclude carbon sources unshared between ECOR and MA strains
+excluded_carbons <- qw(Glu, Ser, Cit, Arg, His, Lys, Thr, Arab)
+subset_plot_df <- plot_df %>% 
+  filter(!(carbon1 %in% excluded_carbons | carbon2 %in% excluded_carbons))
+ggscatter(subset_plot_df, x = "rxndiff_MG1655", y = "rxndiff_median", 
+          alpha = 0.5, size = 1,
+          cor.coef = TRUE, cor.method = "spearman", cor.coef.coord = c(0, 35),
+          xlab = "Metabolic pathway distance\nbased on MG1655 (iML1515)",
+          ylab = "Metabolic pathway distance\nbased on 7 ECOR strains",
+          xlim = c(0, 40), ylim = c(0, 40)) +
+  geom_abline(slope = 1, intercept = 0, color = "red") +
+  labs(subtitle = "Excluding amino acids, citrate, and arabinose")
+
+Sys.time()
+```
+## 1.4 Construction of the integrated essential reaction matrix (Supplementary Data)
+```{r Carbon4}
+# Function to generate a binary essentiality matrix for a specific GEM
+generate_essential_matrix <- function(csv_filename, strain_id) {
+  # Load carbon abbreviation mapping
+  carbon_map <- read_csv(file.path(getwd(), "FBA", "growth_media","Abb_carbon.csv"))
+  
+  # Load raw essentiality data
+  raw_data <- read_csv(file.path(getwd(), "FBA", "output", "essential_by_species", csv_filename))
+  
+  # Join and filter valid carbon sources
+  processed_data <- raw_data %>%
+    left_join(carbon_map, by = "carbon") %>%
+    filter(!is.na(Abb))
+  
+  # Get unique reactions and carbons to define matrix dimensions
+  unique_rxns <- unique(processed_data$reaction_id)
+  unique_abbs <- unique(processed_data$Abb)
+  
+  # Initialize the binary matrix with zeros
+  # Using strain_id as a grouping column for the final integrated table
+  essential_mat <- matrix(0, 
+                          nrow = length(unique_abbs), 
+                          ncol = length(unique_rxns),
+                          dimnames = list(unique_abbs, unique_rxns))
+  
+  # Fill the matrix (1: Essential, 0: Non-essential)
+  for (carbon in unique_abbs) {
+    active_rxns <- processed_data$reaction_id[processed_data$Abb == carbon]
+    essential_mat[carbon, colnames(essential_mat) %in% active_rxns] <- 1
+  }
+  
+  # Convert to a dataframe and add strain identification
+  essential_df <- as.data.frame(essential_mat) %>%
+    rownames_to_column("carbon_name") %>%
+    mutate(strain = strain_id) %>%
+    select(strain, carbon_name, everything())
+  
+  return(essential_df)
+}
+
+# Integrate all models into a single master matrix
+integrated_ess_mat <- NULL
+
+for (i in seq_along(model_files)) {
+  temp_df <- generate_essential_matrix(model_files[i], strain_names[i])
+  
+  if (is.null(integrated_ess_mat)) {
+    integrated_ess_mat <- temp_df
+  } else {
+    # bind_rows automatically handles cases where reaction sets (columns) differ between models,
+    # filling missing entries with NA.
+    integrated_ess_mat <- bind_rows(integrated_ess_mat, temp_df)
+  }
+}
+
+# Handle NAs: Reactions absent in a specific model are treated as non-essential (0)
+# This ensures a complete binary matrix for the supplementary material
+integrated_ess_mat[is.na(integrated_ess_mat)] <- 0
+
+# Define carbon sources to exclude from global statistics
+excluded_carbons <- qw(Glu, Ser, Cit, Arg, His, Lys, Thr, Arab)
+
+# Final output object
+ess_rxn_mat_all <- integrated_ess_mat %>% 
+  filter(carbon_name %nin% excluded_carbons)
+
+Sys.time()
+```
+## 1.5 Clustering carbon sources based on the consensus of 7 ECOR GEMs
+```{r Carbon5,fig.height=2.5,fig.width=9,dpi=300}
+# Prepare the distance matrix using the median metabolic distance
+carbon_matrix_7gem <- carbon_pairs %>%
+  filter(!is.na(rxndiff_median)) %>%
+  select(carbon1, carbon2, rxndiff_median) %>%
+  pivot_wider(names_from = carbon2, values_from = rxndiff_median) %>%
+  column_to_rownames("carbon1") %>%
+  as.matrix()
+
+# Sorting for consistency
+target_order <- sort(rownames(carbon_matrix_7gem))
+carbon_matrix_7gem <- carbon_matrix_7gem[target_order, target_order]
+
+# Convert to distance matrix object
+carbon_dist_matrix_7gem <- as.dist(carbon_matrix_7gem)
+
+
+# Perform hierarchical clustering using Ward's D2 method
+# This consensus clustering represents the average metabolic relationships across E. coli diversity
+carbon_row_cluster_7gem <- hclust(carbon_dist_matrix_7gem, method = "ward.D2")
+
+# Extract ordered labels and join with metabolic category metadata for coloring
+carbon_labels_ordered_7gem <- data.frame(label=carbon_row_cluster_7gem$labels[carbon_row_cluster_7gem$order])
+carbon_labels_ordered_7gem<-left_join(carbon_labels_ordered_7gem,carbon_names,by=c("label"="Abb"))
+
+## --- Visualization: Consensus Dendrogram ---
+dend_sbst_7gem<-as.dendrogram(carbon_row_cluster_7gem)
+
+## --- Visualization: Consensus Dendrogram ---
+dend_7gem <- as.dendrogram(carbon_row_cluster_7gem)
+
+# Customize appearance: labels colored by metabolic category
+dend_7gem <- dend_7gem %>% 
+  set("labels_cex", 1.5) %>% 
+  set("labels_colors", carbon_labels_ordered_7gem$Category_col) %>%
+  set("branches_lwd", 5)
+
+# Plot the dendrogram
+plot(dend_7gem, 
+     main = "Clustering based on Median Metabolic Distance (7 ECOR GEMs)",
+     ylab = "Median Manhattan Distance")
+
+Sys.time()
+```
+## 1.6 Venn Diagram: Overlap of Essential Reactions
+```{r Carbon6, fig.height=3, fig.width=3, dpi=300}
+# Define representative carbon sources
+carbon_reps <- qw(Glc, Succ, Lac)
+
+# Filter the integrated essential reaction matrix for a specific strain (e.g., ECOR11)
+# Transform to long format to identify presence/absence of each reaction
+ess_rxn_long <- ess_rxn_mat_all %>% 
+  filter(strain == "ECOR11" & carbon_name %in% carbon_reps) %>% 
+  pivot_longer(cols = -c(strain, carbon_name), names_to = "rxn", values_to = "is_essential")
+
+# Create a list where each element contains the names of essential reactions for that carbon source
+venn_list <- list(
+  Glc= ess_rxn_long$rxn[ess_rxn_long$carbon_name == "Glc" & ess_rxn_long$is_essential == 1],
+  Succ = ess_rxn_long$rxn[ess_rxn_long$carbon_name == "Succ" & ess_rxn_long$is_essential == 1],
+  Lac = ess_rxn_long$rxn[ess_rxn_long$carbon_name == "Lac" & ess_rxn_long$is_essential == 1]
+)
+
+# Generate the Venn diagram
+# Note: venn.diagram returns a gList object that needs to be drawn via grid.draw
+venn_plot <- venn.diagram(
+  x = venn_list,
+  filename = NULL,         # Do not save to file, return as an object
+  disable.logging = TRUE,  # Suppress log files in the working directory
+  fill = c("#0072B2", "#009E73", "#E69F00"), # Colors for Glc, Succ, Lac
+  alpha = 0.6,             # Transparency for overlapping regions
+  lty = "blank",           # Remove borders for a cleaner look
+  cat.cex = 1.2,           # Category label size
+  cex = 1.2,               # Numerical label size
+  main = "Essential Reaction Overlap (ECOR11)"
+)
+
+# Draw the Venn diagram using the grid package
+grid::grid.newpage()
+grid::grid.draw(venn_plot)
+
+# Data Inspection: Identify reactions essential for Glucose but NOT for Succinate
+# Using basic set logic (setdiff) which is standard in R
+glc_unique_to_succ <- setdiff(venn_list$Glucose, venn_list$Succinate)
+print("Reactions essential for Glucose but not for Succinate:")
+print(glc_unique_to_succ)
+
+Sys.time()
+
+```
+## 1.7 Summary Statistics of Essential Reactions
+```{r Carbon7}
+# Define carbon sources to exclude from global statistics
+excluded_carbons <- qw(Glu, Ser, Cit, Arg, His, Lys, Thr, Arab)
+
+# Filter dataset: Focus on 7 ECOR strains and representative carbon sources
+ess_stats_mat <- ess_rxn_mat_all %>% 
+  filter(strain != "MG1655" & !(carbon_name %in% excluded_carbons)) %>% 
+  select(-strain, -carbon_name) %>% 
+  as.matrix()
+
+# 1. Distribution of the number of essential reactions per condition
+# (Each row represents a specific strain on a specific carbon source)
+essential_counts <- rowSums(ess_stats_mat)
+print("Summary of the number of essential reactions per condition:")
+print(summary(essential_counts))
+
+# 2. Number of "Core" essential reactions
+# Reactions that are essential across ALL tested strains and ALL carbon sources
+# Using colAlls from matrixStats for efficiency, or a simple logical check
+core_reactions_n <- sum(colSums(ess_stats_mat) == nrow(ess_stats_mat))
+cat("# of core reactions (essential in all conditions):", core_reactions_n, "\n")
+
+# 3. Number of "Pan" essential reactions
+# Reactions that are essential in at least ONE condition (strain or carbon source)
+pan_reactions_n <- sum(colSums(ess_stats_mat) > 0)
+cat("# of pan reactions (essential in at least one condition):", pan_reactions_n, "\n")
+
+# 4. List of carbon sources included in this statistical summary
+included_carbons <- ess_rxn_mat_all %>% 
+  filter(strain != "MG1655" & !(carbon_name %in% excluded_carbons)) %>% 
+  pull(carbon_name) %>% 
+  unique()
+
+print("Carbon sources analyzed in this summary:")
+print(included_carbons)
+
+Sys.time()
+```
+
+
+
+# 2 Phylogenetic tree of ECOR
+## 2.1 Strain typing based on alignmrernt of core genome sequnces using Pansnp
+### 2.1.1 load phylogenetic relationship based on core-genome SNP typing using Parsnp
+```{r Phylogeny1}
+## for Parsnp: https://pmc.ncbi.nlm.nih.gov/articles/PMC4262987/
+## for EzClermont: https://github.com/nickp60/EzClermont/tree/master/docs/analysis
+
+# Metadata validation and cleanup
+ez_metadata <- read_csv(file.path(getwd(), "EzClermont", "validation_metadata.csv")) %>%
+  mutate(simple = gsub("(.*?) (.*)", "\\1", reported_phylogroup)) %>%
+  select(-dataset, -reported_phylogroup) %>%
+  filter(accession != "")
+
+# Load ezClermont results
+ez_expdata <- read_delim(file.path(getwd(), "EzClermont", "2020-04-09-ezclermont.txt"), 
+                         col_names = c("long_acc", "ezClermont_phylogroup")) %>%
+  mutate(accession = gsub(".scaffold.fasta", "", 
+                          gsub("(GCA_.*?\\.\\d)_(.*)", "\\1", long_acc)))
+
+# Merge and validate consistency between reported and predicted phylogroups
+ez_together <- left_join(ez_metadata, ez_expdata %>% select(-long_acc), by = "accession") %>%
+  mutate(raw_match = (simple == ezClermont_phylogroup))
+
+# Correct known mismatches for specific Clades/Cryptic lineages
+ez_together <- ez_together %>%
+  mutate(match = ifelse(grepl("Clade", simple) & grepl("cryptic", ezClermont_phylogroup) & !raw_match, 
+                        TRUE, raw_match))
+
+# Load ClermontTyping results for comparison
+ez_expdata_ct <- read_delim(file.path(getwd(), "EzClermont", "2020-04-09-CT-results.txt"), 
+                            col_names = c("accession", "alleles", "profile", "al", "ct_phylotype", "mashpath")) %>%
+  mutate(accession = gsub(".scaffold.fasta", "", gsub("(.*?\\..)_(.*)", "\\1", accession)),
+         ct_phylotype = gsub("(.*?) (.*)", "\\1", ct_phylotype)) %>%
+  select(accession, ct_phylotype)
+
+ez_together <- left_join(ez_together, ez_expdata_ct, by = "accession")
+
+# 2.1.2 Phylogenetic Tree Construction and Visualization
+# Load the Maximum Likelihood tree (Parsnp output)
+ez_tree <- ape::read.tree(file.path(getwd(), "EzClermont", "parsnp.clean.phy_phyml_tree.txt"))
+
+# Standardize tip labels to match accession formats
+ez_tree$tip.label <- ifelse(!startsWith(ez_tree$tip.label, "0"),
+                            paste0("ESC_", ez_tree$tip.label),
+                            paste0("GCA_", ez_tree$tip.label))
+
+# Prepare label dataframe for ggtree mapping
+labdf <- data.frame(label = ez_tree$tip.label, stringsAsFactors = FALSE) %>%
+  left_join(ez_together %>% mutate(label = substr(accession, 1, 13)), by = "label") %>%
+  mutate(
+    label2 = ifelse(match, strain, paste0("(", ezClermont_phylogroup, ") ", strain)),
+    # Consolidate cryptic clades for visualization
+    quardiplex_pcr_base_tidy = ifelse(grepl("lade", simple), "Cryptic", simple),
+    ct_phylotype = ifelse(grepl("lade", ct_phylotype), "Cryptic", 
+                          ifelse(grepl("Unknown", ct_phylotype), "U", ct_phylotype)),
+    ezClermont_phylogroup = ifelse(grepl("cryptic", ezClermont_phylogroup), "Cryptic", ezClermont_phylogroup)
+  )
+
+# Define Phylogroup Color Palette
+colors <- c(A="grey", B1="darkgreen", B2="purple", C="orange", 
+            "Clade I"="yellow", "Cryptic"="yellow", "Clade II"="yellow", 
+            "Clade IV"="yellow", "Clade V"="yellow", D="red", E="green", 
+            F="steelblue", G="black", U="pink")
+
+# Visualization: Circular tree with heatmaps and phylogroup highlights
+tp <- gheatmap(
+  ggtree(ape::root.phylo(ez_tree, node = 142), layout = "circular", branch.length = 'none') %<+% labdf +
+    geom_hilight(node = 145, fill = colors['A'], alpha = 0.6) +
+    geom_hilight(node = 179, fill = colors['B1'], alpha = 0.6) +
+    geom_hilight(node = 218, fill = colors['B2'], alpha = 0.6) +
+    geom_hilight(node = 199, fill = colors['C'], alpha = 0.6) +
+    geom_hilight(node = 212, fill = colors['D'], alpha = 0.6) +
+    geom_hilight(node = 202, fill = colors['E'], alpha = 0.6) +
+    geom_hilight(node = 135, fill = colors['F'], alpha = 0.6) +
+    geom_hilight(node = 132, fill = colors['G'], alpha = 0.6) +
+    geom_tiplab2(aes(label = label2), size = 3, offset = 5) +
+    scale_color_manual(values = colors) +
+    theme(legend.position = "right"),
+  data = labdf %>% select(label, Reported = quardiplex_pcr_base_tidy, ClermonTyping = ct_phylotype, EzClermont = ezClermont_phylogroup) %>%
+    column_to_rownames("label"),
+  colnames_position = "top", width = 0.2, font.size = 2
+) + scale_fill_manual(values = colors)+ labs(fill="Phylogroup")
+print(tp)
+
+
+# 2.1.3 ECOR-specific Subtree Generation
+# Filter for ECOR and K12-MG1655 strains
+labdf_sub <- labdf %>% 
+  filter(grepl("^ECOR", strain) | strain == "K12-MG1655") %>%
+  rename(Phylogroup = ezClermont_phylogroup)
+
+# Manual curation for specific strains (based on literature: doi:10.1099/acmi.0.000143)
+labdf_sub$Phylogroup[labdf_sub$strain %in% c("ECOR44", "ECOR49")] <- "D"
+
+# Extract and plot the subtree
+sub_tree <- ape::keep.tip(ez_tree, labdf_sub$label)
+
+# ggtree(sub_tree, layout="circular", branch.length="none") + geom_text(aes(label=node))
+ggtree(sub_tree, layout = "circular") %<+% labdf_sub +
+  geom_tiplab2(aes(label = strain), size = 3, offset = 0.001) +
+  geom_tippoint(aes(color = Phylogroup), size = 2) +
+  geom_hilight(node = 84, fill = pgPalette['A'], alpha = 0.6) +
+  geom_hilight(node = 108, fill = pgPalette['B1'], alpha = 0.6) +
+  geom_hilight(node = 131, fill = pgPalette['B2'], alpha = 0.6) +
+  geom_hilight(node = 121, fill = pgPalette['C'], alpha = 0.6) +
+  geom_hilight(node = 126, fill = pgPalette['D'], alpha = 0.6) +
+  geom_hilight(node = 123, fill = pgPalette['E'], alpha = 0.6) +
+  geom_hilight(node = 76, fill = pgPalette['F'], alpha = 0.6) +
+  geom_treescale(x = 0.006, y = 71, offset = 1) +
+  labs(title = "Phylogeny of ECOR strains and MG1655") +
+  theme(legend.position = "right")
+
+# Update
+labdf_sub<-labdf_sub %>% 
+  filter(grepl("^ECOR", strain)) # remove K12-MG1655
+
+Sys.time()
+```
+### 2.1.2 Transforming Phylogenetic Distance Matrix to Long-format Dataframe
+```{r Phylogeny2}
+# 1. Compute pairwise distances between tips based on the branch lengths (ML tree)
+# cophenetic.phylo calculates the sum of the edge lengths between each pair of tips
+phylo_dist_mat <- cophenetic.phylo(sub_tree)
+
+# 2. Map accession labels back to strain names for better readability
+# Ensure the mapping matches the current matrix order
+strain_mapping <- labdf_sub$strain[match(rownames(phylo_dist_mat), labdf_sub$label)]
+rownames(phylo_dist_mat) <- colnames(phylo_dist_mat) <- strain_mapping
+
+# 3. Filter for ECOR strains only to create a focused distance matrix
+ecor_indices <- grep("^ECOR", rownames(phylo_dist_mat))
+phylo_dist_mat <- phylo_dist_mat[ecor_indices, ecor_indices]
+
+# 4. Identify matrix positions (Upper triangle, Lower triangle, or Diagonal)
+# This tagging is essential for downstream correlation analyses to avoid redundant pairs
+n_strains <- nrow(phylo_dist_mat)
+pos_tag_mat <- matrix("upper", n_strains, n_strains)
+pos_tag_mat[lower.tri(pos_tag_mat)] <- "lower"
+diag(pos_tag_mat) <- "diag"
+
+# 5. Convert the distance matrix to a long-format dataframe
+phylo_dist_df <- as.data.frame(as.table(phylo_dist_mat))
+colnames(phylo_dist_df) <- c("strain1", "strain2", "phylo_dist")
+
+# 6. Append the positional tags (flattening the tag matrix in the same order)
+phylo_dist_df$Type  <- as.vector(pos_tag_mat)
+
+# 7. Data Inspection
+# Review the first few rows to ensure correct mapping
+print("Preview of the phylogenetic distance dataframe:")
+head(phylo_dist_df)
+Sys.time()
+```
+
+
+
+# 3 Growth-rate profiles of the MA strains
+## 3.1 Load the MA dataset
+```{r MA1,fig.height=10,fig.width=5, dpi=300}
+dat<-paste(getwd(),"From_RawOD_to_GrowthProf","Output","stat_fit_ma.csv",sep="/") %>% read_csv()
+dat<-dat %>% filter(Abb %nin% qw(Ace,Asp,Lys,Pro,Ser,Cit,Glu,His,Arg,Thr))
+dat<-dat %>% mutate(mu_max=r_mean) %>% mutate(carbon=Abb)
+my_tmp<-dat
+
+my_tmp$lineage<-factor(my_tmp$lineage,levels = paste(rep("lineage",12),seq(1,12),sep=""))
+my_df1<-my_tmp %>% filter(round==0)
+my_df2<-my_df1
+my_df2$sublineage<-2
+my_df2$lineage<-paste("lineage",rep(c(2,6,10),each=22),sep="")
+my_df2$colony<-paste(my_df2$Anc,my_df2$sublineage,sep="_")
+my_df3<-my_df1
+my_df3$sublineage<-3
+my_df3$lineage<-paste("lineage",rep(c(3,7,11),each=22),sep="")
+my_df3$colony<-paste(my_df3$Anc,my_df3$sublineage,sep="_")
+my_df4<-my_df1
+my_df4$sublineage<-4
+my_df4$lineage<-paste("lineage",rep(c(4,8,12),each=22),sep="")
+my_df4$colony<-paste(my_df4$Anc,my_df4$sublineage,sep="_")
+my_tmp<-bind_rows(my_tmp,my_df2)
+my_tmp<-bind_rows(my_tmp,my_df3)
+my_tmp<-bind_rows(my_tmp,my_df4)
+my_tmp$lineage<-factor(my_tmp$lineage,levels=paste("lineage",seq(1,12),sep=""))
+
+g<-ggline(my_tmp,x="round",y="mu_max",color="lineage",numeric.x.axis = TRUE, alpha=0.5,legend.title="")+
+  ylab(expression(mu[max]~"[1/h]"))
+g<-ggpar(g, font.y = c(14, "black"))
+facet(g,facet.by = "carbon")
+Sys.time()
+```
+## 3.2 Variance in growth rate across MA lineage
+```{r MA2,fig.height=10,fig.width=5.5, dpi=300}
+carbon<-dat$carbon %>% unique()
+n_carbon<-carbon %>% length()
+lineage<-dat$lineage %>% unique()
+n_lineage<-lineage %>% length()
+round<-dat$round %>% unique()
+n_round<-round %>% unique()
+anc_colony<-dat$Anc %>% unique()
+
+
+i<-1
+j<-1
+for (i in 1:n_carbon){
+  my_carbon<-carbon[i]
+  my_dat<-dat[dat$carbon==my_carbon,]
+  my_dat[(my_dat$lineage %nin% c("lineage1","lineage5","lineage9"))&
+           (my_dat$round==0),]$mu_max<-NA #<- remove overlapped anc data (use Anc data of lineages 1, 5, 9)
+  my_df<-data.frame(round=round,carbon=my_carbon,mean_mu=NA,sd_mu=NA,var_mu=NA)
+  for (j in 1:nrow(my_df)){
+    my_round<-my_df$round[j]
+    my_df$mean_mu[j]<-my_dat[my_dat$round==my_round,]$mu_max %>% mean(na.rm = TRUE)
+    my_df$sd_mu[j]<-my_dat[my_dat$round==my_round,]$mu_max %>% sd(na.rm = TRUE)
+    my_df$var_mu[j]<-my_dat[my_dat$round==my_round,]$mu_max %>% var(na.rm = TRUE)
+  }
+  if(i==1){
+    stat_df<-my_df
+  }else{
+    stat_df<-bind_rows(stat_df,my_df)
+  }
+}
+stat_df$cv_mu<-stat_df$sd_mu/stat_df$mean_mu
+
+g<-ggline(stat_df,x="round",y="cv_mu",numeric.x.axis = TRUE, alpha=0.5,ylab="Coefficient of variation [arb. unit]")
+g<-ggpar(g, font.y = c(14, "black"))
+facet(g,facet.by = "carbon")
+
+g<-ggline(stat_df,x="round",y="var_mu",numeric.x.axis = TRUE, alpha=0.5)
+facet(g,facet.by = "carbon")
+Sys.time()
+```
+## 3.3 Calc relative growth rate to anc (rel growth rate)
+```{r MA3}
+gr_ma_df<-dat
+gr_ma_df$rel_mu_max<-NA
+i<-1
+j<-1
+for(i in 1:length(carbon)){
+  my_carbon<-carbon[i]
+  for(j in 1:length(anc_colony)){
+    my_anc<-anc_colony[j]
+    my_gr_anc<-gr_ma_df[(gr_ma_df$carbon==my_carbon)&
+                       (gr_ma_df$Anc==my_anc)&
+                       (gr_ma_df$round==0),]$mu_max %>% unique()
+    gr_ma_df[(gr_ma_df$carbon==my_carbon)&
+            (gr_ma_df$Anc==my_anc),]$rel_mu_max<-gr_ma_df[(gr_ma_df$carbon==my_carbon)&(gr_ma_df$Anc==my_anc),]$mu_max/my_gr_anc
+  }
+}
+Sys.time()
+```
+## 3.4 Variance in rel growth rate across MA lineage
+```{r MA4,fig.height=10,fig.width=5}
+carbon<-gr_ma_df$carbon %>% unique()
+n_carbon<-carbon %>% length()
+lineage<-gr_ma_df$lineage %>% unique()
+n_lineage<-lineage %>% length()
+round<-gr_ma_df$round %>% unique()
+n_round<-round %>% unique()
+anc_colony<-gr_ma_df$Anc %>% unique()
+
+
+i<-1
+j<-1
+for (i in 1:n_carbon){
+  my_carbon<-carbon[i]
+  my_dat<-gr_ma_df[gr_ma_df$carbon==my_carbon,]
+  my_dat[(my_dat$lineage %nin% c("lineage1","lineage5","lineage9"))&
+           (my_dat$round==0),]$mu_max<-NA #<- remove overlapped anc data (use Anc data of lineages 1, 5, 9)
+  my_df<-data.frame(round=round,carbon=my_carbon,mean_mu=NA,sd_mu=NA,var_mu=NA)
+  for (j in 1:nrow(my_df)){
+    my_round<-my_df$round[j]
+    my_df$mean_mu[j]<-my_dat[my_dat$round==my_round,]$rel_mu_max %>% mean(na.rm = TRUE)
+    my_df$sd_mu[j]<-my_dat[my_dat$round==my_round,]$rel_mu_max %>% sd(na.rm = TRUE)
+    my_df$var_mu[j]<-my_dat[my_dat$round==my_round,]$rel_mu_max %>% var(na.rm = TRUE)
+  }
+  if(i==1){
+    stat_df<-my_df
+  }else{
+    stat_df<-bind_rows(stat_df,my_df)
+  }
+}
+stat_df$cv_mu<-stat_df$sd_mu/stat_df$mean_mu
+
+g<-ggline(stat_df,x="round",y="cv_mu",numeric.x.axis = TRUE, alpha=0.5,ylab="Coefficient of variation in relative mu max [arb. unit]")
+facet(g,facet.by = "carbon")
+
+g<-ggline(stat_df,x="round",y="var_mu",numeric.x.axis = TRUE, alpha=0.5)
+facet(g,facet.by = "carbon")
+Sys.time()
+```
+## 3.5 Pairwise correlation in rel growth rate across carbon sources (Evolutionary correlation, all pairs)
+### 3.5.1 Representatives
+```{r MA5,fig.width=5,fig.height=2.5, dpi=300}
+ma_carbons<-gr_ma_df$carbon %>% unique() # carbon sources used in the MA dataset
+print(ma_carbons)
+# --------------------
+# Representative pair 1
+# --------------------
+my_carbon_1<-"Glc"
+my_carbon_2<-"Fru"
+my_df1<-gr_ma_df[gr_ma_df$carbon==my_carbon_1,]
+my_df1<-my_df1 %>% rename(mu_max_1="mu_max",carbon1="carbon",rel_mu_max_1="rel_mu_max") %>%
+  select(Anc,sublineage,lineage,colony,round,colony_round,carbon1,mu_max_1,rel_mu_max_1)
+my_df2<-gr_ma_df[gr_ma_df$carbon==my_carbon_2,]
+my_df2<-my_df2 %>% rename(mu_max_2="mu_max",carbon2="carbon",rel_mu_max_2="rel_mu_max") %>%
+  select(Anc,sublineage,lineage,colony,round,colony_round,carbon2,mu_max_2,rel_mu_max_2)
+my_df<-my_df1 %>% left_join(my_df2,by=qw(Anc,sublineage,lineage,colony,round,colony_round))
+my_df<-my_df[my_df$round>0,] #<------------------ Remove Anc
+p1<-ggscatter(my_df,x="mu_max_1",y="mu_max_2",alpha=0.5,
+              cor.coef = TRUE,cor.method = "spearman")+
+  scale_y_continuous(breaks = get_breaks(from=0,to=0.4,by=0.2),limits = c(0,0.4))+
+  xlab(expression(mu[max]~"on Glc"))+
+  ylab(expression(mu[max]~"on Fru"))
+p1b<-ggscatter(my_df,x="rel_mu_max_1",y="rel_mu_max_2",alpha=0.5,
+              cor.coef = TRUE,cor.method = "spearman")+
+  scale_y_continuous(breaks = get_breaks(from=0.4,to=1.4,by=0.4),limits = c(0.4,1.6))+
+  xlab(expression("Relative"~mu[max]~"on Glc"))+
+  ylab(expression("Relative"~mu[max]~"on Fru"))
+
+# --------------------
+# Representative pair 2
+# --------------------
+my_carbon_1<-"Glc"
+my_carbon_2<-"Fum"
+my_df1<-gr_ma_df[gr_ma_df$carbon==my_carbon_1,]
+my_df1<-my_df1 %>% rename(mu_max_1="mu_max",carbon1="carbon",rel_mu_max_1="rel_mu_max") %>%
+  select(Anc,sublineage,lineage,colony,round,colony_round,carbon1,mu_max_1,rel_mu_max_1)
+my_df2<-gr_ma_df[gr_ma_df$carbon==my_carbon_2,]
+my_df2<-my_df2 %>% rename(mu_max_2="mu_max",carbon2="carbon",rel_mu_max_2="rel_mu_max") %>%
+  select(Anc,sublineage,lineage,colony,round,colony_round,carbon2,mu_max_2,rel_mu_max_2)
+my_df<-my_df1 %>% left_join(my_df2,by=qw(Anc,sublineage,lineage,colony,round,colony_round))
+my_df<-my_df[my_df$round>0,] #<------------------ Remove Anc
+p2<-ggscatter(my_df,x="mu_max_1",y="mu_max_2",alpha=0.5,
+              cor.coef = TRUE,cor.method = "spearman")+
+  scale_y_continuous(breaks = get_breaks(from=0,to=0.4,by=0.2),limits = c(0,0.4))+
+  xlab(expression(mu[max]~"on Glc"))+
+  ylab(expression(mu[max]~"on Fum"))
+p2b<-ggscatter(my_df,x="rel_mu_max_1",y="rel_mu_max_2",alpha=0.5,
+              cor.coef = TRUE,cor.method = "spearman")+
+  scale_y_continuous(breaks = get_breaks(from=0.4,to=1.4,by=0.4),limits = c(0.4,1.6))+
+  xlab(expression("Relative"~mu[max]~"on Glc"))+
+  ylab(expression("Relative"~mu[max]~"on Fum"))
+
+
+p1+p2
+p1b+p2b
+
+
+Sys.time()
+```
+### 3.5.2 Relationship between metabolic pathway distance and evolutionary correlation
+```{r MA6,fig.height=3,fig.width=5, dpi=300}
+ma_pair_all<-carbon_pairs
+ma_pair_all<-ma_pair_all[(ma_pair_all$carbon1 %in% ma_carbons)&(ma_pair_all$carbon2 %in% ma_carbons),]
+ma_pair_all$correlation<-NA
+i<-1
+for (i in 1:nrow(ma_pair_all)){
+  my_carbon_1<-ma_pair_all$carbon1[i]
+  my_carbon_2<-ma_pair_all$carbon2[i]
+  my_df1<-gr_ma_df[gr_ma_df$carbon==my_carbon_1,]
+  my_df1<-my_df1 %>% select(carbon,Anc,lineage,round,mu_max,rel_mu_max)
+  colnames(my_df1)[c(5,6)]<-qw(mu_max_1,rel_mu_max_1)
+  my_df2<-gr_ma_df[gr_ma_df$carbon==my_carbon_2,]
+  my_df2<-my_df2 %>% select(carbon,Anc,lineage,round,mu_max,rel_mu_max)
+  colnames(my_df2)[c(5,6)]<-qw(mu_max_2,rel_mu_max_2)
+  my_df<-left_join(my_df1,my_df2,by=qw(Anc,lineage,round))
+  my_df<-my_df[my_df$round>0,] #<------------------ Remove Anc
+  my_res<-cor_test(my_df,vars = "rel_mu_max_1",vars2 = "rel_mu_max_2",method = "spearman")
+  ma_pair_all$correlation[i]<-my_res$cor
+}
+
+my_df<-ma_pair_all[ma_pair_all$key=="upper",]
+my_tmp<-c(carbon_categories,"between")
+my_tmp<-my_tmp[my_tmp %in% my_df$pair_category]
+my_df$pair_category<-factor(my_df$pair_category,levels = my_tmp)
+my_palette<-c("#0072B2", "#E69F00", "#56B4E9", "#009E73", "#000000")
+
+# iML1515-based distance
+ggscatter(my_df,
+          x="rxndiff_MG1655",y="correlation",alpha=0.5,
+          color = "pair_category",palette = my_palette,legend="right",legend.title="",
+          cor.coef = TRUE,cor.method = "spearman",cor.coef.coord = c(5,0.9))+
+  scale_y_continuous(breaks = get_breaks(from = -0.4,to = 0.8,by = 0.4),limits = c(-0.4,1))
+
+# 7 GEMs based distance
+ggscatter(my_df,
+          x="rxndiff_median",y="correlation",alpha=0.5,
+          xlab="Metabolic pathway distance [arb. unit]",ylab="Evolutionary correlation \n [arb. unit]",
+          color = "pair_category",palette = my_palette,legend="right",legend.title="",
+          cor.coef = TRUE,cor.method = "spearman",cor.coef.coord = c(5,0.9))+
+  scale_y_continuous(breaks = get_breaks(from = -0.4,to = 0.8,by = 0.4),limits = c(-0.4,1))
+Sys.time()
+```
+### 3.5.3 Evolutionary correlation across metabolic pathway categories
+```{r MA7,fig.height=2.5,fig.width=6,dpi=300}
+my_palette<-c("#0072B2", "#E69F00", "#56B4E9", "#009E73", "grey70", "#000000")
+my_df1<-ma_pair_all[(ma_pair_all$key=="upper")&(ma_pair_all$pair_category!="between"),]
+# my_df1$pair_category<-factor(my_df1$pair_category,levels = carbon_categories)
+my_df1$xlab<-my_df1$pair_category %>% as.character()
+my_df1[my_df1$pair_category=="Upper Glycolysis",]$xlab<-"Upper\nGlycolysis"
+my_df1[my_df1$pair_category=="Lower Glycolysis",]$xlab<-"Lower\nGlycolysis"
+my_df1[my_df1$pair_category=="Pentose Phosphate",]$xlab<-"Pentose\nPhosphate"
+my_df1[my_df1$pair_category=="TCA cycle",]$xlab<-"TCA\ncycle"
+
+my_df2<-ma_pair_all[(ma_pair_all$key=="upper"),]
+my_df2$xlab<-my_df2$pair_category
+my_df2[my_df2$xlab!="between",]$xlab<-"Within"
+my_df2[my_df2$xlab=="between",]$xlab<-"Between"
+
+my_df<-bind_rows(my_df1,my_df2)
+my_label<-c("Upper\nGlycolysis","Lower\nGlycolysis","Pentose\nPhosphate","TCA\ncycle","Within","Between")
+my_df$xlab<-factor(my_df$xlab,levels = my_label)
+
+# Wilcoxon test
+my_df %>%
+  wilcox_test(formula = correlation ~ xlab,
+  ref.group = "Between",
+  p.adjust.method = "BH")
+
+
+
+ggboxplot(my_df,
+          x="xlab",y="correlation",
+          ylab="Evolutionary correlation\n[arb. unit]",xlab="",
+          add="jitter",add.params = list(alpha=0.5),
+          color = "xlab",palette = my_palette,legend="")+
+  stat_pwc(method = "wilcox.test",label = "p.adj.signif",
+           ref.group = "Between",tip.length = 0,
+    p.adjust.method = "BH",hide.ns = TRUE 
+  )+
+  scale_y_continuous(breaks = get_breaks(from = -0.4,to = 1.2,by = 0.4),limits = c(-0.4,1.4))
+Sys.time()
+```
+### 3.5.4 Glucose-centered analysis
+#### 3.5.4.1 Pairwise correlation between glucose and other carbon sources
+```{r MA8,fig.height=3,fig.width=5}
+ma_pair_glc<-ma_pair_all[ma_pair_all$carbon1=="Glc"|ma_pair_all$carbon2=="Glc",]
+ma_pair_glc<-ma_pair_glc[ma_pair_glc$key=="upper",]
+ma_pair_glc$category2<-factor(ma_pair_glc$category2,levels=carbon_categories)
+my_palette<-c("#0072B2", "#E69F00", "#56B4E9", "#009E73", "#CC79A7","#000000", "#8FD926", "#D55E00")
+my_dat<-data.frame(rxndiff_MG1655=0,correlation=1)
+ggscatter(ma_pair_glc,x="rxndiff_MG1655",y="correlation",
+          xlab="Metabolic distance from glucose",
+          ylab="Evolutionary correlation in MA",
+          color="category2",palette = my_palette,
+          legend="right",legend.title="",
+          cor.coef.coord = c(5, 0.95),cor.coef.size=4,font.label = c(6, "plain", "grey50"),
+          cor.coef = TRUE,cor.method = "spearman")+ # correlation is calculated for the data with non-zero distance
+  scale_x_continuous(expand = c(0.05,2))+
+  geom_point(data=my_dat,shape=21, size=2,fill="#0072B2")
+Sys.time()
+```
+#### 3.5.4.2 Relationship between metabolic distance from glucose and rel growth rates 
+```{r MA9,fig.height=3,fig.width=5}
+my_tmp<-ma_pair_all[ma_pair_all$carbon1=="Glc"|ma_pair_all$carbon2=="Glc",] # extract metabolic distance from glucose
+my_tmp<-my_tmp[my_tmp$key!="lower",] %>% select(carbon2,key,category2,rxndiff_MG1655)
+colnames(my_tmp)<-qw(carbon,key,category,rxndiff_MG1655)
+gr_react_diff_df<-left_join(gr_ma_df,my_tmp,by="carbon")
+my_tmp<-carbon_categories[carbon_categories %in% gr_react_diff_df$category]
+gr_react_diff_df$category<-factor(gr_react_diff_df$category,levels=my_tmp)
+gr_react_diff_df<-gr_react_diff_df[order(gr_react_diff_df$rxndiff_MG1655),]
+gr_react_diff_df$carbon<-factor(gr_react_diff_df$carbon,levels = unique(gr_react_diff_df$carbon))
+
+ggscatter(gr_react_diff_df[gr_react_diff_df$round!=0,], # all rounds without round zero
+          x="rxndiff_MG1655",y="rel_mu_max",
+          xlab="Metabolic distance from glucose",
+          alpha=0.3,color="category",palette = cbbPalette,
+          legend="right",legend.title="",
+          cor.coef = T,cor.method = "spearman")
+
+ggboxplot(gr_react_diff_df[gr_react_diff_df$round!=0,], # all rounds without round zero
+          add = "jitter",add.params = list(alpha=0.1),
+          legend="right",legend.title="",
+          x="carbon",y="rel_mu_max",
+          alpha=0.3,color="category",palette = cbbPalette)+
+  rotate_x_text(angle = 90)+
+  geom_hline(yintercept = 1)
+
+
+ggscatter(gr_react_diff_df[gr_react_diff_df$round==28,], # round 28
+          x="rxndiff_MG1655",y="rel_mu_max",
+          xlab="Metabolic distance from glucose",
+          alpha=0.3,color="category",palette = cbbPalette,
+          legend="right",legend.title="",
+          cor.coef = T,cor.method = "spearman")
+
+
+ggboxplot(gr_react_diff_df[gr_react_diff_df$round==28,], # round 28
+          add = "jitter",add.params = list(alpha=0.1),
+          legend="right",legend.title="",
+          x="carbon",y="rel_mu_max",alpha=0.3,color="category",palette = cbbPalette)+
+  rotate_x_text(angle = 90)+
+  geom_hline(yintercept = 1)
+Sys.time()
+```
+### 3.5.5 Comparison between founder and offspring
+#### 3.5.5.1 Relationship between ancestral growth rates and rel growth rates of offspring
+```{r MA10,fig.height=3,fig.width=5}
+anc_gr<-data.frame(carbon=carbon,anc_mu_max=NA)
+for(i in 1:nrow(anc_gr)){
+  my_carbon<-anc_gr$carbon[i]
+  anc_gr$anc_mu_max[i]<-dat[dat$carbon==my_carbon&dat$round==0,]$mu_max %>% unique() %>% mean()
+}
+my_df<-left_join(gr_react_diff_df,anc_gr,by="carbon")
+ggscatter(my_df[my_df$round!=0,],
+          x="anc_mu_max",y="rel_mu_max",
+          legend="right",legend.title="",
+          alpha=0.3,color="category",palette = cbbPalette,
+          cor.coef = TRUE,cor.coeff.args = list(label.sep = "\n",method="spearman"))
+Sys.time()
+```
+## 3.6 Clustering of Evolutionary correlation in MA
+### 3.6.1 Hierarchical clustering for evolutionary correlation across carbon sources in MA
+```{r MA11,fig.height=4.5,fig.width=4.5, dpi=300}
+# Convert to matrix
+ma_matrix <- ma_pair_all %>% select(carbon1,carbon2,correlation) %>%
+  pivot_wider(names_from = carbon2, values_from = correlation) %>%
+  column_to_rownames("carbon1") %>%
+  as.matrix()
+
+# Sorting
+target_order <- sort(rownames(ma_matrix))
+ma_matrix <- ma_matrix[target_order, target_order]
+
+# Calc distance
+ma_dist_matrix <- as.dist(1 - ma_matrix)
+ma_dist_df<-make_dist_dataframe(ma_dist_matrix,"ma")
+
+# Clustering
+ma_row_cluster <- hclust(ma_dist_matrix, method = "ward.D2")
+ma_labels_ordered <- data.frame(label=ma_row_cluster$labels[ma_row_cluster$order])
+ma_labels_ordered<-left_join(ma_labels_ordered,carbon_names,by=c("label"="Abb"))
+my_colors <- colorRampPalette(rev(brewer.pal(11, "RdBu")))(200)
+
+# Visualization
+corrplot(ma_matrix, 
+         method = "color",
+         order = "hclust",
+         hclust.method = "ward.D2",
+         col = my_colors,
+         # cl.lim = c(-1, 1),      # set 0 as white
+         tl.srt = 90,
+         tl.cex = 1,
+         tl.col=ma_labels_ordered$Category_col,
+         addgrid.col = 'white',
+         type="upper",diag =T)
+
+pheatmap(ma_matrix, 
+         clustering_distance_rows = ma_dist_matrix, 
+         clustering_distance_cols = ma_dist_matrix,
+         clustering_method = "ward.D2",
+         color = my_colors,
+         # border_color = "white",
+         breaks = seq(-1, 1, length.out = 201),
+         main = "")
+Sys.time()
+```
+### 3.6.2 Visualization of the dendrogram in hierarchical clustering (Growth-based dendrogram in MA)
+```{r MA12,warning=FALSE, message=FALSE,fig.height=2.5,fig.width=9,dpi=300}
+dend_sbst<-as.dendrogram(ma_row_cluster)
+current_labels <- labels(dend_sbst)
+dend_sbst <- dend_sbst %>% 
+  set("labels_cex", 1.5) %>%
+  set("labels_colors", ma_labels_ordered$Category_col) %>% 
+  set("branches_lwd", 3)
+plot(dend_sbst, main = "ward.D2", hang = -1)
+Sys.time()
+```
+### 3.6.3 Comparison with metabolic pathway distance in MA
+#### 3.6.3.1 Entanglement score with permutation test in MA
+```{r MA13, fig.width=1.5,fig.height=3.5,dpi=300}
+# Genetic distance from FBA (7 GEMs consensus) and Phenotypic distance from Growth rates
+dist_exp<-as.dist(1 - ma_matrix)
+my_ins<-rownames(ma_matrix)
+# dist_theory<-carbon_matrix_pre[my_ins,my_ins] %>% as.dist() # <------ iML1515
+dist_theory<-carbon_matrix_7gem[my_ins,my_ins] %>% as.dist() # <------ 7 GEMs
+
+# Hierarchical clustering using Ward's D2 method
+hc_theory <- hclust(dist_theory, method = "ward.D2")
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+
+dend_theory <- as.dendrogram(hc_theory)
+dend_exp    <- as.dendrogram(hc_exp)
+
+# 2. Untangle: Optimize the layout of the two dendrograms to minimize crossings
+# Maintaining the topology while rotating branches for better visualization
+dl <- dendlist(dend_theory, dend_exp)
+dl_untangled <- dendextend::untangle(dl, method = "step2side")
+
+dend_p <- dl_untangled[[1]] # Optimized FBA-based dendrogram
+dend_t <- dl_untangled[[2]] # Optimized Growth-based dendrogram
+
+
+# 3. Create color vectors based on labels
+# Retrieve current label order from the left (FBA) dendrogram
+current_labels_p <- labels(dend_p)
+# Map categories and colors to the current labels
+groups_p <- carbon_labels_ordered_7gem$Category[match(current_labels_p, carbon_labels_ordered_7gem$label)]
+col_vector_p <- carbon_labels_ordered_7gem$Category_col[match(current_labels_p, carbon_labels_ordered_7gem$label)]
+
+# 4. Set label colors
+dend_p <- dend_p %>% set("labels_colors", col_vector_p)
+
+# Match Growth-based tree labels with the FBA-based tree's color vector
+dend_t <- dend_t %>% 
+  set("labels_colors", col_vector_p[match(labels(dend_t), current_labels_p)])
+
+# 5. Draw Tanglegram
+# Visualizing the structural similarity between metabolic theory and growth phenotype
+tanglegram(dend_p, dend_t,
+           common_subtrees_color_lines = FALSE, 
+           highlight_distinct_edges = FALSE,
+           highlight_branches_lwd = FALSE,
+           color_lines = col_vector_p, 
+           main_left = "FBA-based",
+           main_right = "Growth-based",
+           lab.cex = 1,
+           lwd=2,
+           columns_width = c(4, 1.5, 4),
+           margin_inner = 3.5,
+           margin_outer = 0.5,
+           axes = FALSE)
+
+
+# 6. Permutation Test for Entanglement Score
+# Lower entanglement indicates higher structural similarity
+actual_ent <- entanglement(dl_untangled) # Entanglement score after untangling
+
+print(Sys.time())
+set.seed(123)
+n_perm <- if_else(iteration_scale=="large",1000,10)
+perm_ent <- numeric(n_perm)
+
+# Fixed theory-based labels
+labels_theory <- labels(dend_p)
+
+for(i in 1:n_perm) {
+  # Copy the experimental dendrogram and shuffle labels
+  shuffled_dend <- dend_t
+  labels(shuffled_dend) <- sample(labels_theory)
+  
+  # Calculate entanglement for the shuffled pair after untangling
+  perm_dends <- dendlist(dend_p, shuffled_dend) %>% 
+    dendextend::untangle(method = "step2side")
+  perm_ent[i] <- entanglement(perm_dends)
+  
+  # Progress monitoring
+  if(i %% 100 == 0) cat(sprintf("Iteration %d/%d completed\n", i, n_perm))
+}
+
+# 7. Calculate P-value
+# P-value = Probability that random entanglement is lower than the observed value
+p_val_ent <- sum(perm_ent <= actual_ent) / n_perm
+
+# 8. Visualization of results
+hist(perm_ent, main="Permutation Test for Entanglement", 
+     xlab="Entanglement Score", xlim=c(0, 1))
+abline(v = actual_ent, col = "red", lwd = 2)
+cat(sprintf("Actual Entanglement: %.3f\nP-value: %.4f\n", actual_ent, p_val_ent))
+
+Sys.time()
+```
+#### 3.6.3.1 Cophenetic correlation with permutation test in MA
+```{r MA14}
+# 1. Prepare distance matrices and initial dendrograms
+dist_exp<-as.dist(1 - ma_matrix)
+my_ins<-rownames(ma_matrix)
+
+# Theoretical distance based on 7 GEMs consensus
+# dist_theory<-carbon_matrix_pre[my_ins,my_ins] %>% as.dist() # <------ iML1515
+dist_theory<-carbon_matrix_7gem[my_ins,my_ins] %>% as.dist() # <------ 7 GEMs
+
+# Hierarchical clustering
+hc_theory <- hclust(dist_theory, method = "ward.D2")
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+
+dend_theory <- as.dendrogram(hc_theory)
+dend_exp    <- as.dendrogram(hc_exp)
+
+# Calculate observed Cophenetic correlation (Spearman)
+# This measures how well the tree structure reflects the original distance matrix
+actual_cor <- cor_cophenetic(dend_theory, dend_exp, method = "spearman")
+
+# --- Permutation Test for Cophenetic Correlation ---
+print(Sys.time())
+set.seed(123)
+n_perm <- 1000
+perm_results <- data.frame(cor = numeric(n_perm))
+
+# Get original labels (strain names) from the experimental distance matrix
+exp_labels <- rownames(as.matrix(dist_exp))
+
+for(i in 1:n_perm) {
+  # 1. Shuffle labels while keeping the underlying matrix structure intact
+  dist_shuffled <- dist_exp
+  shuffled_labels <- sample(exp_labels)
+  
+  # Convert to matrix to reassign shuffled names
+  temp_mat <- as.matrix(dist_shuffled)
+  rownames(temp_mat) <- shuffled_labels
+  colnames(temp_mat) <- shuffled_labels
+  
+  # 2. Reconstruct dendrogram from the shuffled distance matrix
+  hc_shuffled <- hclust(as.dist(temp_mat), method = "ward.D2")
+  dend_shuffled <- as.dendrogram(hc_shuffled)
+  
+  # 3. Calculate and store the correlation for this permutation
+  perm_results$cor[i] <- cor_cophenetic(dend_theory, dend_shuffled, method = "spearman")
+  
+  # Progress monitoring
+  if(i %% 100 == 0) cat(sprintf("Iteration %d/%d completed\n", i, n_perm))
+}
+
+# --- Statistical Evaluation ---
+# P-value: Proportion of permutations where correlation is equal to or greater than observed
+p_val_cor <- sum(perm_results$cor >= actual_cor) / n_perm
+
+cat("【Analysis Results】\n")
+cat(sprintf("Cophenetic Cor (Spearman): %.3f (p = %.4f)\n", actual_cor, p_val_cor))
+
+# --- Visualization: Cophenetic Correlation Bubble Plot ---
+# 1. Prepare data and count overlapping points (ties) for bubble sizing
+df_coph <- data.frame(
+  Theory = as.vector(cophenetic(hc_theory)),
+  Experiment = as.vector(cophenetic(hc_exp))
+) %>%
+  group_by(Theory, Experiment) %>%
+  summarise(count = n(), .groups = 'drop') # 各座標の重複数をカウント
+
+my_txt<-paste("R=",sprintf("%.3f",actual_cor),sep="")
+
+# 2. Plotting with ggscatter
+# Bubble size and color intensity are log2-scaled to visualize the density of distance pairs
+ggscatter(df_coph, x = "Theory", y = "Experiment",
+          size = "count",           # Map count to dot size
+          fill = "count",           # Map count to fill color
+          color = "black",          # Fix border color to black
+          shape = 21,               # Use filled circles with borders
+          alpha= 0.8,
+          xlab = "Cophenetic distance (Theory)",
+          ylab = "Cophenetic distance (Experiment)",
+          title = "Cophenetic Correlation (Log-scaled Bubble Size)",
+          ylim=c(0,3)) +
+  # Apply log2 transformation to size and color to handle the wide range of counts
+  scale_size_continuous(trans = "log2", range = c(1, 12), name = "Count (log2)") +
+  scale_fill_distiller(palette = "Greys", trans = "log2", direction = 1, name = "Count (log2)")+
+  annotate("text", x = 10, y = 2.7, label = my_txt,)
+
+Sys.time()
+```
+
+
+
+# 4 Growth-rate profiles of the ECOR strains
+## 4.1 Load the ECOR dataset
+```{r ECOR1}
+gr_ecor_df<-paste(getwd(),"From_RawOD_to_GrowthProf","Output","stat_fit_ecor.csv",sep="/") %>% read_csv()
+gr_ecor_df<-gr_ecor_df %>% select(strain,Abb,r_mean)
+gr_ecor_df<-gr_ecor_df %>% rename(carbon=Abb,mu_max=r_mean)
+gr_ecor_df<-gr_ecor_df %>% filter(carbon %nin% qw(Glu,Ser,Cit,Arg,His,Lys,Thr) &
+                                    strain %nin% qw(ECOR29, ECOR52))
+
+# define carbon sources used in the ECOR dataset
+ecor_carbons<-gr_ecor_df$carbon %>% unique() # carbon sources used in the ECOR dataset
+print(ecor_carbons)
+
+Sys.time()
+```
+### 4.1.1 Relationship between growth rates and carbon sources
+```{r ECOR2,fig.height=3,fig.width=7}
+my_tmp<-carbon_names %>% select(Abb,Category,Category_col) %>% rename(carbon="Abb")
+my_tmp<-my_tmp[my_tmp$carbon %in% ecor_carbons,]
+my_df<-left_join(gr_ecor_df,my_tmp,by="carbon")
+my_tmp<-carbon_categories[carbon_categories %in% my_df$Category]
+my_df$Category<-factor(my_df$Category,levels=my_tmp)
+my_df<-my_df[order(my_df$Category),]
+my_palette<-my_df$Category_col %>% unique()
+ggboxplot(my_df,x="carbon",y="mu_max",color = "Category",palette = my_palette,alpha=0.3,
+          add = "jitter",add.params = list(alpha=0.1),
+          legend="right",legend.title="")+
+  rotate_x_text(angle = 90)
+```
+## 4.2 Correlation in growth rate across carbon sources (Representatives)
+```{r ECOR3,fig.width=5,fig.height=2.5, dpi=300}
+
+# --------------------
+# Representative pair 1
+# --------------------
+my_carbon_1<-"Glc"
+my_carbon_2<-"Fru"
+my_df1<-gr_ecor_df[gr_ecor_df$carbon==my_carbon_1,]
+my_df1<-my_df1 %>% rename(mu_max_1="mu_max",carbon1="carbon")
+my_df2<-gr_ecor_df[gr_ecor_df$carbon==my_carbon_2,]
+my_df2<-my_df2 %>% rename(mu_max_2="mu_max",carbon2="carbon")
+my_df<-left_join(my_df1,my_df2,by="strain")
+p1<-ggscatter(my_df,x="mu_max_1",y="mu_max_2",alpha=0.5,
+              cor.coef = TRUE,cor.coeff.args = list(label.sep = "\n",method="spearman"))+
+  xlab(expression(mu[max]~"on Glc"))+
+  ylab(expression(mu[max]~"on Fru"))
+
+# --------------------
+# Representative pair 2
+# --------------------
+my_carbon_1<-"Glc"
+my_carbon_2<-"Fum"
+my_df1<-gr_ecor_df[gr_ecor_df$carbon==my_carbon_1,]
+my_df1<-my_df1 %>% rename(mu_max_1="mu_max",carbon1="carbon")
+my_df2<-gr_ecor_df[gr_ecor_df$carbon==my_carbon_2,]
+my_df2<-my_df2 %>% rename(mu_max_2="mu_max",carbon2="carbon")
+my_df<-left_join(my_df1,my_df2,by="strain")
+p2<-ggscatter(my_df,x="mu_max_1",y="mu_max_2",alpha=0.5,
+              cor.coef = TRUE,cor.coeff.args = list(method="spearman"))+
+  scale_y_continuous(breaks = get_breaks(from=0,to=0.8,by=0.4),limits = c(0,0.8))+
+  xlab(expression(mu[max]~"on Glc"))+
+  ylab(expression(mu[max]~"on Fum"))
+
+p1+p2
+Sys.time()
+```
+## 4.3. Pairwise correlation across carbon sources (Evolutionary correlation, all pairs)
+### 4.3.1 Relationship between metabolic pathway distance and evolutionary correlation
+#### 4.3.1.1 Visualization of all data
+```{r ECOR4,fig.height=3,fig.width=6, dpi=300}
+ecor_pair_all<-carbon_pairs
+ecor_pair_all<-ecor_pair_all[(ecor_pair_all$carbon1 %in% ecor_carbons)&(ecor_pair_all$carbon2 %in% ecor_carbons),]
+ecor_pair_all$correlation<-NA
+i<-1
+for (i in 1:nrow(ecor_pair_all)){
+  my_carbon_1<-ecor_pair_all$carbon1[i]
+  my_carbon_2<-ecor_pair_all$carbon2[i]
+  my_df1<-gr_ecor_df[gr_ecor_df$carbon==my_carbon_1,]
+  my_df1<-my_df1 %>% rename(mu_max_1="mu_max")
+  my_df2<-gr_ecor_df[gr_ecor_df$carbon==my_carbon_2,]
+  my_df2<-my_df2 %>% rename(mu_max_2="mu_max")
+  my_df<-left_join(my_df1,my_df2,by="strain")
+  my_res<-cor_test(my_df,vars = "mu_max_1",vars2 = "mu_max_2",method = "spearman")
+  ecor_pair_all$correlation[i]<-my_res$cor
+}
+
+my_df<-ecor_pair_all[ecor_pair_all$key=="upper",]
+my_tmp<-c(carbon_categories,"between")
+my_tmp<-my_tmp[my_tmp %in% my_df$pair_category]
+my_df$pair_category<-factor(my_df$pair_category,levels = my_tmp)
+my_df<-my_df[order(my_df$pair_category,decreasing = TRUE),]
+
+my_palette<-c("#0072B2","#E69F00","#56B4E9","#009E73","#8FD926", "grey60")
+
+ggscatter(my_df,
+          x="rxndiff_MG1655",y="correlation",alpha=0.8,
+          xlab="Metabolic pathway distance [arb. unit]",ylab="Evolutionary correlation [arb. unit]",
+          color = "pair_category",palette = my_palette,legend="right",legend.title="",
+          shape="pair_category",
+          cor.coef = TRUE,cor.method = "spearman",cor.coef.coord = c(5,-0.4))+
+   scale_shape_manual(values = c(16, 16, 16, 16, 16, 4))+
+  scale_y_continuous(breaks = get_breaks(from = -0.4,to = 0.8,by = 0.4),limits = c(-0.4,1))
+
+ggscatter(my_df,
+          x="rxndiff_median",y="correlation",alpha=0.8,
+          xlab="Metabolic pathway distance [arb. unit]",ylab="Evolutionary correlation [arb. unit]",
+          color = "pair_category",palette = my_palette,legend="right",legend.title="",
+          shape="pair_category",
+          cor.coef = TRUE,cor.method = "spearman",cor.coef.coord = c(5,-0.4))+
+  scale_shape_manual(values = c(16, 16, 16, 16, 16, 4))+
+  scale_y_continuous(breaks = get_breaks(from = -0.4,to = 0.8,by = 0.4),limits = c(-0.4,1))
+
+
+my_palette2<-c("#E69F00","#56B4E9","#009E73","#8FD926")
+# iML1515-based distance
+ggscatter(my_df[(my_df$pair_category!="between")&(my_df$pair_category!="Upper Glycolysis"),],
+          x="rxndiff_MG1655",y="correlation",alpha=0.7,
+          xlab="Metabolic pathway distance [arb. unit]",ylab="Evolutionary correlation [arb. unit]",
+          # cor.coef = TRUE,cor.method = "spearman",cor.coef.coord = c(5,-0.3),
+          color = "pair_category",palette = my_palette2,legend="",legend.title="")+
+  scale_y_continuous(breaks = get_breaks(from = -0.4,to = 0.8,by = 0.4),limits = c(-0.4,1))
+
+# 7GEMs-based distance
+ggscatter(my_df[(my_df$pair_category!="between")&(my_df$pair_category!="Upper Glycolysis"),],
+          x="rxndiff_median",y="correlation",alpha=0.7,
+          xlab="Metabolic pathway distance [arb. unit]",ylab="Evolutionary correlation [arb. unit]",
+          # cor.coef = TRUE,cor.method = "spearman",cor.coef.coord = c(5,-0.3),
+          color = "pair_category",palette = my_palette2,legend="",legend.title="")+
+  scale_y_continuous(breaks = get_breaks(from = -0.4,to = 0.8,by = 0.4),limits = c(-0.4,1))
+
+
+Sys.time()
+```
+#### 4.3.1.2 Visualization of subset categories without upper glyclysis
+```{r ECOR5,fig.height=1.5,fig.width=2.3, dpi=300}
+my_palette2<-c("#E69F00","#56B4E9","#009E73","#8FD926")
+ggscatter(my_df[(my_df$pair_category!="between")&(my_df$pair_category %nin% c("Upper Glycolysis","Amino acid-derived TCA input")),],
+          # x="rxndiff_MG1655",y="correlation",alpha=0.7, #<- iML1515
+          x="rxndiff_median",y="correlation",alpha=0.7, # <- 7 GEMs
+          xlab="",ylab="",
+          # cor.coef = TRUE,cor.method = "spearman",cor.coef.coord = c(5,-0.3),
+          color = "pair_category",palette = my_palette2,legend="",legend.title="")+
+  scale_x_continuous(breaks = get_breaks(from = 10,to = 20,by = 10),limits = c(3,23))+
+  scale_y_continuous(breaks = get_breaks(from = 0,to = 0.8,by = 0.8),limits = c(-0.4,1))
+Sys.time()
+```
+### 4.3.2 Evolutionary correlation across metabolic pathway categories
+#### 4.3.2.1 Comparison with global between-categories
+```{r ECOR6,fig.height=2.6,fig.width=7,dpi=300}
+my_palette<-c("#0072B2", "#E69F00", "#56B4E9", "#009E73", "#8FD926", "grey70", "#000000")
+my_df1<-ecor_pair_all[(ecor_pair_all$key=="upper")&(ecor_pair_all$pair_category!="between"),]
+# my_df1$pair_category<-factor(my_df1$pair_category,levels = carbon_categories)
+my_df1$xlab<-my_df1$pair_category %>% as.character()
+my_df1[my_df1$pair_category=="Upper Glycolysis",]$xlab<-"Upper\nGlycolysis"
+my_df1[my_df1$pair_category=="Lower Glycolysis",]$xlab<-"Lower\nGlycolysis"
+my_df1[my_df1$pair_category=="Pentose Phosphate",]$xlab<-"Pentose\nPhosphate"
+my_df1[my_df1$pair_category=="TCA cycle",]$xlab<-"TCA\ncycle"
+my_df1[my_df1$pair_category=="Amino acid-derived TCA input",]$xlab<-"Amino acid\nderived\nTCA input"
+
+my_df2<-ecor_pair_all[(ecor_pair_all$key=="upper"),]
+my_df2$xlab<-my_df2$pair_category
+my_df2[my_df2$xlab!="between",]$xlab<-"Within"
+my_df2[my_df2$xlab=="between",]$xlab<-"Between"
+
+my_df<-bind_rows(my_df1,my_df2)
+my_label<-c("Upper\nGlycolysis","Lower\nGlycolysis","Pentose\nPhosphate","TCA\ncycle","Amino acid\nderived\nTCA input","Within","Between")
+my_df$xlab<-factor(my_df$xlab,levels = my_label)
+
+# Wilcoxon test
+my_df %>%
+  wilcox_test(formula = correlation ~ xlab,
+              ref.group = "Between",
+              p.adjust.method = "BH"
+              )
+
+
+ggboxplot(my_df,
+          x="xlab",y="correlation",
+          ylab="Evolutionary correlation\n[arb. unit]",xlab="",
+          add="jitter",add.params = list(alpha=0.5),
+          color = "xlab",palette = my_palette,legend="")+
+  stat_pwc(method = "wilcox.test",label = "p.adj.signif",
+           ref.group = "Between",tip.length = 0,
+    p.adjust.method = "BH",hide.ns = TRUE 
+  )+
+  scale_y_continuous(breaks = get_breaks(from = -0.4,to = 1.2,by = 0.4),limits = c(-0.4,1.4))
+Sys.time()
+```
+#### 4.3.2.2 Comparison with local between-categories 
+```{r ECOR7,fig.width=1.7,fig.height=2,dpi=300}
+my_palette<-c("#0072B2", "#E69F00", "#56B4E9", "#CC79A7", "#009E73","#8FD926")
+my_pathctgs<-c("Upper Glycolysis",
+          "Lower Glycolysis",
+          "Pentose Phosphate",
+          "Entner Doudoroff",
+          "TCA cycle",
+          "Amino acid-derived TCA input")
+pathctgs_df<-data.frame(category=my_pathctgs,
+                        label=c("Upper\nGlycolysis",
+          "Lower\nGlycolysis",
+          "Pentose\nPhosphate",
+          "Entner\nDoudoroff",
+          "TCA\ncycle",
+          "Amino acid-\nderived\nTCA input"),
+                        color=my_palette)
+  
+my_df<-ecor_pair_all[ecor_pair_all$key=="upper",]
+my_list<-list()
+my_p_list<-list()
+i<-6
+for(i in 1:nrow(pathctgs_df)){
+  my_cls<-pathctgs_df$category[i]
+  my_dat<-my_df[(my_df$category1==my_cls)|(my_df$category2==my_cls),]
+  n_cbn<-c(my_dat[my_dat$category1==my_cls,]$carbon1,my_dat[my_dat$category2==my_cls,]$carbon2) %>% unique() %>% length()
+  if(n_cbn>1){
+    my_dat$pair_mpc<-"Between"
+    my_dat[my_dat$category1==my_dat$category2,]$pair_mpc<-pathctgs_df$label[i]
+    my_dat$pair_mpc<-factor(my_dat$pair_mpc,levels=c(pathctgs_df$label[i],"Between"))
+    my_dat$pair_category<-factor(my_dat$pair_category,levels=c(pathctgs_df$category[i],"between"))
+    my_list[[i]]<-ggboxplot(my_dat,
+            # x="pair_mpc",y="correlation",
+            x="pair_category",y="correlation",
+            ylab="Evolutionary correlation [arb. unit]",xlab="",
+            # color="pair_mpc",
+            color="pair_category",
+            add="jitter",add.params = list(alpha=0.5),
+            palette = c(pathctgs_df$color[i],"grey60"),
+            legend="")+
+    stat_pwc(method = "wilcox.test",label = "p.adj.signif",
+             # ref.group = "Between",
+             ref.group = "between",
+             tip.length = 0,
+      p.adjust.method = "BH",hide.ns = TRUE)+
+    scale_y_continuous(breaks = seq(-0.4, 0.8, by = 0.4), limits = c(-0.4, 1.2))
+    # Wilcoxon test
+    my_res<-my_dat %>%
+      # wilcox_test(formula = correlation ~ pair_mpc,
+      wilcox_test(formula = correlation ~ pair_category,
+      # ref.group = "Between",
+      ref.group = "between",
+      p.adjust.method = "BH")
+    my_p_list[[i]]<-my_res$p
+  }
+}
+p.adjust(my_p_list%>% unlist(),method = "BH")
+my_list[[1]]
+my_list[[2]]
+my_list[[3]]
+my_list[[4]]
+my_list[[5]]
+my_list[[6]]
+Sys.time()
+```
+## 4.4 Clustering of evolutionary correlation in ECOR
+### 4.4.1 Hierarchical clustering for evolutionary correlation across carbon sources in ECOR
+```{r ECOR8,fig.height=4.5,fig.width=4.5, dpi=300}
+# Convert to matrix
+ecor_matrix <- ecor_pair_all %>% select(carbon1,carbon2,correlation) %>%
+  pivot_wider(names_from = carbon2, values_from = correlation) %>%
+  column_to_rownames("carbon1") %>%
+  as.matrix()
+
+# Sorting
+target_order <- sort(rownames(ecor_matrix))
+ecor_matrix <- ecor_matrix[target_order, target_order]
+
+# Calc distance (1 - r)
+ecor_dist_matrix <- as.dist(1 - ecor_matrix)
+ecor_dist_df<-make_dist_dataframe(ecor_dist_matrix,"ecor")
+
+# Clustering
+ecor_row_cluster <- hclust(ecor_dist_matrix, method = "ward.D2")
+ecor_labels_ordered <- data.frame(label=ecor_row_cluster$labels[ecor_row_cluster$order])
+ecor_labels_ordered<-left_join(ecor_labels_ordered,carbon_names,by=c("label"="Abb"))
+my_colors <- colorRampPalette(rev(brewer.pal(11, "RdBu")))(200)
+
+# Visualization
+corrplot(ecor_matrix, 
+         method = "color",
+         order = "hclust",
+         hclust.method = "ward.D2",
+         col = my_colors,
+         tl.srt = 90,
+         tl.cex = 1,
+         tl.col=ecor_labels_ordered$Category_col,
+         addgrid.col = 'white',
+         type="upper",diag =T)
+
+pheatmap(ecor_matrix, 
+         clustering_distance_rows = ecor_dist_matrix, 
+         clustering_distance_cols = ecor_dist_matrix,
+         clustering_method = "ward.D2",
+         color = my_colors,
+         # border_color = "white",
+         breaks = seq(-1, 1, length.out = 201),
+         main = "")
+Sys.time()
+```
+### 4.4.2 Visualization of the dendrogram in hierarchical clustering (Growth-based dendrogram in ECOR)
+```{r ECOR9,fig.height=2.5,fig.width=9,dpi=300}
+dend_sbst<-as.dendrogram(ecor_row_cluster)
+current_labels <- labels(dend_sbst)
+dend_sbst <- dend_sbst %>% 
+  set("labels_cex", 1.5) %>%
+  set("labels_colors", ecor_labels_ordered$Category_col) %>% 
+  set("branches_lwd", 3)
+plot(dend_sbst, main = "ward.D2")
+Sys.time()
+```
+### 4.4.1 Evolutionary correlation for each of three clusters defined by hieralchical clustering
+```{r ECOR10,fig.width=2,fig.height=3,dpi=300}
+# 1. Clustering based on experimental evolutionary distances
+# Define the number of theoretical clusters (k)
+k_val <- 3
+
+dist_exp<-ecor_dist_matrix
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+cluster_exp    <- cutree(hc_exp, k = k_val)
+
+# Create a mapping table for carbon sources and their assigned clusters
+my_tmp<-data.frame(carbon=names(cluster_exp),exp=cluster_exp)
+
+# Print carbon sources belonging to each cluster for inspection
+for(i in 1:k_val){
+  paste("cluster ",i,": ",paste(my_tmp[my_tmp$exp==i,]$carbon,collapse = ","),sep="") %>% print()
+}
+
+# 2. Data Integration
+# Focus on unique pairs (upper triangle) and join with cluster assignments
+my_df<-ecor_pair_all[ecor_pair_all$key=="upper",]
+my_tmp1<-my_tmp %>% rename(carbon1=carbon,exp1=exp)
+my_tmp2<-my_tmp %>% rename(carbon2=carbon,exp2=exp)
+my_df<-left_join(my_df,my_tmp1,by="carbon1")
+my_df<-left_join(my_df,my_tmp2,by="carbon2")
+
+my_clstrs<-seq(1,k_val)
+
+# 3. Iterative Comparison: Within-cluster vs. Between-cluster Correlations
+my_list<-list()
+my_p_list<-list()
+for(i in 1:length(my_clstrs)){
+  my_cls<-my_clstrs[i]
+  
+  # Select pairs where at least one carbon source belongs to the target cluster
+  my_dat<-my_df[(my_df$exp1==my_cls)|(my_df$exp2==my_cls),]
+  n_cbn<-my_tmp[my_tmp$exp==my_cls,] %>% nrow()
+  
+  # Perform analysis only if the cluster contains more than one carbon source
+  if(n_cbn>1){
+    # Label pairs as either "Within" (the specific cluster number) or "Between"
+    my_dat$pair_cluster_exp<-"Between"
+    my_dat[my_dat$exp1==my_dat$exp2,]$pair_cluster_exp<-as.character(my_cls)
+    
+    # Set factor levels for consistent plotting order
+    my_dat$pair_cluster_exp<-factor(my_dat$pair_cluster_exp,levels=c(as.character(my_cls), "Between"))
+    
+    # 4. Visualization: Boxplot with Jitter
+    # Comparing evolutionary correlations within the cluster vs. with others
+    my_list[[i]]<-ggboxplot(my_dat,
+            x="pair_cluster_exp",y="correlation",
+            ylab="Evolutionary correlation [arb. unit]",xlab="",
+            add="jitter",add.params = list(alpha=0.5),
+            # palette = my_palette,
+            legend="")+
+    stat_pwc(method = "wilcox.test",label = "p.adj.signif",
+             ref.group = "Between",tip.length = 0,
+      p.adjust.method = "BH",hide.ns = TRUE)+
+    scale_y_continuous(breaks = seq(-0.4, 0.8, by = 0.4), limits = c(-0.4, 1.2))
+    
+    # 5. Statistical Testing: Wilcoxon Rank Sum Test
+    my_res<-my_dat %>%
+      wilcox_test(formula = correlation ~ pair_cluster_exp,
+      ref.group = "Between",
+      p.adjust.method = "BH")
+    my_p_list[[i]]<-my_res$p
+  }
+}
+
+# 6. Global P-value adjustment across all cluster comparisons
+p_adjusted_all <- p.adjust(unlist(my_p_list), method = "BH")
+print("Adjusted P-values for all clusters:")
+print(p_adjusted_all)
+
+# Output individual plots
+my_list[[1]]
+my_list[[2]]
+my_list[[3]]
+
+Sys.time()
+```
+## 4.5 Comparison with metabolic pathway distance in ECOR
+### 4.5.1 Dendrogram of the carbnon sources used in the ECOR dataset, based on metabolic pathway distance
+```{r ECOR11,fig.height=2.5,fig.width=9,dpi=300}
+my_df<-carbon_pairs[(carbon_pairs$carbon1 %in% ecor_carbons)&(carbon_pairs$carbon2 %in% ecor_carbons),]
+# Convert to matrix
+
+
+# iML1515-based distance
+# carbon_matrix <- my_df %>% select(carbon1,carbon2,rxndiff_MG1655) %>%
+#   pivot_wider(names_from = carbon2, values_from = rxndiff_MG1655) %>%
+#   column_to_rownames("carbon1") %>%
+#   as.matrix()
+
+# 7 GEM based distance
+carbon_matrix <- my_df %>% select(carbon1,carbon2,rxndiff_median) %>%
+  pivot_wider(names_from = carbon2, values_from = rxndiff_median) %>%
+  column_to_rownames("carbon1") %>%
+  as.matrix()
+
+
+# Sorting
+target_order <- sort(rownames(carbon_matrix))
+carbon_matrix <- carbon_matrix[target_order, target_order]
+
+# Convert to distance matrix
+carbon_dist_matrix <- as.dist(carbon_matrix)
+carbon_dist_df<-make_dist_dataframe(carbon_dist_matrix,"fba")
+
+# Clustering
+carbon_row_cluster <- hclust(carbon_dist_matrix, method = "ward.D2")
+carbon_labels_ordered <- data.frame(label=carbon_row_cluster$labels[carbon_row_cluster$order])
+carbon_labels_ordered<-left_join(carbon_labels_ordered,carbon_names,by=c("label"="Abb"))
+
+# Visualization
+dend_sbst<-as.dendrogram(carbon_row_cluster)
+current_labels <- labels(dend_sbst)
+dend_sbst <- dend_sbst %>% 
+  set("labels_cex", 1.5) %>%
+  set("labels_colors", carbon_labels_ordered$Category_col) %>%
+  set("branches_lwd", 3)
+plot(dend_sbst, main = "ward.D2")
+Sys.time()
+```
+### 4.5.2 Metabolic pathway distance across metabolic pathway categories
+```{r ECOR12,fig.height=2.5,fig.width=7, dpi=300}
+my_palette<-c("#0072B2", "#E69F00", "#56B4E9", "#009E73", "#8FD926", "grey60", "grey30")
+
+my_df1<-carbon_pairs[(carbon_pairs$carbon1 %in% ecor_carbons)&(carbon_pairs$carbon2 %in% ecor_carbons),]
+my_df1<-my_df1[(my_df1$key=="upper")&(my_df1$pair_category!="between"),]
+# my_df1$pair_category<-factor(my_df1$pair_category,levels = carbon_categories)
+my_df1$xlab<-my_df1$pair_category %>% as.character()
+my_df1[my_df1$pair_category=="Upper Glycolysis",]$xlab<-"Upper\nGlycolysis"
+my_df1[my_df1$pair_category=="Lower Glycolysis",]$xlab<-"Lower\nGlycolysis"
+my_df1[my_df1$pair_category=="Pentose Phosphate",]$xlab<-"Pentose\nPhosphate"
+my_df1[my_df1$pair_category=="TCA cycle",]$xlab<-"TCA\ncycle"
+my_df1[my_df1$pair_category=="Amino acid-derived TCA input",]$xlab<-"Amino acid\nderived\nTCA input"
+
+my_df2<-carbon_pairs[(carbon_pairs$carbon1 %in% ecor_carbons)&(carbon_pairs$carbon2 %in% ecor_carbons),]
+my_df2<-my_df2[(my_df2$key=="upper"),]
+my_df2$xlab<-my_df2$pair_category
+my_df2[my_df2$xlab!="between",]$xlab<-"Within"
+my_df2[my_df2$xlab=="between",]$xlab<-"Between"
+
+my_df<-bind_rows(my_df1,my_df2)
+my_label<-c("Upper\nGlycolysis","Lower\nGlycolysis","Pentose\nPhosphate","TCA\ncycle","Amino acid\nderived\nTCA input","Between","Within")
+
+my_df$xlab<-factor(my_df$xlab,levels = my_label)
+
+# Wilcoxon test
+my_df %>%
+  wilcox_test(formula = rxndiff_MG1655 ~ xlab,
+              ref.group = "Between",
+              p.adjust.method = "BH"
+              )
+
+# iML1515 based distance
+ggboxplot(my_df,
+          x="xlab",y="rxndiff_MG1655",
+          ylab="Metabolic pathway\ndistance [arb. unit]",xlab="",
+          add="jitter",add.params = list(alpha=0.5),
+          color = "xlab",palette = my_palette,legend="")+
+  # stat_pwc(method = "wilcox.test",label = "p.adj.signif",
+  #          ref.group = "Between",tip.length = 0,
+  #   p.adjust.method = "BH",hide.ns = TRUE)+
+  scale_y_continuous(breaks = get_breaks(from = 0,to = 30,by = 10),limits = c(0,35))
+
+# 7 GEMs based distance
+ggboxplot(my_df,
+          x="xlab",y="rxndiff_median",
+          ylab="Metabolic pathway\ndistance [arb. unit]",xlab="",
+          add="jitter",add.params = list(alpha=0.5),
+          color = "xlab",palette = my_palette,legend="")+
+  # stat_pwc(method = "wilcox.test",label = "p.adj.signif",
+  #          ref.group = "Between",tip.length = 0,
+  #   p.adjust.method = "BH",hide.ns = TRUE)+
+  scale_y_continuous(breaks = get_breaks(from = 0,to = 30,by = 10),limits = c(0,35))
+Sys.time()
+```
+### 4.5.3 Entanglement score with permutation test in ECOR (processing time: 15 min)
+```{r ECOR13, fig.width=1.8,fig.height=5,dpi=300}
+# 1. Pre-processing: Create initial dendrograms
+# Genetic distance (FBA theory) and Evolutionary distance (ECOR data)
+dend_fba_raw <- as.dendrogram(carbon_row_cluster)
+current_labels <- labels(dend_fba_raw)
+
+# Color labels based on metabolic categories
+dend_fba_raw <- dend_fba_raw %>% 
+  set("labels_colors", carbon_labels_ordered$Category_col)
+
+dend_ecor_raw<- as.dendrogram(ecor_row_cluster)
+
+# 2. Untangle: Minimize crossing lines between the two dendrograms
+# This optimizes the visualization without changing the underlying topology
+dl <- dendlist(dend_fba_raw, dend_ecor_raw)
+dl_untangled <- dendextend::untangle(dl, method = "step2side")
+
+dend_p <- dl_untangled[[1]] # Optimized FBA-based dendrogram
+dend_t <- dl_untangled[[2]] # Optimized ECOR-based dendrogram
+
+# 3. Create color vectors for plotting
+# Retrieve current label order from the left (FBA) tree
+current_labels_p <- labels(dend_p)
+
+# Map categories and colors to the current labels
+groups_p <- carbon_labels_ordered$Category[match(current_labels_p, carbon_labels_ordered$label)]
+col_vector_p <- carbon_labels_ordered$Category_col[match(current_labels_p, carbon_labels_ordered$label)]
+
+# 4. Set label colors (branches remain black)
+dend_p <- dend_p %>% set("labels_colors", col_vector_p)
+
+# Match labels of the ECOR-based tree to the FBA-based tree's color vector
+dend_t <- dend_t %>% 
+  set("labels_colors", col_vector_p[match(labels(dend_t), current_labels_p)])
+
+# 5. Draw Tanglegram for ECOR
+# Assessing structural similarity between metabolic theory and natural evolution
+tanglegram(dend_p, dend_t,
+           common_subtrees_color_lines = FALSE, 
+           highlight_distinct_edges = FALSE,
+           highlight_branches_lwd = FALSE, 
+           color_lines = col_vector_p, # Connecting lines match category colors
+           main_left = "FBA-based",
+           main_right = "Growth-based",
+           lab.cex = 1,
+           lwd=2,
+           columns_width = c(4, 2.5, 4),  # Narrow central column to emphasize links
+           margin_inner = 3.5,          
+           margin_outer = 0.5,             
+           # 枝の色を黒で固定
+           axes = FALSE)
+
+# legend
+# legend("topleft", legend = names(pgPalette), fill = pgPalette, title = "Phylogroup", cex = 0.8)
+
+
+# 6. Calculate Observed Entanglement Score
+# Lower entanglement score suggests higher similarity between trees
+actual_ent <- entanglement(dl_untangled) # Entanglement score after untangling
+
+print(Sys.time())
+
+# 7. Permutation Test for Entanglement
+set.seed(123)
+n_perm <- if_else(iteration_scale=="large",1000,10)
+perm_ent <- numeric(n_perm)
+
+# Fix the structural layout of the theoretical tree
+labels_theory <- labels(dend_p)
+
+for(i in 1:n_perm) {
+  # Create a copy of the experimental dendrogram and shuffle labels
+  shuffled_dend <- dend_t
+  labels(shuffled_dend) <- sample(labels_theory)
+  
+  # Perform untangle for each shuffle to maintain consistency with the observed value
+  perm_dends <- dendlist(dend_p, shuffled_dend) %>% dendextend::untangle(method = "step2side")
+  perm_ent[i] <- entanglement(perm_dends)
+  
+  # Progress monitoring
+  if(i %% 100 == 0) cat(sprintf("Iteration %d/%d completed\n", i, n_perm))
+}
+
+# 8. Calculate P-value
+# P-value: Probability that random entanglement is lower than the observed value
+p_val_ent <- sum(perm_ent <= actual_ent) / n_perm
+
+# 9. Results Visualization
+hist(perm_ent, main="Permutation Test for Entanglement", 
+     xlab="Entanglement Score", xlim=c(0, 1))
+abline(v = actual_ent, col = "red", lwd = 2)
+cat(sprintf("Actual Entanglement: %.3f\nP-value: %.4f\n", actual_ent, p_val_ent))
+Sys.time()
+```
+
+### 4.5.4 Cophenetic correlation with permutation test in ECOR
+```{r ECOR14}
+# 1. Prepare distance matrices and initial dendrograms for ECOR
+dist_theory<-carbon_dist_matrix
+dist_exp<-ecor_dist_matrix
+
+# Hierarchical clustering using Ward's D2 method
+hc_theory <- hclust(dist_theory, method = "ward.D2")
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+
+dend_theory <- as.dendrogram(hc_theory)
+dend_exp    <- as.dendrogram(hc_exp)
+
+# Calculate observed Cophenetic correlation (Spearman)
+# This evaluates the correlation between the dendrogram-induced distances and original matrices
+actual_cor <- cor_cophenetic(dend_theory, dend_exp, method = "spearman")
+
+# --- Integrated Permutation Test ---
+# Generating a null distribution by shuffling labels to evaluate statistical significance
+print(Sys.time())
+set.seed(123)
+n_perm <- 1000
+perm_results <- data.frame(cor = numeric(n_perm))
+
+# Retrieve labels (strain names) from the experimental distance matrix
+exp_labels <- rownames(as.matrix(dist_exp))
+
+for(i in 1:n_perm) {
+  # 1. Shuffle only the labels while maintaining the distance matrix structure
+  dist_shuffled <- dist_exp
+  shuffled_labels <- sample(exp_labels)
+  
+  # Re-assign shuffled labels to the matrix
+  temp_mat <- as.matrix(dist_shuffled)
+  rownames(temp_mat) <- shuffled_labels
+  colnames(temp_mat) <- shuffled_labels
+  
+  # 2. Reconstruct the dendrogram from the shuffled distance matrix
+  # Consistency in the clustering method (ward.D2) is crucial
+  hc_shuffled <- hclust(as.dist(temp_mat), method = "ward.D2")
+  dend_shuffled <- as.dendrogram(hc_shuffled)
+  
+  # 3. Compute and store correlation for the permuted pair
+  perm_results$cor[i] <- cor_cophenetic(dend_theory, dend_shuffled, method = "spearman")
+  
+  # Progress monitoring
+  if(i %% 100 == 0) cat(sprintf("Iteration %d/%d completed\n", i, n_perm))
+}
+
+# --- Statistical Evaluation ---
+# P-value: Probability of obtaining a correlation as high as observed by chance
+p_val_cor <- sum(perm_results$cor >= actual_cor) / n_perm
+
+cat("【Analysis Results】\n")
+cat(sprintf("Cophenetic Cor (Spearman): %.3f (p = %.4f)\n", actual_cor, p_val_cor))
+
+# --- Visualization: Cophenetic Correlation Bubble Plot ---
+# 1. Prepare data and count overlapping distance pairs for bubble sizing
+df_coph <- data.frame(
+  Theory = as.vector(cophenetic(hc_theory)),
+  Experiment = as.vector(cophenetic(hc_exp))
+) %>%
+  group_by(Theory, Experiment) %>%
+  summarise(count = n(), .groups = 'drop')
+
+my_txt<-paste("R=",sprintf("%.3f",actual_cor),sep="")
+
+# 2. Visualization using ggscatter
+# Point size and color intensity are log2-scaled to reflect the density of identical distance pairs
+ggscatter(df_coph, x = "Theory", y = "Experiment",
+          size = "count",          # Map number of ties to dot size
+          fill = "count",           # Map number of ties to color intensity
+          color = "black",          # Solid black borders for bubbles
+          shape = 21,               # Filled circles with borders
+          alpha= 0.8,
+          xlab = "Cophenetic distance (Theory)",
+          ylab = "Cophenetic distance (Experiment)",
+          title = "Cophenetic Correlation (Log-scaled Bubble Size)",
+          ylim=c(0,3)) +
+  # Apply log2 transformation to handle the wide range of point densities
+  scale_size_continuous(trans = "log2", range = c(1, 12), name = "Count (log2)") +
+  scale_fill_distiller(palette = "Greys", trans = "log2", direction = 1, name = "Count (log2)")+
+  annotate("text", x = 10, y = 2.7, label = my_txt)
+
+Sys.time()
+```
+### 4.5.5 Baker's Gamma Index for Topological Similarity
+```{r ECOR15}
+# 1. Prepare distance matrices and initial dendrograms for ECOR
+dist_theory<-carbon_dist_matrix
+dist_exp<-ecor_dist_matrix
+
+# Hierarchical clustering using Ward's D2 method
+hc_theory <- hclust(dist_theory, method = "ward.D2")
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+
+dend_theory <- as.dendrogram(hc_theory)
+dend_exp    <- as.dendrogram(hc_exp)
+
+# 2. Calculate Observed Baker's Gamma Index
+# Baker's Gamma measures the rank correlation between the stages at which 
+# pairs of objects combine in each dendrogram.
+actual_gamma <- cor_bakers_gamma(dend_theory, dend_exp)
+cat(sprintf("Actual Baker's Gammer: %.3f\n", actual_gamma))
+
+# 3. Permutation Test (1,000 iterations)
+# Building a null distribution by randomly shuffling labels to assess significance
+set.seed(123)
+n_perm <- 1000
+perm_gammas <- numeric(n_perm)
+
+for(i in 1:n_perm) {
+  # Randomly shuffle the labels of one dendrogram while preserving its structure
+  perm_dend <- sample.dendrogram(dend_theory, replace = FALSE)
+  # Compute Baker's Gamma for the shuffled pair
+  perm_gammas[i] <- cor_bakers_gamma(perm_dend, dend_exp)
+}
+
+# 4. Calculate P-value
+# P-value: The probability of obtaining a Gamma value as high as observed by chance
+p_value <- sum(perm_gammas >= actual_gamma) / n_perm
+
+print(Sys.time())
+cat(sprintf("P-value: %.4f\n", p_value))
+```
+### 4.5.5 Validation of FBA-based Clusters using ECOR Evolutionary Correlations
+```{r ECOR17,fig.width=2,fig.height=3,dpi=300}
+# 1. Clustering based on Theory (FBA) vs. Experiment (ECOR)
+# Defining the number of clusters (k) for comparative analysis
+k_val <- 3
+
+dist_theory<-carbon_dist_matrix
+dist_exp<-ecor_dist_matrix
+hc_theory <- hclust(dist_theory, method = "ward.D2")
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+
+# Assign clusters to each carbon source based on both datasets
+cluster_theory <- cutree(hc_theory, k = k_val)
+cluster_exp    <- cutree(hc_exp, k = k_val)
+
+# Merge cluster assignments into a mapping table
+my_df1<-data.frame(carbon=names(cluster_theory),theory=cluster_theory)
+my_df2<-data.frame(carbon=names(cluster_exp),exp=cluster_exp)
+my_tmp<-left_join(my_df1,my_df2,by="carbon")
+
+# 2. Data Integration for Pairwise Correlation Analysis
+# Filter for unique pairs (upper triangle) and map cluster assignments for both members of each pair
+my_df<-ecor_pair_all[ecor_pair_all$key=="upper",]
+my_tmp1<-my_tmp %>% rename(carbon1=carbon,theory1=theory,exp1=exp)
+my_tmp2<-my_tmp %>% rename(carbon2=carbon,theory2=theory,exp2=exp)
+my_df<-left_join(my_df,my_tmp1,by="carbon1")
+my_df<-left_join(my_df,my_tmp2,by="carbon2")
+
+# Display the mapping results for inspection
+print("Mapping of Carbon Sources to FBA (Theory) and ECOR (Experiment) Clusters:")
+print(my_tmp)
+
+# 3. Statistical Comparison: Within-Theory-Cluster vs. Between-Cluster Correlations
+# Testing if FBA-defined metabolic modules exhibit higher evolutionary coherence in ECOR data
+my_clstrs<-seq(1,k_val)
+my_list<-list()
+
+for(i in 1:length(my_clstrs)){
+  my_cls<-my_clstrs[i]
+  
+  # Select pairs where at least one member belongs to the current FBA cluster
+  my_dat<-my_df[(my_df$theory1==my_cls)|(my_df$theory2==my_cls),]
+  
+  # Label pairs as "Within" (specific cluster ID) or "Between" (cross-cluster comparison)
+  my_dat$pair_cluster_theory<-"Between"
+  my_dat[my_dat$theory1 == my_dat$theory2, ]$pair_cluster_theory <- as.character(my_cls)
+  
+  # Set factor levels to ensure "Between" is the reference group in plots
+  my_dat$pair_cluster_theory <- factor(my_dat$pair_cluster_theory, levels = c(as.character(my_cls), "Between"))
+  
+  # 4. Visualization: Boxplot with Wilcoxon Rank Sum Test
+  my_list[[i]]<-ggboxplot(my_dat,
+          x="pair_cluster_theory",y="correlation",
+          ylab="Evolutionary correlation [arb. unit]",xlab="",
+          add="jitter",add.params = list(alpha=0.5),
+          # palette = my_palette,
+          legend="")+
+    # Use Wilcoxon test with BH adjustment to compare within-cluster correlation against the baseline
+  stat_pwc(method = "wilcox.test",label = "p.adj.signif",
+           ref.group = "Between",tip.length = 0,
+    p.adjust.method = "BH",hide.ns = TRUE)+
+  scale_y_continuous(breaks = seq(-0.4, 0.8, by = 0.4), limits = c(-0.4, 1))
+}
+
+# Display the comparison for Cluster 1
+print("Plotting comparison for FBA Cluster 1:")
+my_list[[1]]
+
+Sys.time()
+```
+### 4.5.6 Subset trees without upper glycolysis
+#### 4.5.6.1 Entanglement score with permutation test
+```{r ECOR18, fig.width=1.8,fig.height=2.5,dpi=300}
+
+# 1. Data Preparation: Subsetting carbon sources
+# Transforming ECOR growth data into a matrix and excluding 'Upper Glycolysis' category
+mat_exp<-gr_ecor_df %>%
+  pivot_wider(names_from = carbon,values_from = mu_max)
+# my_rows<-paste("ECOR",sprintf("%02d", mat_exp$strain),sep="")
+my_rows<-mat_exp$strain
+mat_exp<-mat_exp %>% select(-strain)
+
+# Filter carbon sources to exclude Upper Glycolysis based on the reference label dataframe
+my_ins<-carbon_labels_ordered[carbon_labels_ordered$Category %nin% "Upper Glycolysis",]$label
+mat_exp<-mat_exp %>% select(all_of(my_ins)) %>% as.matrix()
+rownames(mat_exp)<-my_rows
+
+# Calculate distances for the subset
+# dist_exp uses Spearman correlation, dist_theory uses the FBA-based matrix
+dist_exp<-mat_exp %>% spearman_dist()
+dist_theory<-carbon_matrix[my_ins,my_ins] %>% as.dist()
+
+# Hierarchical clustering
+hc_theory <- hclust(dist_theory, method = "ward.D2")
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+
+dend_theory <- as.dendrogram(hc_theory)
+dend_exp    <- as.dendrogram(hc_exp)
+
+# 2. Untangle: Optimize the layout for visualization
+# Rotating branches to minimize crossing lines while preserving topology
+dl <- dendlist(dend_theory, dend_exp)
+dl_untangled <- dendextend::untangle(dl, method = "step2side")
+
+dend_p <- dl_untangled[[1]] # Optimized FBA-based tree
+dend_t <- dl_untangled[[2]] # Optimized Growth-based tree
+
+# 3. Create color vectors for the subset
+current_labels_p <- labels(dend_p)
+col_vector_p <- carbon_labels_ordered$Category_col[match(current_labels_p, carbon_labels_ordered$label)]
+
+# 4. Set label colors
+dend_p <- dend_p %>% set("labels_colors", col_vector_p)
+dend_t <- dend_t %>% 
+  set("labels_colors", col_vector_p[match(labels(dend_t), current_labels_p)])
+
+# 5. Draw Tanglegram for the subset (Excluding Upper Glycolysis)
+tanglegram(dend_p, dend_t,
+           common_subtrees_color_lines = FALSE, 
+           highlight_distinct_edges = FALSE,
+           highlight_branches_lwd = FALSE,
+           color_lines = col_vector_p, 
+           main_left = "FBA-based",
+           main_right = "Growth-based",
+           lab.cex = 1,
+           lwd=2,
+           columns_width = c(4, 2.5, 4),
+           margin_inner = 3.5,
+           margin_outer = 0.5,
+           axes = FALSE)
+
+
+# 6. Permutation Test for Entanglement Score
+# Evaluating the statistical significance of the topological similarity in the subset
+actual_ent <- entanglement(dl_untangled) # Entanglement score after untangling
+
+set.seed(123)
+n_perm <- if_else(iteration_scale=="large",1000,10)
+perm_ent <- numeric(n_perm)
+
+# Shuffling labels while keeping the structural layout of the theoretical tree fixed
+labels_theory <- labels(dend_p)
+
+for(i in 1:n_perm) {
+  shuffled_dend <- dend_t
+  labels(shuffled_dend) <- sample(labels_theory)
+  
+  # Standardize by applying untangle to each permuted pair
+  perm_dends <- dendlist(dend_p, shuffled_dend) %>% 
+    dendextend::untangle(method = "step2side")
+  perm_ent[i] <- entanglement(perm_dends)
+  
+  if(i %% 100 == 0) cat(sprintf("Iteration %d/%d completed\n", i, n_perm))
+}
+
+# 7. Calculate P-value
+# Lower entanglement score reflects higher similarity
+p_val_ent <- sum(perm_ent <= actual_ent) / n_perm
+
+# 8. Plot Results
+hist(perm_ent, main="Permutation Test for Entanglement", 
+     xlab="Entanglement Score", xlim=c(0, 1))
+abline(v = actual_ent, col = "red", lwd = 2)
+cat(sprintf("Actual Entanglement: %.3f\nP-value: %.4f\n", actual_ent, p_val_ent))
+
+Sys.time()
+```
+#### 4.5.6.2 Cophenetic correlation with permutation test
+```{r ECOR19}
+# 1. Data Preparation: Subsetting carbon sources for Cophenetic Correlation
+# Excluding 'Upper Glycolysis' to test the robustness of the metabolic constraints
+mat_exp<-gr_ecor_df %>%
+  pivot_wider(names_from = carbon,values_from = mu_max)
+# my_rows<-paste("ECOR",sprintf("%02d", mat_exp$strain),sep="")
+my_rows<-mat_exp$strain
+mat_exp<-mat_exp %>% select(-strain)
+
+# Filter carbon sources based on category
+my_ins<-carbon_labels_ordered[carbon_labels_ordered$Category %nin% "Upper Glycolysis",]$label
+mat_exp<-mat_exp %>% select(all_of(my_ins)) %>% as.matrix()
+rownames(mat_exp)<-my_rows
+
+# Calculate distances for the subset
+dist_exp<-mat_exp %>% spearman_dist()
+dist_theory<-carbon_matrix[my_ins,my_ins] %>% as.dist()
+
+# Hierarchical clustering using Ward's D2
+hc_theory <- hclust(dist_theory, method = "ward.D2")
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+
+# dend_theory <- as.data.frame(as.table(as.matrix(dist_theory))) # Placeholder for structure check
+dend_theory <- as.dendrogram(hc_theory)
+dend_exp    <- as.dendrogram(hc_exp)
+
+# Calculate observed Cophenetic correlation (Spearman)
+actual_cor <- cor_cophenetic(dend_theory, dend_exp, method = "spearman")
+
+# --- Integrated Permutation Test ---
+# Generating null distribution to evaluate statistical significance of the correlation
+set.seed(123)
+n_perm <- 1000
+perm_results <- data.frame(cor = numeric(n_perm))
+
+# Retrieve labels (strain names) from the subset experimental matrix
+exp_labels <- rownames(as.matrix(dist_exp))
+
+for(i in 1:n_perm) {
+  # 1. Shuffle labels while maintaining the underlying distance structure
+  dist_shuffled <- dist_exp
+  shuffled_labels <- sample(exp_labels)
+  
+  # Re-assign shuffled names to the distance matrix
+  temp_mat <- as.matrix(dist_shuffled)
+  rownames(temp_mat) <- shuffled_labels
+  colnames(temp_mat) <- shuffled_labels
+  
+  # 2. Reconstruct dendrogram from the shuffled matrix
+  hc_shuffled <- hclust(as.dist(temp_mat), method = "ward.D2")
+  dend_shuffled <- as.dendrogram(hc_shuffled)
+  
+  # 3. Compute and store correlation for the permuted pair
+  perm_results$cor[i] <- cor_cophenetic(dend_theory, dend_shuffled, method = "spearman")
+}
+
+# --- Statistical Evaluation ---
+# P-value: Probability that random correlation is equal to or higher than observed
+p_val_cor <- sum(perm_results$cor >= actual_cor) / n_perm
+
+cat("【Analysis Results: Subset without Upper Glycolysis】\n")
+cat(sprintf("Cophenetic Cor (Spearman): %.3f (p = %.4f)\n", actual_cor, p_val_cor))
+
+# --- Visualization: Cophenetic Correlation Bubble Plot ---
+# 1. Prepare data and count overlapping points (ties) for bubble sizing
+df_coph <- data.frame(
+  Theory = as.vector(cophenetic(hc_theory)),
+  Experiment = as.vector(cophenetic(hc_exp))
+) %>%
+  group_by(Theory, Experiment) %>%
+  summarise(count = n(), .groups = 'drop') 
+
+my_txt<-paste("R=",sprintf("%.3f",actual_cor),sep="")
+
+# 2. Visualization with ggscatter
+# Point size and fill color reflect the density of identical distance pairs (log2-scaled)
+ggscatter(df_coph, x = "Theory", y = "Experiment",
+          size = "count",           # Map overlap count to bubble size
+          fill = "count",           # Map overlap count to fill intensity
+          color = "black",          # Solid black borders
+          shape = 21,               # Filled circles with borders
+          alpha= 0.8,
+          xlab = "Cophenetic distance (Theory)",
+          ylab = "Cophenetic distance (Experiment)",
+          title = "Cophenetic Correlation (Log-scaled Bubble Size)",
+          ylim=c(0,3)) +
+  # Apply log2 transformation to optimize visualization of overlapping points
+  scale_size_continuous(trans = "log2", range = c(1, 12), name = "Count (log2)") +
+  scale_fill_distiller(palette = "Greys", trans = "log2", direction = 1, name = "Count (log2)")+
+  annotate("text", x = 10, y = 2.7, label = my_txt,)
+Sys.time()
+```
+#### 4.5.6.3 Baker's Gamma Index (Subset without Upper Glycolysis)
+```{r ECOR20}
+# 1. Data Preparation: Subsetting carbon sources for Topological Comparison
+# Excluding Upper Glycolysis to evaluate the robustness of tree structure similarity
+mat_exp<-gr_ecor_df %>%
+  pivot_wider(names_from = carbon,values_from = mu_max)
+# my_rows<-paste("ECOR",sprintf("%02d", mat_exp$strain),sep="")
+my_rows<-mat_exp$strain
+mat_exp<-mat_exp %>% select(-strain)
+
+# Filter for the specific subset of carbon sources
+my_ins<-carbon_labels_ordered[carbon_labels_ordered$Category %nin% "Upper Glycolysis",]$label
+mat_exp<-mat_exp %>% select(all_of(my_ins)) %>% as.matrix()
+rownames(mat_exp)<-my_rows
+
+# Compute distances and build dendrograms
+dist_exp<-mat_exp %>% spearman_dist()
+dist_theory<-carbon_matrix[my_ins,my_ins] %>% as.dist()
+
+hc_theory <- hclust(dist_theory, method = "ward.D2")
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+
+dend_theory <- as.dendrogram(hc_theory)
+dend_exp    <- as.dendrogram(hc_exp)
+
+
+# 2. Calculate Observed Baker's Gamma Index
+# This index assesses the rank correlation of the stages where pairs of carbon sources merge
+actual_gamma <- cor_bakers_gamma(dend_theory, dend_exp)
+cat(sprintf("Actual Baker's Gammer: %.3f\n", actual_gamma))
+
+# 3. Permutation Test (1,000 iterations)
+# Assessing if the topological similarity is significantly higher than random expectation
+set.seed(123)
+n_perm <- 1000
+perm_gammas <- numeric(n_perm)
+
+for(i in 1:n_perm) {
+  # Randomly shuffle labels while maintaining the dendrogram's branching structure
+  perm_dend <- sample.dendrogram(dend_theory, replace = FALSE)
+  # Calculate Baker's Gamma for the permuted pair
+  perm_gammas[i] <- cor_bakers_gamma(perm_dend, dend_exp)
+}
+
+# 4. P-value Calculation
+# Proportion of random permutations with Gamma equal to or greater than observed
+p_value <- sum(perm_gammas >= actual_gamma) / n_perm
+
+print(Sys.time())
+cat(sprintf("P-value: %.4f\n", p_value))
+```
+## 4.6 Comparison with phylogeny of ECOR strains
+### 4.6.1 Correlation in growth rate across ECOR strains (Representatives)
+```{r ECOR21,fig.width=5,fig.height=2.5,dpi=300}
+
+
+# --------------------
+# Representative pair 1
+# --------------------
+my_strain_1<-"ECOR01"
+my_strain_2<-"ECOR02"
+my_df1<-gr_ecor_df[gr_ecor_df$strain==my_strain_1,]
+my_df1<-my_df1 %>% rename(mu_max_1="mu_max",strain1="strain")
+my_df2<-gr_ecor_df[gr_ecor_df$strain==my_strain_2,]
+my_df2<-my_df2 %>% rename(mu_max_2="mu_max",strain2="strain")
+my_df<-left_join(my_df1,my_df2,by="carbon")
+p1<-ggscatter(my_df,x="mu_max_1",y="mu_max_2",alpha=0.5,
+              cor.coef = TRUE,cor.coeff.args = list(label.sep = "\n",method="spearman"),cor.coef.coord = c(-0.1,0.6))+
+  scale_x_continuous(breaks = get_breaks(by = 0.2,from = 0,to = 0.6),limits = c(-0.1,0.7))+
+  scale_y_continuous(breaks = get_breaks(by = 0.2,from = 0,to = 0.6),limits = c(-0.1,0.7))+
+  xlab(expression(mu[max]~"of ECOR01"))+
+  ylab(expression(mu[max]~"on ECOR02"))
+
+# --------------------
+# Representative pair 2
+# --------------------
+my_strain_1<-"ECOR01"
+my_strain_2<-"ECOR50"
+my_df1<-gr_ecor_df[gr_ecor_df$strain==my_strain_1,]
+my_df1<-my_df1 %>% rename(mu_max_1="mu_max",strain1="strain")
+my_df2<-gr_ecor_df[gr_ecor_df$strain==my_strain_2,]
+my_df2<-my_df2 %>% rename(mu_max_2="mu_max",strain2="strain")
+my_df<-left_join(my_df1,my_df2,by="carbon")
+p2<-ggscatter(my_df,x="mu_max_1",y="mu_max_2",alpha=0.5,
+              cor.coef = TRUE,cor.coeff.args = list(label.sep = "\n",method="spearman"),cor.coef.coord = c(-0.1,0.6))+
+  scale_x_continuous(breaks = get_breaks(by = 0.2,from = 0,to = 0.6),limits = c(-0.1,0.7))+
+  scale_y_continuous(breaks = get_breaks(by = 0.2,from = 0,to = 0.6),limits = c(-0.1,0.7))+
+  xlab(expression(mu[max]~"of ECOR01"))+
+  ylab(expression(mu[max]~"on ECOR50"))
+
+p1+p2
+Sys.time()
+```
+### 4.6.2 Pairwise correlation across strains (All pairs)
+```{r ECOR22,fig.height=3,fig.width=6}
+df_up<-combn(gr_ecor_df$strain %>% unique(), 2) %>% t() %>% as.data.frame()
+colnames(df_up)<-qw(strain1,strain2)
+df_up$key<-"upper"
+df_diag<-data.frame(strain1=gr_ecor_df$strain %>% unique(),strain2=gr_ecor_df$strain %>% unique(),key="diag")
+df_lw<-df_up
+colnames(df_lw)<-qw(strain2,strain1,key)
+df_lw$key<-"lower"
+ecorstrain_pairs<-bind_rows(df_up,df_diag)
+ecorstrain_pairs<-bind_rows(ecorstrain_pairs,df_lw)
+ecor_strain_pair_all<-ecorstrain_pairs
+ecor_strain_pair_all$correlation<-NA
+i<-1
+for (i in 1:nrow(ecor_strain_pair_all)){
+  my_strain_1<-ecor_strain_pair_all$strain1[i]
+  my_strain_2<-ecor_strain_pair_all$strain2[i]
+  my_df1<-gr_ecor_df[gr_ecor_df$strain==my_strain_1,]
+  my_df1<-my_df1 %>% rename(mu_max_1="mu_max")
+  my_df2<-gr_ecor_df[gr_ecor_df$strain==my_strain_2,]
+  my_df2<-my_df2 %>% rename(mu_max_2="mu_max")
+  my_df<-left_join(my_df1,my_df2,by="carbon")
+  my_res<-cor_test(my_df,vars = "mu_max_1",vars2 = "mu_max_2",method = "spearman")
+  ecor_strain_pair_all$correlation[i]<-my_res$cor
+}
+# ecor_strain_pair_all$strain1<-paste("ECOR",sprintf("%02d", ecor_strain_pair_all$strain1),sep="")
+# ecor_strain_pair_all$strain2<-paste("ECOR",sprintf("%02d", ecor_strain_pair_all$strain2),sep="")
+Sys.time()
+```
+### 4.6.3 Clustering growth profiles across ECOR strains
+#### 4.6.3.1 Hierarchical clustering for growth profiles across ECOR strains
+```{r ECOR23,fig.height=10,fig.width=10}
+# Convert to matrix
+ecor_strain_matrix <- ecor_strain_pair_all %>% select(strain1, strain2, correlation) %>%
+  pivot_wider(names_from = strain2, values_from = correlation) %>%
+  column_to_rownames("strain1") %>%
+  as.matrix()
+
+# Sorting
+target_order <- sort(rownames(ecor_strain_matrix))
+ecor_strain_matrix <- ecor_strain_matrix[target_order, target_order]
+
+# Calc distance (1 - r)
+ecor_strain_dist_matrix <- as.dist(1 - ecor_strain_matrix)
+
+# 1. Convert the distance object to a square matrix
+my_mat <- as.matrix(ecor_strain_dist_matrix)
+
+# 2. Create all pair labels using expand.grid
+# Generate all pairs from row and column names
+ecor_strain_dist_df <- expand.grid(
+  strain1 = rownames(my_mat),
+  strain2 = colnames(my_mat),
+  stringsAsFactors = FALSE
+)
+
+# 3. Add the distance values (mumax_dist)
+ecor_strain_dist_df$mumax_dist <- as.vector(my_mat)
+
+# 4. Attach positional tags (Type)
+# Create a tag matrix with the same dimensions and attach it as a vector
+n <- nrow(my_mat)
+pos_matrix <- matrix("upper", n, n)
+diag(pos_matrix) <- "diag"
+pos_matrix[lower.tri(pos_matrix)] <- "lower"
+ecor_strain_dist_df$Type <- as.vector(pos_matrix)
+
+# Clustering# Clusteringas.matrix()
+ecor_strain_row_cluster <- hclust(ecor_strain_dist_matrix, method = "ward.D2")
+ecor_strain_labels_ordered <- data.frame(label = ecor_strain_row_cluster$labels[ecor_strain_row_cluster$order])
+
+my_tmp <- labdf_sub %>% select(strain, Phylogroup) %>%
+  rename(label = strain)
+my_df <- data.frame(Phylogroup = names(pgPalette), Phylogroup_col = pgPalette)
+my_tmp <- left_join(my_tmp, my_df, by = "Phylogroup")
+
+ecor_strain_labels_ordered <- left_join(ecor_strain_labels_ordered, my_tmp, by = "label")
+
+my_colors <- colorRampPalette(rev(brewer.pal(11, "RdBu")))(200)
+
+# Visualization
+corrplot(ecor_strain_matrix,
+         method = "color",
+         order = "hclust",
+         hclust.method = "ward.D2",
+         col = my_colors,
+         tl.srt = 90,
+         tl.cex = 1,
+         tl.col = ecor_strain_labels_ordered$Phylogroup_col,
+         addgrid.col = 'white',
+         type = "upper", diag = TRUE)
+Sys.time()
+```
+#### 4.6.3.2 Visualization of the dendrogram in hierarchical clustering (Growth-based dendrogram in ECOR)
+```{r ECOR24,fig.height=4,fig.width=18,dpi=300}
+dend_sbst <- as.dendrogram(ecor_strain_row_cluster)
+current_labels <- labels(dend_sbst)
+dend_sbst <- dend_sbst %>%
+  set("labels_cex", 1.5) %>%
+  set("labels_colors", ecor_strain_labels_ordered$Phylogroup_col) %>%   # Label colors
+  set("branches_lwd", 3)  # Keep the previous branch width setting
+
+# 1. Convert the dendrogram to a phylo object
+tree_phylo <- as.phylo(dend_sbst)
+
+# 2. Prepare metadata (mapping between label names and colors)
+# Create a data frame for joining based on the structure of ecor_strain_labels_ordered
+tip_metadata <- data.frame(
+  label = current_labels,
+  col = ecor_strain_labels_ordered$Phylogroup_col
+)
+
+# 3. Plot with ggtree
+ggtree(tree_phylo, size = 1.5, layout = "dendrogram",
+       ladderize = FALSE      # Disable automatic reordering
+       ) %<+% tip_metadata +  # 'size' corresponds to branches_lwd
+  geom_tiplab(aes(color = I(col)), size = 5, offset = -0.1) +  # Apply colors directly via I(col)
+  theme_tree() +                                   # Show scales if needed
+  # Set the minimum margin negative to create extra space at the bottom and push the tree upward
+  # 3. Ensure labels outside the plotting area are shown
+  theme(plot.margin = margin(10, 10, 150, 10)) +  # Reserve extra bottom margin
+  labs(title = "ward.D2")
+
+Sys.time()
+```
+### 4.6.4 Relationship between phylogenetic distance and correlation in growth rate across strains
+```{r ECOR25,fig.width=4,fig.height=2.5,dpi=300}
+my_tmp<-phylo_dist_df %>% select(-Type)
+my_df<-left_join(ecor_strain_pair_all,my_tmp,by=c("strain1","strain2"))
+my_df<-my_df[my_df$key=="upper",]
+ggscatter(my_df,x="phylo_dist",y="correlation",
+          xlab="Phylogenetic distance [arb. unit]",ylab="Growth similarity [arb. unit]",
+          cor.coef = TRUE,alpha=0.2)+
+  scale_y_continuous(breaks = get_breaks(by = 0.5,from = 0,to = 1),limits = c(0,1.2))
+Sys.time()
+```
+### 4.6.5 Phylogenetic signals
+#### 4.6.5.1 Kmult (multi variate)
+```{r ECOR26}
+my_tmp <- gr_ecor_df
+# my_tmp$strain <- paste("ECOR", sprintf("%02d", my_tmp$strain), sep = "")
+my_tmp <- my_tmp %>% pivot_wider(names_from = carbon, values_from = mu_max)
+
+ecor_mlsubtree <- sub_tree
+my_df <- data.frame(label = ecor_mlsubtree$tip.label)
+my_df <- left_join(my_df, labdf_sub, by = "label")
+ecor_mlsubtree$tip.label <- my_df$strain
+ecor_mlsubtree <- keep.tip(ecor_mlsubtree, my_tmp$strain)
+
+ecor_physig_mat <- my_tmp %>% select(-strain) %>% as.matrix()
+rownames(ecor_physig_mat) <- my_tmp$strain
+ecor_physig_mat <- ecor_physig_mat[ecor_mlsubtree$tip.label, ]
+
+# Replace branches of length 1e-08 or 0 with a small computable value (e.g., 1e-06)
+ecor_mlsubtree$edge.length[ecor_mlsubtree$edge.length < 1e-6] <- 1e-6
+
+k_mult_result <- physignal(ecor_physig_mat, ecor_mlsubtree, iter = 999)
+print(summary(k_mult_result)) 
+
+# 1. Standardize the data (mean = 0, variance = 1 for each column)
+ecor_physig_mat_scaled <- scale(ecor_physig_mat)
+
+# 2. Recompute the multivariate phylogenetic signal
+# * Use 'ecor_mlsubtree' whose branch lengths were adjusted to 1e-06 above
+mult_signal_scaled <- physignal(A = ecor_physig_mat_scaled, phy = ecor_mlsubtree, iter = 999)
+
+# 3. Display the results
+summary(mult_signal_scaled)
+Sys.time()
+```
+#### 4.6.5.2 Pagel's lambda
+```{r ECOR27, fig.height=3,fig.width=5, dpi=300 }
+# Create a container to store results for each environment
+# env_names <- colnames(ecor_physig_mat_scaled)
+env_names <- colnames(ecor_physig_mat)
+results_list <- data.frame(Environment = env_names, Lambda = NA, P_val = NA)
+
+# Loop through each environment and compute Pagel's lambda
+for(i in 1:length(env_names)) {
+  env_data <- ecor_physig_mat_scaled[, i]
+  names(env_data) <- rownames(ecor_physig_mat_scaled)
+  
+  # Remove missing values if present
+  clean_data <- env_data[!is.na(env_data)]
+  current_tree <- keep.tip(ecor_mlsubtree, names(clean_data))
+  
+  # Compute Pagel's lambda
+  sig <- phylosig(current_tree, clean_data, method = "lambda", test = TRUE)
+  
+  results_list$Lambda[i] <- sig$lambda
+  results_list$P_val[i] <- sig$P
+}
+
+# Multiple testing correction using Benjamini-Hochberg (BH) method
+results_list$P_adj <- p.adjust(results_list$P_val, method = "BH")
+
+# Show significant environments
+print(results_list[results_list$P_adj < 0.05, ])
+
+
+base_val <- 0.00001
+p<-ggplot(results_list, aes(x = Environment, y = Lambda)) +
+  geom_rect(aes(xmin = as.numeric(as.factor(Environment)) - 0.4, 
+                xmax = as.numeric(as.factor(Environment)) + 0.4, 
+                ymin = base_val, 
+                ymax = Lambda), 
+            fill = "grey50") +
+  scale_y_log10(limits = c(base_val, 10), 
+                breaks = trans_breaks("log10", function(x) 10^x), # 
+    labels = label_log())+                              
+  geom_hline(yintercept = 1)+
+  theme_pubr() +
+  labs(y = "Pagel's L [arb. unit]")+
+  rotate_x_text(angle = 90)
+ggpar(p,xlab="")
+
+ggbarplot(results_list,x="Environment",y="Lambda",
+          fill="grey50",ylim=c(0,1),
+          xlab="",ylab="Pagel's L [arb. unit]")+
+  scale_y_continuous(breaks = get_breaks(by = 0.2,from = 0,to = 1),limits = c(0,1))+
+  geom_hline(yintercept = 1)+
+  rotate_x_text(angle=90)
+Sys.time()
+```
+#### 4.6.5.3 Blomberg's K
+```{r ECOR28, fig.height=3,fig.width=5, dpi=300 }
+# 1. Phylogenetic Signal Estimation using Blomberg's K
+# Initialize a data frame to store K-statistics and P-values for each environment (carbon source)
+k_results <- data.frame(Environment = env_names, K_stat = NA, P_val = NA)
+
+for(i in 1:length(env_names)) {
+  # Extract scaled growth data for the current environment
+  env_data <- ecor_physig_mat_scaled[, i]
+  names(env_data) <- rownames(ecor_physig_mat_scaled)
+  
+  # Remove missing values (NA) to ensure tree-data compatibility
+  clean_data <- env_data[!is.na(env_data)]
+  # Prune the ML subtree to match the available phenotypic data
+  current_tree <- keep.tip(ecor_mlsubtree, names(clean_data))
+  
+  # Compute Blomberg's K with 999 permutations to assess significance
+  sig_k <- phylosig(current_tree, clean_data, method = "K", test = TRUE, nsim = 999)
+  
+  k_results$K_stat[i] <- sig_k$K
+  k_results$P_val[i] <- sig_k$P
+}
+
+# 2. Statistical Correction
+# Apply Benjamini–Hochberg (BH) adjustment for multiple testing across environments
+k_results$P_adj <- p.adjust(k_results$P_val, method = "BH")
+
+# Display significant environments (where phylogenetic signal is detected)
+print("Significant Phylogenetic Signals (BH-adjusted P < 0.05):")
+print(k_results[k_results$P_adj < 0.05, ])
+
+ggbarplot(k_results,x="Environment",y="K_stat",fill="grey50",size=0)+
+  scale_y_log10(
+    limits = c(0.001, NA),      
+    breaks = log_breaks(n = 5), 
+    labels = label_log()       
+  )+
+  rotate_x_text(angle=90)
+
+k_results$log_K <- log10(k_results$K_stat)
+
+# 3. Visualization: Log-scaled Bar Plot for Blomberg's K
+# Set the baseline for the log plot (K=1 represents the Brownian Motion expectation)
+base_val <- 0.001
+p<-ggplot(k_results, aes(x = Environment, y = K_stat)) +
+  # Using geom_rect to precisely control the base of bars on a log-scale
+  geom_rect(aes(xmin = as.numeric(as.factor(Environment)) - 0.4, 
+                xmax = as.numeric(as.factor(Environment)) + 0.4, 
+                ymin = base_val, 
+                ymax = K_stat), 
+            fill = "grey50") +
+  # Configure log10 scale with appropriate breaks and labels
+  scale_y_log10(limits = c(base_val, 10), 
+                breaks = trans_breaks("log10", function(x) 10^x), 
+    labels = label_log())+                              
+  # Horizontal line at K = 1 (Standard Brownian Motion model)
+  geom_hline(yintercept = 1)+
+  theme_pubr() +
+  labs(y = "Blomberg's K [arb. unit]")+
+  rotate_x_text(angle = 90)
+ggpar(p,xlab="")
+
+Sys.time()
+```
+### 4.6.6 Entanglement analysis between phylogeny and growth-based dendrogram
+#### 4.6.6.1 Entanglement score with permutation test
+```{r ECOR29, fig.width=5,fig.height=4}
+# 1. Pre-processing: Ultrametric tree conversion and dendrogram creation
+# Convert the ML tree to an ultrametric tree (equal root-to-tip distances)
+tree_ultra <- chronos(ecor_mlsubtree)
+dend_p_raw <- as.dendrogram(as.hclust(tree_ultra))
+
+# Compute phenotypic distance based on Spearman correlation of growth profiles
+dist_trait <- as.dist(1 - cor(t(ecor_physig_mat), method = "spearman"))
+dend_t_raw <- as.dendrogram(hclust(dist_trait, method = "ward.D2"))
+
+# 2. Untangle: Optimize branch rotation for visualization
+# Minimizing line crossings while strictly maintaining the topology of both trees
+dl <- dendlist(dend_p_raw, dend_t_raw)
+dl_untangled <- dendextend::untangle(dl, method = "step2side")
+
+dend_p <- dl_untangled[[1]] 
+dend_t <- dl_untangled[[2]] 
+
+# 3. Color mapping based on Phylogroups
+# Retrieve labels in the current optimized order from the phylogeny (left tree)
+current_labels_p <- labels(dend_p)
+
+# Map labels to their respective Phylogroups and assign colors from pgPalette
+groups_p <- labdf_sub$Phylogroup[match(current_labels_p, labdf_sub$strain)]
+col_vector_p <- pgPalette[groups_p]
+
+# Align trait tree label colors with the phylogeny colors
+dend_p <- dend_p %>% set("labels_colors", col_vector_p)
+
+# 4. Set label colors (branches remain neutral black)
+dend_t <- dend_t %>% 
+  set("labels_colors", col_vector_p[match(labels(dend_t), current_labels_p)])
+
+# 5. Draw Tanglegram: Phylogeny vs. Growth Traits
+tanglegram(dend_p, dend_t,
+           common_subtrees_color_lines = FALSE, 
+           highlight_distinct_edges = FALSE,
+           highlight_branches_lwd = FALSE,         
+           color_lines = col_vector_p, 
+           main_left = "Phylogeny",
+           main_right = "Trait-based",
+           lab.cex = 0.4,
+           columns_width = c(5, 5, 5), 
+           margin_inner = 4,           
+           margin_outer = 1,             
+           axes = FALSE)
+# legend("topleft", legend = names(pgPalette), fill = pgPalette, title = "Phylogroup", cex = 0.8)
+
+# Calculate the observed entanglement score after untangling
+actual_ent<-dendextend::entanglement(dend_p, dend_t) # Entanglement score
+cat(sprintf("Actual Entanglement (after untangle): %.3f\n", actual_ent))
+
+# 6. Permutation Test for Significance
+# Assessing if the topological similarity is better than random expectation
+n_perm <- if_else(iteration_scale=="large",1000,10)
+null_entanglements <- numeric(n_perm)
+
+cat("Starting permutation test (this may take a while)...\n")
+print(Sys.time())
+
+set.seed(123) 
+labels_fixed <- labels(dend_p)
+
+for(i in 1:n_perm) {
+  # Copy the trait tree and shuffle its labels
+  dend_shuffled <- dend_t
+  labels(dend_shuffled) <- sample(labels_fixed)
+  
+  # Re-run untangle for each shuffle to create a fair null distribution
+  dl_perm <- dendlist(dend_p, dend_shuffled) %>% 
+    dendextend::untangle(method = "step2side")
+  
+  # Record optimized entanglement for the null model
+  null_entanglements[i] <- dendextend::entanglement(dl_perm)
+  
+  if(i %% 100 == 0) cat(sprintf("Iteration %d/%d completed\n", i, n_perm))
+}
+
+# 7. Statistical Evaluation (P-value)
+# Proportion of shuffled trees that achieved a score as low as the actual data
+p_value <- sum(null_entanglements <= actual_ent) / (n_perm + 1)
+
+# 8. Plot the Null Distribution
+print(Sys.time())
+cat(sprintf("P-value: %.4f\n", p_value))
+
+hist(null_entanglements, 
+     main="Permutation Test (with untangle)", 
+     xlab="Entanglement Score", 
+     xlim=c(0, 1), col="lightgray")
+abline(v = actual_ent, col = "red", lwd = 2, lty = 2)
+legend("topright", legend=c("Actual Score"), col="red", lwd=2, lty=2)
+```
+#### 4.6.6.2 Visualization of tanglegram
+```{r ECOR30,fig.height=10,fig.width=3,dpi=300}
+tanglegram(dend_p, dend_t,
+           common_subtrees_color_lines = FALSE, 
+           highlight_distinct_edges = FALSE,
+           highlight_branches_lwd = FALSE,
+           color_lines = col_vector_p, 
+           main_left = "Phylogeny",
+           main_right = "Trait-based",
+           lab.cex = 1,
+           lwd=2,
+           columns_width = c(5, 5, 5),
+           margin_inner = 4,
+           margin_outer = 1, 
+           axes = FALSE)
+Sys.time()
+```
+### 4.6.7 Baker's Gamma Index for Phylogeny-Trait Congruence
+```{r ECOR31}
+# 1. Calculate Observed Baker's Gamma Index
+# This measures the rank correlation between the merging stages of the Phylogeny 
+# and the Trait-based dendrograms.
+actual_gamma <- cor_bakers_gamma(dend_p, dend_t)
+cat(sprintf("Actual Baker's Gammer: %.3f\n", actual_gamma))
+
+# 2. Permutation Test (1,000 iterations)
+# Assessing the significance of the topological similarity by shuffling labels
+set.seed(123)
+n_perm <- 1000
+perm_gammas <- numeric(n_perm)
+
+# Progress tracking for larger permutations
+cat("Calculating null distribution for Baker's Gamma...\n")
+
+for(i in 1:n_perm) {
+  # Shuffle the labels of the phylogeny dendrogram while preserving its branching structure
+  perm_dend <- sample.dendrogram(dend_p, replace = FALSE)
+  
+  # Compute Baker's Gamma for the permuted pair
+  perm_gammas[i] <- cor_bakers_gamma(perm_dend, dend_t)
+}
+
+# 3. P-value Calculation
+# P-value: The probability that a random label assignment would yield 
+# a Baker's Gamma equal to or higher than the observed value.
+p_value <- sum(perm_gammas >= actual_gamma) / n_perm
+
+print(Sys.time())
+cat(sprintf("P-value: %.4f\n", p_value))
+
+# 4. Result Interpretation
+if(p_value < 0.05) {
+  cat("The topological similarity between phylogeny and traits is statistically significant.\n")
+} else {
+  cat("No significant topological similarity was detected between phylogeny and traits.\n")
+}
+
+```
+
+
+
+# 5 Comparison between MA and ECOR
+## 5.1 Relationship between evolutoinary correlation and metabolic distance
+```{r MA_and_ECOR1,fig.height=3,fig.width=3.5,dpi=300}
+my_df1 <- ecor_pair_all
+my_df1$strain <- "ECOR"
+my_df2 <- ma_pair_all
+my_df2$strain <- "MA"
+pair_all <- bind_rows(my_df1, my_df2)
+pair_all <- pair_all[pair_all$key == "upper", ]
+
+# iML1515 based distance
+ggboxplot(pair_all, x = "rxndiff_MG1655", y = "correlation", color = "strain",
+          legend.title = "", xlab = "Essential reaction difference",
+          ylab = "Evolutionary correlation",
+          add = "jitter", add.params = list(alpha = 0.3)) +
+  # geom_pwc(aes(group = strain), method = "wilcox_test", label = "p.adj.signif") +
+  geom_hline(yintercept = 0, color = "gray50") +
+  scale_y_continuous(breaks = get_breaks(from = -0.4, to = 0.8, by = 0.4),
+                     limits = c(-0.4, 1))
+
+# iML1515 based distance
+ggplot(pair_all, aes(x = rxndiff_MG1655, y = correlation, color = strain, fill = strain)) +
+  # 1. Draw boxplots (position_dodge aligns boxes side-by-side)
+  geom_boxplot(aes(group = interaction(rxndiff_MG1655, strain)),
+               position = position_dodge(width = 0.8),
+               width = 0.6, outlier.shape = NA, alpha = 0.1) +
+  # 2. Add jittered points (position_jitterdodge aligns with boxplots)
+  geom_jitter(aes(group = interaction(rxndiff_MG1655, strain)),
+              position = position_jitterdodge(dodge.width = 0.8, jitter.width = 0.2),
+              alpha = 0.3) +
+  # 3. Additional plot decoration
+  geom_hline(yintercept = 0, color = "gray50") +
+  scale_x_continuous() +  # Use numeric spacing for the x-axis
+  scale_y_continuous(breaks = seq(-0.4, 0.8, by = 0.4), limits = c(-0.4, 1)) +
+  labs(x = "Metabolic pathway distance [arb. unit]",
+       y = "Evolutionary correlation\n[arb. unit]",
+       color = "", fill = "") +
+  theme_pubr()  # Apply ggpubr-style theme
+
+# 7 GEMs based distance
+ggplot(pair_all, aes(x = rxndiff_median, y = correlation, color = strain, fill = strain)) +
+  # 1. Draw boxplots (position_dodge aligns boxes side-by-side)
+  geom_boxplot(aes(group = interaction(rxndiff_median, strain)),
+               position = position_dodge(width = 0.8),
+               width = 0.6, outlier.shape = NA, alpha = 0.1) +
+  # 2. Add jittered points (position_jitterdodge aligns with boxplots)
+  geom_jitter(aes(group = interaction(rxndiff_median, strain)),
+              position = position_jitterdodge(dodge.width = 0.8, jitter.width = 0.2),
+              alpha = 0.3) +
+  # 3. Additional plot decoration
+  geom_hline(yintercept = 0, color = "gray50") +
+  scale_x_continuous() +  # Use numeric spacing for the x-axis
+  scale_y_continuous(breaks = seq(-0.4, 0.8, by = 0.4), limits = c(-0.4, 1)) +
+  labs(x = "Metabolic pathway distance [arb. unit]",
+       y = "Evolutionary correlation\n[arb. unit]",
+       color = "", fill = "") +
+  theme_pubr()  # Apply ggpubr-style theme
+
+
+Sys.time()
+```
+## 5.2 Relatinship in evolutionary association between ecor and ma
+```{r MA_and_ECOR2,fig.height=2.7,fig.width=2.7,dpi=300}
+my_df1<-ecor_pair_all
+my_df1<-my_df1 %>% select(carbon1,carbon2,key,pair_category,correlation) %>% rename(correlation_ecor="correlation")
+my_df2<-ma_pair_all
+my_df2<-my_df2 %>% select(carbon1,carbon2,key,correlation) %>% rename(correlation_ma="correlation")
+my_df<-left_join(my_df1,my_df2,by=c("carbon1","carbon2","key"))
+my_df<-my_df[my_df$key=="upper",]
+my_df<-my_df[!is.na(my_df$correlation_ma),]
+my_df$pair_category<-factor(my_df$pair_category,levels = c(carbon_categories,"between"))
+
+ggscatter(my_df,x="correlation_ma",y="correlation_ecor",
+          color = "pair_category",palette = c(cbbPalette[c(1:4)],"grey60"),
+          legend="",legend.title="",
+          xlab="Evolutionary correlation\nin MA [arb. unit]",
+          ylab="Evolutionary correlation\nin ECOR [arb. unit]",
+          shape = "pair_category",
+          alpha=0.8,cor.coef = TRUE,cor.method = "spearman",cor.coef.coord = c(-0.4,0.99))+
+  scale_shape_manual(values = c(16, 16, 16, 16, 4))+
+  geom_abline(slope = 1,intercept = 0)+
+  scale_x_continuous(breaks = get_breaks(from=-0.4,to=0.8,by=0.4),limits = c(-0.4,1))+
+  scale_y_continuous(breaks = get_breaks(from=-0.4,to=0.8,by=0.4),limits = c(-0.4,1))
+Sys.time()
+```
+## 5.3 Evolutionary correlation of MA across clusters defined by ECOR
+```{r MA_and_ECOR3,fig.width=1.6,fig.height=2,dpi=300}
+# 1. Cluster Definition based on ECOR (Natural Evolution)
+# Setting the number of clusters (k) to partition the ECOR growth-based tree
+k_val <- 3
+
+dist_exp<-ecor_dist_matrix
+hc_exp    <- hclust(dist_exp, method = "ward.D2")
+cluster_exp    <- cutree(hc_exp, k = k_val)
+
+# Mapping ECOR clusters to carbon sources used in the MA experiments
+my_tmp<-data.frame(carbon=names(cluster_exp),exp=cluster_exp)
+my_tmp<-my_tmp[my_tmp$carbon %in% ma_carbons,]
+
+# 2. Data Integration for MA Pairwise Correlations
+# Filter for unique pairs from MA results and map their corresponding ECOR clusters
+my_df<-ma_pair_all[ma_pair_all$key=="upper",]
+my_tmp1<-my_tmp %>% rename(carbon1=carbon,exp1=exp)
+my_tmp2<-my_tmp %>% rename(carbon2=carbon,exp2=exp)
+my_df<-left_join(my_df,my_tmp1,by="carbon1")
+my_df<-left_join(my_df,my_tmp2,by="carbon2")
+
+# 3. Statistical Comparison: Within-ECOR-Cluster vs. Between-Cluster in MA Data
+# Testing if natural evolutionary modules predict short-term mutational coherence
+my_clstrs<-seq(1,k_val)
+my_list<-list()
+my_p_list<-list()
+for(i in 1:length(my_clstrs)){
+  my_cls<-my_clstrs[i]
+  
+  # Select MA pairs where at least one member belongs to the current ECOR cluster
+  my_dat<-my_df[(my_df$exp1==my_cls)|(my_df$exp2==my_cls),]
+  
+  # Ensure the cluster has multiple members to allow within-cluster comparison
+  n_cbn<-my_tmp[my_tmp$exp==my_cls,] %>% nrow()
+  if(n_cbn>1){
+    my_dat$pair_cluster_exp<-"Between"
+    # Identify pairs where both members are within the same ECOR cluster
+    mmbr_clst<-my_dat[my_dat$exp1==my_dat$exp2,] %>% nrow()
+    if(mmbr_clst>0){
+      my_dat[my_dat$exp1 == my_dat$exp2, ]$pair_cluster_exp <- as.character(my_cls)
+      my_dat$pair_cluster_exp <- factor(my_dat$pair_cluster_exp, levels = c(as.character(my_cls), "Between"))
+      
+      # 4. Visualization: Boxplot with Wilcoxon Test
+      my_list[[i]]<-ggboxplot(my_dat,
+        x="pair_cluster_exp",y="correlation",
+        ylab="Evolutionary correlation [arb. unit]",xlab="",
+        add="jitter",add.params = list(alpha=0.5),
+        # palette = my_palette,
+        legend="")+
+        # Pairwise comparison against the "Between" group baseline
+        stat_pwc(method = "wilcox.test",label = "p.adj.signif",
+               ref.group = "Between",tip.length = 0,
+        p.adjust.method = "BH",hide.ns = TRUE)+
+        scale_y_continuous(breaks = seq(-0.4, 0.8, by = 0.4), limits = c(-0.4, 1))
+      
+      # 5. Formal Wilcoxon test and store P-values for global BH correction
+      my_res<-my_dat %>%
+        wilcox_test(formula = correlation ~ pair_cluster_exp,
+        ref.group = "Between",
+        p.adjust.method = "BH")
+      my_p_list[[i]]<-my_res$p
+    }
+  }
+}
+
+# 6. Global Multiple Testing Correction
+# Adjusting P-values across all tested clusters
+p_adj_summary <- p.adjust(my_p_list %>% unlist(), method = "BH")
+print("Adjusted P-values for each ECOR cluster comparison:")
+print(p_adj_summary)
+
+# Display comparisons for each cluster
+my_list[[1]]
+my_list[[2]]
+my_list[[3]]
+
+Sys.time()
+
+
+```
+
+
+
+# 6 PCA
+## 6.1 ECOR and MA
+```{r PCA1,fig.height=2.5,fig.width=2.5}
+# Define common carbon sources between MA and ECOR
+carbons_ecorma_common<-ma_carbons[ma_carbons %in% ecor_carbons]
+carbons_ecorma_common<-carbons_ecorma_common[order(carbons_ecorma_common)]
+
+# A (ECOR)
+gr_ecor_com_mat<-gr_ecor_df %>%
+  pivot_wider(names_from = carbon,values_from = mu_max)
+my_rows<-paste("ECOR",gr_ecor_com_mat$strain,sep="_")
+gr_ecor_com_mat<-gr_ecor_com_mat %>% select(carbons_ecorma_common) %>% as.matrix()
+rownames(gr_ecor_com_mat)<-my_rows
+A_mat<-gr_ecor_com_mat
+
+# B (MA)
+## Anc
+gr_ma_anc_df<-gr_ma_df[gr_ma_df$round==0,] %>% distinct(carbon,.keep_all = TRUE) %>% select(lineage,round,carbon,rel_mu_max)
+gr_ma_anc_df$name<-"MA_Anc@0"
+## Offspring
+gr_ma_offsp_df<-gr_ma_df[gr_ma_df$round!=0,] %>% select(lineage,round,carbon,rel_mu_max)
+gr_ma_offsp_df$name<-paste(gr_ma_offsp_df$lineage,sprintf("%02d", gr_ma_offsp_df$round),sep="@R")
+## Anc & Offspring
+gr_ma_com_mat<-bind_rows(gr_ma_anc_df,gr_ma_offsp_df) %>% select(name,carbon,rel_mu_max)
+gr_ma_com_mat<-gr_ma_com_mat%>%
+  pivot_wider(names_from = carbon,values_from = rel_mu_max)
+my_rows<-gr_ma_com_mat$name
+my_rows<-my_rows %>% str_replace_all(pattern = "lineage",replacement = "L")
+gr_ma_com_mat<-gr_ma_com_mat %>% select(carbons_ecorma_common) %>% as.matrix()
+rownames(gr_ma_com_mat)<-my_rows
+B_mat<-gr_ma_com_mat
+
+
+# 1. Normalization
+A_scaled <- scale(A_mat) # ECOR
+B_scaled <- scale(B_mat) # MA
+
+# 2. Extract principal components of (co-)variation across carbon sources
+## 2.1. PCA for dataset B
+pca_B <- prcomp(B_scaled, center = TRUE, scale. = TRUE)
+## 2.2. PCA for dataset A
+pca_A <- prcomp(A_scaled, center = TRUE, scale. = TRUE)
+
+# 3. Calc. variance explained
+## 3.1. for dataset B 
+var_B_own <- pca_B$sdev^2 / sum(pca_B$sdev^2) # ratio of total variance
+cum_B_own <- cumsum(var_B_own) # cumulative variance
+## 3.2. for dataset A
+var_A_own <- pca_A$sdev^2 / sum(pca_A$sdev^2)
+cum_A_own <- cumsum(var_A_own)
+
+# 4. Generate a dataframe for visualization
+pca_summary <- data.frame(
+  PC = 1:length(var_B_own),
+  Variance = var_B_own,
+  Cumulative = cum_B_own
+)
+
+# 5. Project A onto the principal component space of B
+# Apply the principal component axis (rotation matrix) of B to A_scaled
+# A_projected represents principal score (coordinates) of A in B's PC space.
+A_projected <- scale(A_mat,center = pca_B$center,scale = pca_B$scale) %*% pca_B$rotation
+var_A_on_B <- apply(A_projected, 2, var)
+var_explained_A_on_B <- var_A_on_B / sum(var_A_on_B)
+cum_A_on_B <- cumsum(var_explained_A_on_B)
+
+# 6. Generate a dataframe for visualization
+pca_compare <- data.frame(
+  PC = rep(1:length(var_B_own), 2),
+  Variance = c(var_B_own, var_explained_A_on_B),
+  Cumulative = c(cum_B_own, cum_A_on_B),
+  Type = rep(c("MA", "ECOR"), each = length(var_B_own))
+)
+
+# dataset B: MA
+fviz_pca_biplot(pca_B, repel = TRUE, col.var = "red", col.ind = "grey50",labelsize = 2,arrowsize=0.3)+
+  theme_pubr()
+# dataset A: ECOR
+fviz_pca_biplot(pca_A, repel = TRUE, col.var = "red", col.ind = "grey50",labelsize = 2,arrowsize=0.3)+
+  theme_pubr()
+
+
+#
+pc_map<-data.frame(
+  PC1=c(pca_B$x[,1],A_projected[,1]),
+  PC2=c(pca_B$x[,2],A_projected[,2]),
+  PC3=c(pca_B$x[,3],A_projected[,3]),
+  Type=c(rep("MA",nrow(pca_B$x)),rep("ECOR",nrow(A_projected))),
+  Name=c(rownames(pca_B$x),rownames(A_projected))
+)
+ggscatter(pc_map[pc_map$Type=="MA",],x="PC1",y="PC2",
+          # repel = TRUE,label = "Name",font.label = c(6),
+          color="#00BFC4",legend.title="",alpha=0.9)
+
+
+Sys.time()
+```
+## 6.2 random dataset
+```{r PCA2}
+# 1. Settings
+n_row <- nrow(gr_ecor_com_mat); n_col <- length(carbons_ecorma_common)
+#set.seed(123)
+# B_rnd_mat <- matrix(rnorm(n_row * n_col), nrow = n_row, ncol = n_col)
+# B_rnd_scaled <- scale(B_rnd_mat)
+# pca_B_rnd <- prcomp(B_rnd_scaled, scale. = TRUE)
+
+# 2. Generate random datasets 10,000 times
+n_sim <- 1000
+sim_results <- matrix(NA, nrow = n_sim, ncol = n_col)
+
+for (i in 1:n_sim) {
+  # A_rnd_mat
+  A_rnd_tmp <- matrix(rnorm(n_row * n_col), nrow = n_row, ncol = n_col)
+  # Normalize using the parameters from dataset B (MA)
+  A_rnd_scaled <- scale(A_rnd_tmp, center = pca_B$center, scale = pca_B$scale)
+  A_rnd_proj <- A_rnd_scaled %*% pca_B$rotation
+  
+  # Compute cumulative explained variance
+  vars <- apply(A_rnd_proj, 2, var)
+  sim_results[i, ] <- cumsum(vars) / sum(vars)
+}
+
+# 3. Compute summary statistics (mean, 2.5th percentile, 97.5th percentile)
+stats_rand_df <- data.frame(
+  PC = 1:n_col,
+  Mean = colMeans(sim_results),
+  Lower = apply(sim_results, 2, quantile, probs = 0.025),
+  Upper = apply(sim_results, 2, quantile, probs = 0.975)
+)
+
+# 4. Visualization
+ggplot(stats_rand_df, aes(x = PC, y = Mean)) +
+  geom_line(color = "blue", size = 1) +
+  geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha = 0.2, fill = "blue") +
+  geom_abline(intercept = 0, slope = 1/n_col, linetype = "dashed", color = "red") + # Theoretical uniform line
+  scale_x_continuous(breaks = 1:n_col) +
+  labs(title = "Cumulative Proportion of Variance (10,000 Iterations)",
+       subtitle = "Projecting Random A onto PCA space of Random B",
+       x = "Principal Component (of Dataset B)",
+       y = "Cumulative Proportion") +
+  theme_pubr()
+```
+## 6.3 Scree plot
+```{r PCA3,fig.height=3,fig.width=3,dpi=300}
+# 7. Visualization
+## 7.1. Scree Plot
+ggline(pca_compare, x = "PC", y = "Variance", color = "Type",
+       numeric.x.axis = TRUE,
+       legend.title="",
+       xlab = "Principal Component of MA", 
+       ylab = "Fraction of variance explained") 
+
+## 7.2. Cumulative
+ggline(pca_compare, x = "PC", y = "Cumulative", color = "Type",
+       numeric.x.axis = TRUE,
+       xlab = "Principal Component of MA", 
+       ylab = "Cumulative fraction of \n variance explained",
+       legend.title="",
+       ylim=c(0,1))+
+  geom_line(data = stats_rand_df,aes(x=PC,y=Mean),color = "gray20", size = 1) +
+  geom_ribbon(data = stats_rand_df,aes(x=PC,y=NULL,ymin = Lower, ymax = Upper), alpha = 0.2, fill = "black") +
+  geom_point(data = stats_rand_df, aes(x = PC, y = Mean), inherit.aes = FALSE, color = "gray20", size = 2) +
+  scale_y_continuous(breaks = get_breaks(from = 0,to = 1,by = 0.2),limits = c(0,1.1))
+Sys.time()
+```
+# 7 Output
+```{r Output}
+my_outfile<-paste(getwd(),"Outputs_Main","ecor_phylogeny.csv",sep="/")
+my_out_dat<-labdf_sub[order(labdf_sub$strain),] %>% select(strain,Phylogroup)
+# write_csv(x = my_out_dat,file = my_outfile)
+
+
+
+my_outfile<-paste(getwd(),"Outputs_Main","ess_rxn_mat_all.csv",sep="/")
+my_out_dat<-ess_rxn_mat_all
+# write_csv(x = my_out_dat,file = my_outfile)
+
+
+my_outfile<-paste(getwd(),"Outputs_Main","gr_ecor_df.csv",sep="/")
+my_out_dat<-gr_ecor_df
+# write_csv(x = my_out_dat,file = my_outfile)
+
+my_outfile<-paste(getwd(),"Outputs_Main","gr_ma_df.csv",sep="/")
+my_out_dat<-gr_ma_df
+colnames(my_out_dat)[1]<-"founder"
+my_out_dat<-my_out_dat %>% select(founder,lineage,round,carbon,mu_max,rel_mu_max)
+# write_csv(x = my_out_dat,file = my_outfile)
+
+
+# ECOR
+gr_ecor_fullstat_df<-paste(getwd(),"From_RawOD_to_GrowthProf","Output","stat_fit_ecor.csv",sep="/") %>%
+  read_csv()
+gr_ecor_fullstat_df<-gr_ecor_fullstat_df %>%  select(strain,Abb,n_growth,n_no_growth,n_partial,n_total,selected_rep,r_mean,r_sd,od_max_mean,od_max_sd,growth_category) %>%
+  rename(carbon=Abb,mu_max=r_mean, mu_max_sd=r_sd,od_max=od_max_mean) %>%
+  filter(carbon %nin% qw(Glu,Ser,Cit,Arg,His,Lys,Thr) & strain %nin% qw(ECOR29, ECOR52))
+my_outfile<-paste(getwd(),"Outputs_Main","gr_ecor_fullstat_df.csv",sep="/")
+# write_csv(x = gr_ecor_fullstat_df,file = my_outfile)
+
+# MA
+gr_ma_fullstat_df<-gr_ma_df %>%
+  select(Anc,lineage,round,Abb,n_growth,n_no_growth,n_partial,n_total,selected_rep,r_mean,r_sd,od_max_mean,od_max_sd,growth_category,rel_mu_max) %>% rename(founder=Anc,carbon=Abb,mu_max=r_mean, mu_max_sd=r_sd,od_max=od_max_mean)
+my_outfile<-paste(getwd(),"Outputs_Main","gr_ma_fullstat_df.csv",sep="/")
+# write_csv(x = gr_ma_fullstat_df,file = my_outfile)
+
+Sys.time()
+```
+
+
+

@@ -1,0 +1,33 @@
+﻿Carbon,Abb,subfolder,ECOR_controllfolder,MA_controllfolder
+glucose,Glc,1_glucose,0_control_20250206,0_control_20250611
+ribose,Rib,2_ribose,0_control_20250206,0_control_20250611
+maltose,Malt,3_maltose,0_control_20250206,0_control_20250611
+galactose,Gal,4_galactose,0_control_20250206,0_control_20250611
+mannose,Man,5_mannose,0_control_20250206,0_control_20250611
+trehalose,Tre,6_trehalose,0_control_20250206,0_control_20250611
+lactose,Lcts,7_lactose,0_control_20250206,0_control_20250619
+melibiose,Melib,8_melibiose,0_control_20251016,0_control_20250611
+fructose,Fru,9_fructose,0_control_20250403,0_control_20250619
+rhamnose,Rmn,11_rhamnose,0_control_20250403,0_control_20250619
+xylose,Xyl,12_xylose,0_control_20250403,0_control_20250619
+n-acetyl-d-glucosamine,GlcNAc,13_n-acetyl-d-glucosamine,0_control_20250522,0_control_20250619
+glycerol,Gly,15_glycerol,0_control_20250515,0_control_20250619
+sorbitol,Sor,16_sorbitol,0_control_20250515,0_control_20250619
+mannitol,Mnl,17_mannitol,0_control_20250515,0_control_20250619
+gluconate,Glcn,19_gluconate,0_control_20250515,0_control_20250619
+acetate,Ace,20_acetate,0_control_20250515,0_control_20250619
+l-lactic acid,Lac,21_l-lactic_acid,0_control_20250515,0_control_20250619
+fumarate,Fum,22_fumarate,0_control_20250515,0_control_20250718
+malic acid,Mal,23_malic_acid,0_control_20250515,0_control_20250718
+succinate,Succ,24_succinate,0_control_20251016,0_control_20250718
+citrate,Cit,25_citrate,0_control_20250515,0_control_20250718
+pyruvate,Pyr,26_pyruvate,0_control_20250515,0_control_20250718
+alanine,Ala,27_alanine,0_control_20250515,0_control_20250718
+proline,Pro,28_proline,0_control_20251016,0_control_20250718
+aspartic acid,Asp,29_aspartic_acid,0_control_20250611,0_control_20250718
+glutamic acid,Glu,30_glutamic_acid,0_control_20250611,0_control_20250718
+serine,Ser,31_serine,0_control_20250611,0_control_20250718
+threonine,Thr,32_threonine,0_control_20250522,0_control_20250718
+arginine,Arg,33_arginine,0_control_20250522,0_control_20250718
+histidine,His,34_histidine,0_control_20250522,0_control_20250718
+lysine,Lys,35_lysine,0_control_20250522,0_control_20250718
