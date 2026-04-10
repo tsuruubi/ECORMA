@@ -1,1 +1,4 @@
 00_Format_Raw_OD/
+.*
+!.gitignore
+!.gitattributes
