@@ -2924,7 +2924,7 @@ Sys.time()
 
 
 # 6 PCA
-## 6.1 ECOR and MA
+## 6.1 ECOR projected onto MA space
 ```{r PCA1,fig.height=2.5,fig.width=2.5}
 # Define common carbon sources between MA and ECOR
 carbons_ecorma_common<-ma_carbons[ma_carbons %in% ecor_carbons]
@@ -3046,7 +3046,7 @@ for (i in 1:n_sim) {
 }
 
 # 3. Compute summary statistics (mean, 2.5th percentile, 97.5th percentile)
-stats_rand_df <- data.frame(
+stats_randAontoB_df <- data.frame(
   PC = 1:n_col,
   Mean = colMeans(sim_results),
   Lower = apply(sim_results, 2, quantile, probs = 0.025),
@@ -3054,7 +3054,7 @@ stats_rand_df <- data.frame(
 )
 
 # 4. Visualization
-ggplot(stats_rand_df, aes(x = PC, y = Mean)) +
+ggplot(stats_randAontoB_df, aes(x = PC, y = Mean)) +
   geom_line(color = "blue", size = 1) +
   geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha = 0.2, fill = "blue") +
   geom_abline(intercept = 0, slope = 1/n_col, linetype = "dashed", color = "red") + # Theoretical uniform line
@@ -3082,12 +3082,79 @@ ggline(pca_compare, x = "PC", y = "Cumulative", color = "Type",
        ylab = "Cumulative fraction of \n variance explained",
        legend.title="",
        ylim=c(0,1))+
-  geom_line(data = stats_rand_df,aes(x=PC,y=Mean),color = "gray20", size = 1) +
-  geom_ribbon(data = stats_rand_df,aes(x=PC,y=NULL,ymin = Lower, ymax = Upper), alpha = 0.2, fill = "black") +
-  geom_point(data = stats_rand_df, aes(x = PC, y = Mean), inherit.aes = FALSE, color = "gray20", size = 2) +
+  geom_line(data = stats_randAontoB_df,aes(x=PC,y=Mean),color = "gray20", size = 1) +
+  geom_ribbon(data = stats_randAontoB_df,aes(x=PC,y=NULL,ymin = Lower, ymax = Upper), alpha = 0.2, fill = "black") +
+  geom_point(data = stats_randAontoB_df, aes(x = PC, y = Mean), inherit.aes = FALSE, color = "gray20", size = 2) +
   scale_y_continuous(breaks = get_breaks(from = 0,to = 1,by = 0.2),limits = c(0,1.1))
 Sys.time()
 ```
+## 6.4 MA projected onto ECOR space
+```{r PCA3,fig.height=3,fig.width=3,dpi=300}
+# 1. Project MA (B_mat) onto the principal component space of ECOR (pca_A)
+# Important: Use the scaling parameters (center/scale) from the ECOR PCA
+B_projected_on_A <- scale(B_mat, center = pca_A$center, scale = pca_A$scale) %*% pca_A$rotation
+
+# 2. Calculate variance explained by MA within ECOR's PC axes
+var_MA_on_A <- apply(B_projected_on_A, 2, var)
+var_explained_MA_on_A <- var_MA_on_A / sum(var_MA_on_A)
+cum_MA_on_A <- cumsum(var_explained_MA_on_A)
+
+# 3. Create a dataframe for visualization (ECOR as baseline)
+pca_compare_rev <- data.frame(
+  PC = rep(1:length(var_A_own), 2),
+  Variance = c(var_A_own, var_explained_MA_on_A),
+  Cumulative = c(cum_A_own, cum_MA_on_A),
+  Type = rep(c("ECOR (Original)", "MA (Projected)"), each = length(var_A_own))
+)
+
+# 4. Create a random dataset
+# 4.1. Settings
+n_row <- nrow(gr_ma_com_mat); n_col <- length(carbons_ecorma_common)
+#set.seed(123)
+# B_rnd_mat <- matrix(rnorm(n_row * n_col), nrow = n_row, ncol = n_col)
+# B_rnd_scaled <- scale(B_rnd_mat)
+# pca_B_rnd <- prcomp(B_rnd_scaled, scale. = TRUE)
+
+# 4.2. Generate random datasets 10,000 times
+n_sim <- 1000
+sim_results <- matrix(NA, nrow = n_sim, ncol = n_col)
+
+for (i in 1:n_sim) {
+  # A_rnd_mat
+  B_rnd_tmp <- matrix(rnorm(n_row * n_col), nrow = n_row, ncol = n_col)
+  # Normalize using the parameters from dataset B (MA)
+  B_rnd_scaled <- scale(B_rnd_tmp, center = pca_A$center, scale = pca_A$scale)
+  B_rnd_proj <- B_rnd_scaled %*% pca_A$rotation
+  
+  # Compute cumulative explained variance
+  vars <- apply(B_rnd_proj, 2, var)
+  sim_results[i, ] <- cumsum(vars) / sum(vars)
+}
+
+# 3. Compute summary statistics (mean, 2.5th percentile, 97.5th percentile)
+stats_randBontoA_df <- data.frame(
+  PC = 1:n_col,
+  Mean = colMeans(sim_results),
+  Lower = apply(sim_results, 2, quantile, probs = 0.025),
+  Upper = apply(sim_results, 2, quantile, probs = 0.975)
+)
+
+# 4. Visualization: Cumulative Variance Explained
+# This shows how much of the MA variance is captured by the major axes of ECOR
+ggline(pca_compare_rev, x = "PC", y = "Cumulative", color = "Type",
+       numeric.x.axis = TRUE,
+       xlab = "Principal Component of ECOR", 
+       ylab = "Cumulative fraction of \n variance explained",
+       legend.title="",
+       ylim=c(0,1))+
+  geom_line(data = stats_randBontoA_df,aes(x=PC,y=Mean),color = "gray20", size = 1) +
+  geom_ribbon(data = stats_randBontoA_df,aes(x=PC,y=NULL,ymin = Lower, ymax = Upper), alpha = 0.2, fill = "black") +
+  geom_point(data = stats_randBontoA_df, aes(x = PC, y = Mean), inherit.aes = FALSE, color = "gray20", size = 2) +
+  scale_y_continuous(breaks = get_breaks(from = 0,to = 1,by = 0.2),limits = c(0,1.1))
+Sys.time()
+```
+
+
 # 7 Output
 ```{r Output}
 my_outfile<-paste(getwd(),"Outputs_Main","ecor_phylogeny.csv",sep="/")
