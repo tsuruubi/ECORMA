@@ -1,6 +1,6 @@
 # Growth rate profiles of different strains of E. coli
 
-[![DOI](https://zenodo.org/badge/9876543210.svg)](https://doi.org/XXXXXXXXX/zenodo.9876543210)
+[![DOI](https://zenodo.org/badge/1206532381.svg)](https://doi.org/10.5281/zenodo.19707592)
 
 This repository contains the data and code for generating growth rate profiles and performing Flux Balance Analysis (FBA) across various *E. coli* strains (ECOR and MA strains).
 
@@ -68,4 +68,4 @@ The analysis utilizes a wide range of R libraries categorized as follows:
 
 ## Citation
 If you use this code or data, please cite the following Zenodo record:
-[https://doi.org/XXXXXXXXX/zenodo.9876543210](https://doi.org/XXXXXXXXX/zenodo.9876543210)
+[https://doi.org/10.5281/zenodo.19707592](https://doi.org/10.5281/zenodo.19707592)
