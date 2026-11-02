@@ -1,0 +1,3 @@
+reaction_id,coeff,direction
+0 <= Growth <= 1000.0,1.0,max
+0 <= Growth_reverse_699ae <= -0.0,-1.0,max
