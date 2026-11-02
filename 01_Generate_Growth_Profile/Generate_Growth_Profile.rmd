@@ -650,7 +650,120 @@ g<-ggscatter(plot_df,x="time",y="od",
   theme(strip.text = element_text(face = "bold")) 
 facet(g,facet.by = "carbon",nrow = 3)
 ```
+## 2.15. Four reps
+### 2.15.1. use all replicates
+```{r}
+stat_fit_ecor_allrep <- fit_results_ecor %>%
+  # 1. Identify target replicates (Top-2 selection and all-target selection)
+  group_by(strain, carbon) %>%
+  mutate(
+    is_target = growth_category %in% c("Growth", "Slow/Partial growth") & od_ini < 0.07,
+    r2_rank   = if_else(is_target, min_rank(desc(r2)), NA_integer_)
+  ) %>%
+  
+  # 2. Compute summary statistics
+  summarise(
+    n_growth    = sum(growth_category == "Growth", na.rm = TRUE),
+    n_no_growth = sum(growth_category == "No growth", na.rm = TRUE),
+    n_partial   = sum(growth_category == "Slow/Partial growth", na.rm = TRUE),
+    n_total     = n(),
+    
+    # [Top 2] IDs of selected replicates
+    selected_rep = paste(rep[is_target & r2_rank <= 2], collapse = "; "),
+    # [All] IDs of all qualifying replicates
+    selected_rep_all = paste(rep[is_target], collapse = "; "),
+    
+    # [Top 2] Mean, median, and SD computed from the top-2 replicates only
+    across(
+      c(r, od_max, od_max_runmed),
+      list(
+        mean   = ~ mean(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        median = ~ median(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        sd     = ~ sd(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        cv     = ~ sd(.x[is_target & r2_rank <= 2], na.rm = TRUE) / mean(.x[is_target & r2_rank <= 2], na.rm = TRUE)
+      ),
+      .names = "{.col}_{.fn}"
+    ),
+    
+    # [All] Mean, median, and SD computed from all qualifying replicates (is_target == TRUE)
+    across(
+      c(r, od_max, od_max_runmed),
+      list(
+        mean   = ~ mean(.x[is_target], na.rm = TRUE),
+        median = ~ median(.x[is_target], na.rm = TRUE),
+        sd     = ~ sd(.x[is_target], na.rm = TRUE),
+        cv     = ~ sd(.x[is_target], na.rm = TRUE) / mean(.x[is_target], na.rm = TRUE)
+      ),
+      .names = "{.col}_{.fn}_all"
+    ),
+    .groups = "drop"
+  ) %>%
+  
+  # 3. Assign growth category (using the same criteria as before)
+  mutate(growth_category = case_when(
+    n_growth >= 3    ~ "Growth",
+    n_no_growth >= 3 ~ "No growth",
+    n_partial >= 3   ~ "Slow/Partial growth",
+    TRUE             ~ "Unstable"
+  )) %>%
+  
+  # 4. Replace "No growth" and missing values (NaN/NA) with 0
+  #    (applied to both Top-2 and All columns)
+  mutate(across(
+    matches("^(r|od_max)_(mean|median|sd)(_all)?$"),
+    ~ case_when(
+      n_no_growth > 2 ~ 0,
+      is.nan(.x)      ~ 0,
+      is.na(.x)       ~ 0,
+      TRUE            ~ .x
+    )
+  ))
 
+# Join with the existing best-fit data (unchanged)
+my_tmp <- best_fit_ecor %>% 
+  select(strain, carbon, r, r2, growth_category) %>% 
+  rename(r_bh = r, r2_bh = r2, growth_category_bh = growth_category)
+
+stat_fit_ecor_allrep <- stat_fit_ecor_allrep %>% left_join(my_tmp, by = c("strain", "carbon"))
+```
+### 2.15.2. Heatmap of OD_max
+```{r, fig.height=6,fig.width=12,dpi=300}
+p<-ggplot(stat_fit_ecor_allrep, aes(x = strain, y = carbon, fill = od_max_mean_all)) +
+  geom_tile() + 
+  scale_fill_gradientn(
+    colors = c("black", "white", "#00468BFF"),
+    values = c(0, 0.0001, 1), 
+    rescaler = scales::rescale
+  )+
+  theme_pubr() + 
+  labs(
+       x = "Strain",
+       y = "Carbon sourcces",
+       fill = "OD_max")+
+  rotate_x_text(angle = 90)
+ggpar(p,legend="right")
+Sys.time()
+```
+### 2.15.3. Heatmap of mu_max
+```{r, fig.height=6,fig.width=12,dpi=300 }
+my_min<-stat_fit_ecor_allrep[stat_fit_ecor_allrep$r_mean_all!=0,]$r_mean_all %>% min()
+my_max<-stat_fit_ecor_allrep$r_mean_all %>% max()
+p<-ggplot(stat_fit_ecor_allrep, aes(x = strain, y = carbon, fill = r_mean_all)) +
+  geom_tile() + 
+  scale_fill_gradientn(
+    colors = c("black", "white", "#AD002AFF"),
+    values = c(0, my_min/100, 1.3),
+    rescaler = scales::rescale
+  )+
+  theme_pubr() + 
+  labs(
+       x = "Strain",
+       y = "Carbon sourcces",
+       fill = "mu_max")+
+  rotate_x_text(angle = 90)
+ggpar(p,legend="right")
+Sys.time()
+```
 
 
 # 3. MA
@@ -1155,7 +1268,135 @@ g<-ggscatter(plot_df,x="time",y="od",
   theme(strip.text = element_text(face = "bold")) 
 facet(g,facet.by = "colony_round")
 ```
+## 3.13. Four reps
+### 3.13.1. use all replicates
+```{r}
+stat_fit_ma_allrep <- fit_results_ma %>%
+  # 1. Identify target replicates (Top-2 selection and all-target selection)
+  group_by(colony, carbon, round, colony_round, lineage) %>%
+  mutate(
+    is_target = growth_category %in% c("Growth", "Slow/Partial growth") & od_ini < 0.07, 
+    r2_rank   = if_else(is_target, min_rank(desc(r2)), NA_integer_)
+  ) %>%
+  
+  # 2. Compute summary statistics
+  summarise(
+    n_growth    = sum(growth_category == "Growth", na.rm = TRUE),
+    n_no_growth = sum(growth_category == "No growth", na.rm = TRUE),
+    n_partial   = sum(growth_category == "Slow/Partial growth", na.rm = TRUE),
+    n_total     = n(),
+    
+    # [Top 2] IDs of selected replicates
+    selected_rep = paste(rep[is_target & r2_rank <= 2], collapse = "; "),
+    # [Top 2] Mean, median, and SD computed from the top-2 replicates only
+    selected_rep_all = paste(rep[is_target], collapse = "; "),
+    
+    # [Top 2] Mean, median, and SD computed from the top-2 replicates only
+    across(
+      c(r, od_max, od_max_runmed),
+      list(
+        mean   = ~ mean(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        median = ~ median(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        sd     = ~ sd(.x[is_target & r2_rank <= 2], na.rm = TRUE),
+        cv     = ~ sd(.x[is_target & r2_rank <= 2], na.rm = TRUE) / mean(.x[is_target & r2_rank <= 2], na.rm = TRUE)
+      ),
+      .names = "{.col}_{.fn}"
+    ),
+    
+    # [All] Mean, median, and SD computed from all qualifying replicates (is_target == TRUE)
+    across(
+      c(r, od_max, od_max_runmed),
+      list(
+        mean   = ~ mean(.x[is_target], na.rm = TRUE),
+        median = ~ median(.x[is_target], na.rm = TRUE),
+        sd     = ~ sd(.x[is_target], na.rm = TRUE),
+        cv     = ~ sd(.x[is_target], na.rm = TRUE) / mean(.x[is_target], na.rm = TRUE)
+      ),
+      .names = "{.col}_{.fn}_all"
+    ),
+    .groups = "drop"
+  ) %>%
+  
+  # 3. Assign growth category (using the same criteria as before)
+  mutate(growth_category = case_when(
+    n_growth >= 3    ~ "Growth",
+    n_no_growth >= 3 ~ "No growth",
+    n_partial >= 3   ~ "Slow/Partial growth",
+    TRUE             ~ "Unstable"
+  )) %>%
+  
+  # 4. Replace "No growth" and missing values (NaN/NA) with 0
+  #    (applied to both Top-2 and All columns)
+  mutate(across(
+    matches("^(r|od_max)_(mean|median|sd|cv)(_all)?$"),
+    ~ case_when(
+      n_no_growth > 2                        ~ 0,
+      is.na(.x) | is.nan(.x) | is.infinite(.x) ~ 0,
+      TRUE                                   ~ .x
+    )
+  ))
 
+# Join with the existing best-fit data
+my_tmp <- best_fit_ma %>% 
+  select(colony_round, carbon, r, r2, growth_category) %>% 
+  rename(r_bh = r, r2_bh = r2, growth_category_bh = growth_category)
+
+stat_fit_ma_allrep <- stat_fit_ma_allrep %>% 
+  left_join(my_tmp, by = c("colony_round", "carbon")) %>%
+  mutate(
+    Anc = str_extract(colony, "colony[1-3]"),
+    sublineage = str_extract(colony, "(?<=_).*$") %>% as.numeric()
+  ) %>%
+  arrange(Anc, sublineage, round) %>%
+  mutate(
+    colony_round = factor(colony_round, levels = unique(colony_round))
+  )
+```
+### 3.13.2. Heatmap of OD_max
+```{r, fig.height=5.5,fig.width=18,dpi=300}
+p<-ggplot(stat_fit_ma_allrep, aes(x = colony_round, y = carbon, fill = od_max_mean_all)) +
+  geom_tile() +
+  scale_fill_gradientn(
+    colors = c("black", "white", "#00468BFF"),
+    values = c(0, 0.0001, 1), 
+    rescaler = scales::rescale
+  )+
+  theme_pubr() + 
+  font("y.text",size=12)+
+  font("ylab",size=20)+
+  labs(
+       x = "Colony@Round",
+       y = "Carbon sourcces",
+       fill = "OD_max")+
+  rotate_x_text(angle = 90)
+ggpar(p,legend="right")
+
+Sys.time()
+```
+### 3.13.3. Heatmap of mu_max
+```{r, fig.height=5.5,fig.width=18,dpi=300}
+my_min<-stat_fit_ma_allrep[stat_fit_ma_allrep$r_mean_all!=0,]$r_mean_all %>% min()
+my_max<-stat_fit_ma_allrep$r_mean_all %>% max()
+g<-ggplot(stat_fit_ma_allrep, aes(x = colony_round, y = carbon, fill = r_mean_all)) +
+  geom_tile() + 
+  scale_fill_gradientn(
+    colors = c("black", "white", "#AD002AFF"),
+    values = c(0, my_min/100, 1), 
+    rescaler = scales::rescale
+  )+
+  theme_pubr() + 
+  font("y.text",size=12)+
+  font("ylab",size=20)+
+  labs(
+       x = "Colony@Round",
+       y = "Carbon sourcces",
+       fill = "mu_max")+
+  rotate_x_text(angle = 90)
+ggpar(g,legend="right")
+
+
+Sys.time()
+```
 
 
 # 4. Output
@@ -1173,6 +1414,13 @@ my_out_dat<-stat_fit_ecor %>%
   rename(Abb=carbon)
 my_out_dir<-paste(getwd(),"Output","stat_fit_ecor.csv",sep="/")
 # write_csv(x = my_out_dat,file = my_out_dir)
+
+my_out_dat<-stat_fit_ecor_allrep %>%
+  rename(Abb=carbon)
+my_out_dir<-paste(getwd(),"Output","stat_fit_ecor_allrep.csv",sep="/")
+# write_csv(x = my_out_dat,file = my_out_dir)
+
+
 Sys.time()
 ```
 ## 4.2. MA
@@ -1192,6 +1440,13 @@ my_out_dat<-stat_fit_ma %>%
   rename(Abb=carbon)
 my_out_dir<-paste(getwd(),"Output","stat_fit_ma.csv",sep="/")
 # write_csv(x = my_out_dat,file = my_out_dir)
+
+my_out_dat<-stat_fit_ma_allrep %>%
+  select(Anc,sublineage,lineage,colony,round,colony_round,everything()) %>%
+  rename(Abb=carbon)
+my_out_dir<-paste(getwd(),"Output","stat_fit_ma_allrep.csv",sep="/")
+# write_csv(x = my_out_dat,file = my_out_dir)
+
 Sys.time()
 ```
 
