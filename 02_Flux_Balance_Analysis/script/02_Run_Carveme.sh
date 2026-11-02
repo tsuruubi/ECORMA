@@ -7,7 +7,7 @@
 # ==============================================================================
 
 # 0. Set current directry
-# cd /Volumes/..../02_Flux_Balance_Analysis
+# cd /path/to/ECORMA/02_Flux_Balance_Analysis
 # To run this script: script/02_Run_Carveme.sh
 
 # 1. Setup paths
