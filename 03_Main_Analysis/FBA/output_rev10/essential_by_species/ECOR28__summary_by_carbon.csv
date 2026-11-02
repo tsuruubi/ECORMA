@@ -1,0 +1,34 @@
+species,carbon,n_essential_reactions
+ECOR28,Acetate,234
+ECOR28,Alanine,236
+ECOR28,Arabinose,232
+ECOR28,Arginine,227
+ECOR28,Aspartate,231
+ECOR28,Citrate,233
+ECOR28,Fructose,233
+ECOR28,Fumarate,231
+ECOR28,Galactose,236
+ECOR28,GlcNAc,234
+ECOR28,Gluconate,232
+ECOR28,Glucose,234
+ECOR28,Glutamate,230
+ECOR28,Glycerol,233
+ECOR28,Lactose,239
+ECOR28,Lysine,241
+ECOR28,Malic acid,232
+ECOR28,Maltose,234
+ECOR28,Mannitol,232
+ECOR28,Mannose,234
+ECOR28,Melibiose,241
+ECOR28,Proline,230
+ECOR28,Pyruvate,237
+ECOR28,Rhamnose,240
+ECOR28,Ribose,231
+ECOR28,Serine,230
+ECOR28,Sorbitol,232
+ECOR28,Succinate,232
+ECOR28,Sucrose,233
+ECOR28,Threonine,230
+ECOR28,Trehalose,234
+ECOR28,Xylose,231
+ECOR28,lactic acid,236
