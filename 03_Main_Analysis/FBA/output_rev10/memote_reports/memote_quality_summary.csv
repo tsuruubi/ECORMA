@@ -1,3 +1,0 @@
-species,model_file,stoichiometric_consistency,unconserved_metabolites,biomass_consistency,orphan_metabolites_ratio,dead_end_metabolites_ratio,gpr_presence_ratio,num_reactions,num_metabolites,status
-ECOR01,ECOR01_model.xml,1.0,6.0,{'Growth': 1.0},,,0.05583756345177665,2561.0,1609.0,Success
-ECOR01,ECOR01_model.xml,ERROR,,,,,,,,Error: module 'memote' has no attribute 'MemoteConfiguration'
