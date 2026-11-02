@@ -1,0 +1,562 @@
+Carbon_Source_A,Carbon_Source_B,Min_Distance,Dist_A_to_B,Dist_B_to_A
+Succinate,Fumarate,3.0,3.0,3.0
+Succinate,Malic acid,3.0,3.0,3.0
+Succinate,Aspartate,3.0,3.0,3.0
+Galactose,Lactose,3.0,,3.0
+Glucose,Trehalose,3.0,,3.0
+Glucose,Lactose,3.0,,3.0
+Succinate,Citrate,3.0,5.0,3.0
+Fumarate,Malic acid,4.0,4.0,4.0
+Citrate,Aspartate,4.0,4.0,6.0
+Malic acid,Aspartate,4.0,4.0,4.0
+Citrate,Fumarate,4.0,4.0,6.0
+Citrate,Malic acid,4.0,4.0,6.0
+Fumarate,Aspartate,4.0,4.0,4.0
+Alanine,Glutamate,5.0,5.0,5.0
+Alanine,Pyruvate,5.0,5.0,5.0
+Malic acid,Pyruvate,5.0,5.0,7.0
+Serine,Pyruvate,5.0,5.0,8.0
+Acetate,Citrate,5.0,10.0,5.0
+lactic acid,Pyruvate,5.0,5.0,7.0
+Fructose,Glutamate,5.0,5.0,
+Acetate,Pyruvate,5.0,10.0,5.0
+Acetate,GlcNAc,5.0,9.0,5.0
+Aspartate,Glutamate,5.0,5.0,5.0
+Mannose,Glutamate,6.0,6.0,
+Alanine,Fructose,6.0,,6.0
+Malic acid,Threonine,6.0,6.0,9.0
+Alanine,Serine,6.0,7.0,6.0
+Fructose,Aspartate,6.0,6.0,
+Fumarate,Glutamate,6.0,7.0,6.0
+Fumarate,Pyruvate,6.0,6.0,7.0
+lactic acid,Threonine,6.0,6.0,9.0
+GlcNAc,lactic acid,6.0,11.0,6.0
+Galactose,Malic acid,6.0,11.0,6.0
+Galactose,lactic acid,6.0,13.0,6.0
+Alanine,Aspartate,6.0,6.0,6.0
+lactic acid,Aspartate,6.0,6.0,9.0
+Galactose,Aspartate,6.0,10.0,6.0
+Ribose,Aspartate,6.0,8.0,6.0
+Serine,lactic acid,6.0,8.0,6.0
+Acetate,Malic acid,6.0,10.0,6.0
+Glucose,Lysine,6.0,6.0,11.0
+Glucose,Glutamate,6.0,6.0,7.0
+Glucose,Malic acid,6.0,9.0,6.0
+Ribose,lactic acid,6.0,10.0,6.0
+Acetate,Threonine,6.0,9.0,6.0
+Glucose,Aspartate,6.0,7.0,6.0
+Glucose,lactic acid,6.0,10.0,6.0
+Acetate,lactic acid,6.0,13.0,6.0
+Sorbitol,Glutamate,6.0,6.0,
+Serine,Glutamate,6.0,7.0,6.0
+Serine,Malic acid,6.0,8.0,6.0
+Serine,Aspartate,6.0,8.0,6.0
+Proline,Glutamate,6.0,6.0,8.0
+Glycerol,lactic acid,6.0,9.0,6.0
+GlcNAc,Malic acid,6.0,10.0,6.0
+GlcNAc,Aspartate,6.0,8.0,6.0
+lactic acid,Glutamate,6.0,6.0,9.0
+Alanine,Malic acid,6.0,8.0,6.0
+Alanine,lactic acid,6.0,8.0,6.0
+Alanine,Acetate,6.0,6.0,9.0
+Malic acid,Glutamate,6.0,6.0,7.0
+Fumarate,Arginine,6.0,6.0,6.0
+Succinate,Pyruvate,6.0,6.0,6.0
+Succinate,Glutamate,6.0,6.0,6.0
+Citrate,Pyruvate,6.0,6.0,7.0
+Mannitol,Glutamate,6.0,6.0,
+Succinate,Acetate,6.0,6.0,9.0
+Acetate,Glutamate,6.0,8.0,6.0
+Glycerol,Aspartate,6.0,7.0,6.0
+Acetate,Serine,6.0,9.0,6.0
+Glycerol,Malic acid,6.0,8.0,6.0
+Serine,Threonine,6.0,9.0,6.0
+Ribose,Malic acid,6.0,10.0,6.0
+Pyruvate,Glutamate,6.0,6.0,6.0
+Pyruvate,Aspartate,6.0,7.0,6.0
+Aspartate,Arginine,6.0,6.0,8.0
+Aspartate,Threonine,6.0,6.0,9.0
+Succinate,lactic acid,6.0,9.0,6.0
+GlcNAc,Glutamate,7.0,7.0,7.0
+Fructose,Pyruvate,7.0,7.0,
+Alanine,Mannitol,7.0,,7.0
+Fumarate,Threonine,7.0,7.0,9.0
+Alanine,Glucose,7.0,8.0,7.0
+Succinate,Arginine,7.0,7.0,7.0
+Succinate,Alanine,7.0,7.0,7.0
+Succinate,Threonine,7.0,7.0,8.0
+Alanine,Proline,7.0,9.0,7.0
+Succinate,GlcNAc,7.0,7.0,9.0
+Alanine,Sorbitol,7.0,,7.0
+Alanine,Mannose,7.0,,7.0
+Alanine,Citrate,7.0,8.0,7.0
+GlcNAc,Fumarate,7.0,9.0,7.0
+Lactose,Glutamate,7.0,7.0,
+Lactose,Lysine,7.0,7.0,
+Trehalose,Glutamate,7.0,7.0,
+Trehalose,Lysine,7.0,7.0,
+Galactose,Fumarate,7.0,11.0,7.0
+Mannose,Aspartate,7.0,7.0,
+Galactose,Glutamate,7.0,9.0,7.0
+Fructose,Fumarate,7.0,7.0,
+Ribose,Fumarate,7.0,9.0,7.0
+Glycerol,Fumarate,7.0,8.0,7.0
+Glycerol,Threonine,7.0,7.0,9.0
+Ribose,Glutamate,7.0,7.0,7.0
+Glycerol,Glutamate,7.0,7.0,7.0
+Serine,Fumarate,7.0,8.0,7.0
+Proline,Aspartate,7.0,7.0,9.0
+Sorbitol,Aspartate,7.0,7.0,
+Serine,Fructose,7.0,,7.0
+Glycerol,GlcNAc,7.0,7.0,9.0
+Glycerol,Fructose,7.0,,7.0
+Acetate,Fructose,7.0,,7.0
+Ribose,Glycerol,7.0,8.0,7.0
+Glycerol,Galactose,7.0,7.0,11.0
+Glycerol,Serine,7.0,7.0,7.0
+Citrate,Glutamate,7.0,7.0,7.0
+Acetate,Fumarate,7.0,10.0,7.0
+Glucose,Fumarate,7.0,8.0,7.0
+Acetate,Aspartate,7.0,9.0,7.0
+Glucose,Gluconate,7.0,7.0,10.0
+Citrate,lactic acid,7.0,9.0,7.0
+Mannitol,Aspartate,7.0,7.0,
+Glucose,Glycerol,7.0,8.0,7.0
+lactic acid,Malic acid,7.0,7.0,8.0
+Alanine,Fumarate,7.0,7.0,7.0
+Fructose,Lysine,7.0,7.0,
+Gluconate,Pyruvate,7.0,7.0,9.0
+lactic acid,Fumarate,7.0,7.0,9.0
+Succinate,Serine,7.0,7.0,7.0
+Succinate,Glycerol,7.0,7.0,7.0
+Succinate,Ribose,7.0,7.0,9.0
+Succinate,Glucose,7.0,7.0,8.0
+Glutamate,Histidine,7.0,7.0,
+Malic acid,Arginine,7.0,7.0,7.0
+Succinate,Galactose,7.0,7.0,10.0
+Succinate,Fructose,7.0,,7.0
+Pyruvate,Threonine,7.0,8.0,7.0
+Glutamate,Threonine,7.0,7.0,7.0
+Glutamate,Arginine,7.0,7.0,7.0
+Aspartate,Histidine,8.0,8.0,
+Pyruvate,Lysine,8.0,8.0,10.0
+Mannitol,Fumarate,8.0,8.0,
+Pyruvate,Arginine,8.0,9.0,8.0
+Alanine,Lactose,8.0,,8.0
+Alanine,Trehalose,8.0,,8.0
+Melibiose,Glutamate,8.0,8.0,
+Glucose,Serine,8.0,8.0,9.0
+Alanine,Glycerol,8.0,8.0,8.0
+Alanine,Ribose,8.0,8.0,8.0
+Citrate,Arginine,8.0,8.0,8.0
+Citrate,Threonine,8.0,8.0,9.0
+Citrate,GlcNAc,8.0,8.0,10.0
+Citrate,Fructose,8.0,,8.0
+Alanine,Galactose,8.0,8.0,10.0
+Fructose,Histidine,8.0,8.0,
+Fructose,GlcNAc,8.0,8.0,
+Fructose,Gluconate,8.0,8.0,
+Fructose,Malic acid,8.0,8.0,
+Melibiose,Lysine,8.0,8.0,
+Mannitol,Serine,8.0,8.0,
+Ribose,Fructose,8.0,,8.0
+Glucose,Fructose,8.0,,8.0
+Mannitol,Glycerol,8.0,8.0,
+Fructose,Arginine,8.0,8.0,
+Proline,Serine,8.0,8.0,11.0
+Xylose,Glutamate,8.0,8.0,
+Fructose,Threonine,8.0,8.0,
+Glucose,Pyruvate,8.0,8.0,8.0
+Ribose,Pyruvate,8.0,8.0,8.0
+Glycerol,Mannose,8.0,,8.0
+Glycerol,Sorbitol,8.0,,8.0
+Serine,Sorbitol,8.0,,8.0
+Sorbitol,Pyruvate,8.0,8.0,
+Trehalose,Gluconate,8.0,8.0,
+Trehalose,Aspartate,8.0,8.0,
+Sorbitol,Fumarate,8.0,8.0,
+Rhamnose,lactic acid,8.0,8.0,
+Serine,Mannose,8.0,,8.0
+GlcNAc,Pyruvate,8.0,9.0,8.0
+Lactose,Aspartate,8.0,8.0,
+Proline,Fumarate,8.0,8.0,11.0
+Proline,Acetate,8.0,8.0,12.0
+Maltose,Glutamate,8.0,8.0,
+Proline,Pyruvate,8.0,8.0,10.0
+Mannose,Lysine,8.0,8.0,
+Acetate,Mannitol,8.0,,8.0
+Acetate,Glucose,8.0,9.0,8.0
+Acetate,Gluconate,8.0,14.0,8.0
+Acetate,Mannose,8.0,,8.0
+Glycerol,Pyruvate,8.0,9.0,8.0
+Acetate,Sorbitol,8.0,,8.0
+Maltose,Lysine,8.0,8.0,
+Mannose,Pyruvate,8.0,8.0,
+Mannose,Fumarate,8.0,8.0,
+Lactose,Gluconate,8.0,8.0,
+Sorbitol,Lysine,8.0,8.0,
+Galactose,Fructose,8.0,,8.0
+Galactose,Pyruvate,8.0,10.0,8.0
+Alanine,GlcNAc,8.0,8.0,8.0
+Alanine,Gluconate,8.0,10.0,8.0
+Alanine,Threonine,8.0,8.0,8.0
+Alanine,Arginine,8.0,8.0,8.0
+Alanine,Histidine,8.0,8.0,
+Succinate,Mannose,8.0,,8.0
+Succinate,Sorbitol,8.0,,8.0
+Succinate,Mannitol,8.0,,8.0
+Citrate,Glucose,8.0,8.0,9.0
+Mannitol,Lysine,8.0,8.0,
+Citrate,Glycerol,8.0,8.0,8.0
+Citrate,Galactose,8.0,8.0,11.0
+Mannitol,Pyruvate,8.0,8.0,
+Citrate,Ribose,8.0,8.0,10.0
+Citrate,Serine,8.0,8.0,8.0
+Succinate,Proline,8.0,10.0,8.0
+Glutamate,Lysine,8.0,8.0,8.0
+Mannitol,Glucose,9.0,9.0,
+Mannitol,Citrate,9.0,9.0,
+Mannitol,Ribose,9.0,9.0,
+Mannitol,GlcNAc,9.0,9.0,
+Ribose,Serine,9.0,9.0,9.0
+Ribose,Sorbitol,9.0,,9.0
+Ribose,Mannose,9.0,,9.0
+Acetate,Arginine,9.0,11.0,9.0
+Pyruvate,Histidine,9.0,9.0,
+Aspartate,Lysine,9.0,9.0,9.0
+Mannitol,Gluconate,9.0,9.0,
+Acetate,Galactose,9.0,9.0,11.0
+Glycerol,Arginine,9.0,10.0,9.0
+Acetate,Glycerol,9.0,9.0,9.0
+Acetate,Trehalose,9.0,,9.0
+Acetate,Lactose,9.0,,9.0
+Ribose,Arginine,9.0,10.0,9.0
+Ribose,Threonine,9.0,10.0,9.0
+Glycerol,Trehalose,9.0,,9.0
+Glycerol,Lactose,9.0,,9.0
+Serine,Trehalose,9.0,,9.0
+Serine,Lactose,9.0,,9.0
+Serine,GlcNAc,9.0,9.0,9.0
+Glycerol,Rhamnose,9.0,,9.0
+GlcNAc,Arginine,9.0,10.0,9.0
+GlcNAc,Threonine,9.0,10.0,9.0
+Proline,Fructose,9.0,,9.0
+Rhamnose,Pyruvate,9.0,9.0,
+Glucose,GlcNAc,9.0,9.0,10.0
+Mannitol,Galactose,9.0,9.0,
+Glucose,Arginine,9.0,9.0,9.0
+Glucose,Threonine,9.0,9.0,9.0
+Proline,Citrate,9.0,9.0,11.0
+Proline,Glucose,9.0,9.0,10.0
+Proline,Ribose,9.0,9.0,11.0
+Fructose,lactic acid,9.0,9.0,
+Glucose,Histidine,9.0,9.0,
+Proline,Glycerol,9.0,9.0,11.0
+Proline,Galactose,9.0,9.0,13.0
+GlcNAc,Lysine,9.0,9.0,11.0
+Glucose,Ribose,9.0,9.0,10.0
+Arabinose,Glutamate,9.0,9.0,
+Melibiose,Aspartate,9.0,9.0,
+Citrate,Mannose,9.0,,9.0
+Glucose,Mannose,9.0,,9.0
+Citrate,Lysine,9.0,9.0,11.0
+Alanine,Maltose,9.0,,9.0
+lactic acid,Lysine,9.0,9.0,12.0
+Xylose,Pyruvate,9.0,9.0,
+Alanine,Melibiose,9.0,,9.0
+Glucose,Sorbitol,9.0,,9.0
+Glucose,Galactose,9.0,9.0,12.0
+Xylose,Aspartate,9.0,9.0,
+Maltose,Aspartate,9.0,9.0,
+Proline,Malic acid,9.0,9.0,11.0
+Proline,GlcNAc,9.0,9.0,11.0
+Acetate,Ribose,9.0,9.0,9.0
+Proline,Histidine,9.0,9.0,
+Proline,Arginine,9.0,9.0,11.0
+Proline,Threonine,9.0,9.0,12.0
+Serine,Lysine,9.0,9.0,10.0
+Serine,Arginine,9.0,10.0,9.0
+Melibiose,Gluconate,9.0,9.0,
+Mannose,Histidine,9.0,9.0,
+Sorbitol,Malic acid,9.0,9.0,
+Sorbitol,Gluconate,9.0,9.0,
+Sorbitol,GlcNAc,9.0,9.0,
+Sorbitol,Galactose,9.0,9.0,
+Serine,Galactose,9.0,9.0,11.0
+Glycerol,Lysine,9.0,9.0,10.0
+Trehalose,Pyruvate,9.0,9.0,
+Trehalose,Fumarate,9.0,9.0,
+Lactose,Pyruvate,9.0,9.0,
+Lactose,Fumarate,9.0,9.0,
+Glycerol,Xylose,9.0,,9.0
+Glycerol,Gluconate,9.0,10.0,9.0
+Sorbitol,Arginine,9.0,9.0,
+Sorbitol,Threonine,9.0,9.0,
+Maltose,Gluconate,9.0,9.0,
+Sorbitol,Histidine,9.0,9.0,
+Gluconate,Lysine,9.0,11.0,9.0
+Alanine,Xylose,9.0,,9.0
+Alanine,Lysine,9.0,9.0,9.0
+Gluconate,Glutamate,9.0,9.0,11.0
+Succinate,Trehalose,9.0,,9.0
+Succinate,Lactose,9.0,,9.0
+Malic acid,Lysine,9.0,9.0,11.0
+Galactose,Threonine,9.0,12.0,9.0
+Galactose,Lysine,9.0,9.0,11.0
+Galactose,Arginine,9.0,12.0,9.0
+Mannose,GlcNAc,9.0,9.0,
+Mannose,Gluconate,9.0,9.0,
+Galactose,Mannose,9.0,,9.0
+Mannose,Malic acid,9.0,9.0,
+Mannose,Arginine,9.0,9.0,
+Mannose,Threonine,9.0,9.0,
+Mannitol,Threonine,9.0,9.0,
+Mannitol,Malic acid,9.0,9.0,
+Mannitol,Histidine,9.0,9.0,
+Mannitol,Arginine,9.0,9.0,
+lactic acid,Arginine,9.0,9.0,11.0
+Citrate,Sorbitol,9.0,,9.0
+Succinate,Gluconate,9.0,11.0,9.0
+Succinate,Histidine,9.0,9.0,
+Threonine,Arginine,9.0,11.0,9.0
+Arginine,Histidine,10.0,10.0,
+Succinate,Rhamnose,10.0,,10.0
+Succinate,Xylose,10.0,,10.0
+Succinate,Lysine,10.0,10.0,10.0
+lactic acid,Histidine,10.0,10.0,
+Succinate,Maltose,10.0,,10.0
+Succinate,Melibiose,10.0,,10.0
+Malic acid,Histidine,10.0,10.0,
+Lactose,GlcNAc,10.0,10.0,
+Mannose,lactic acid,10.0,10.0,
+Galactose,Trehalose,10.0,,10.0
+Galactose,Rhamnose,10.0,,10.0
+Galactose,GlcNAc,10.0,12.0,10.0
+Galactose,Gluconate,10.0,10.0,10.0
+Gluconate,Threonine,10.0,10.0,12.0
+Alanine,Rhamnose,10.0,,10.0
+Proline,Mannitol,10.0,,10.0
+Maltose,Fumarate,10.0,10.0,
+Maltose,Pyruvate,10.0,10.0,
+Proline,Lysine,10.0,10.0,12.0
+Serine,Histidine,10.0,10.0,
+Sorbitol,lactic acid,10.0,10.0,
+Lactose,Arginine,10.0,10.0,
+Lactose,Histidine,10.0,10.0,
+Melibiose,Fumarate,10.0,10.0,
+Melibiose,Pyruvate,10.0,10.0,
+Trehalose,GlcNAc,10.0,10.0,
+Trehalose,Malic acid,10.0,10.0,
+Trehalose,Threonine,10.0,10.0,
+Trehalose,Arginine,10.0,10.0,
+Trehalose,Histidine,10.0,10.0,
+Serine,Maltose,10.0,,10.0
+Serine,Melibiose,10.0,,10.0
+Serine,Rhamnose,10.0,,10.0
+Serine,Xylose,10.0,,10.0
+Serine,Gluconate,10.0,10.0,10.0
+Glycerol,Melibiose,10.0,,10.0
+Glycerol,Arabinose,10.0,,10.0
+Xylose,Lysine,10.0,10.0,
+GlcNAc,Gluconate,10.0,10.0,10.0
+GlcNAc,Histidine,10.0,10.0,
+Rhamnose,Aspartate,10.0,10.0,
+Rhamnose,Glutamate,10.0,10.0,
+Lactose,Malic acid,10.0,10.0,
+Lactose,Threonine,10.0,10.0,
+Glycerol,Histidine,10.0,10.0,
+Acetate,Maltose,10.0,,10.0
+Acetate,Melibiose,10.0,,10.0
+Acetate,Rhamnose,10.0,,10.0
+Acetate,Xylose,10.0,,10.0
+Ribose,Histidine,10.0,10.0,
+Ribose,Lysine,10.0,10.0,11.0
+Glycerol,Maltose,10.0,,10.0
+Ribose,Galactose,10.0,10.0,12.0
+Ribose,Trehalose,10.0,,10.0
+Ribose,Lactose,10.0,,10.0
+Ribose,Rhamnose,10.0,,10.0
+Ribose,GlcNAc,10.0,10.0,10.0
+Ribose,Gluconate,10.0,11.0,10.0
+Acetate,Lysine,10.0,12.0,10.0
+Glucose,Rhamnose,10.0,,10.0
+Proline,Sorbitol,10.0,,10.0
+Proline,Mannose,10.0,,10.0
+Citrate,Histidine,10.0,10.0,
+Fumarate,Histidine,10.0,10.0,
+Fumarate,Lysine,10.0,10.0,10.0
+Citrate,Trehalose,10.0,,10.0
+Citrate,Lactose,10.0,,10.0
+Citrate,Gluconate,10.0,10.0,10.0
+Rhamnose,Threonine,10.0,10.0,
+Xylose,Fumarate,10.0,10.0,
+Arabinose,Pyruvate,10.0,10.0,
+Arabinose,Aspartate,10.0,10.0,
+Rhamnose,GlcNAc,10.0,10.0,
+Alanine,Arabinose,10.0,,10.0
+Gluconate,lactic acid,10.0,10.0,10.0
+Gluconate,Fumarate,10.0,10.0,11.0
+Gluconate,Malic acid,10.0,10.0,10.0
+Gluconate,Aspartate,10.0,10.0,10.0
+Mannitol,lactic acid,10.0,10.0,
+Histidine,Lysine,11.0,,11.0
+Arginine,Lysine,11.0,11.0,11.0
+Threonine,Lysine,11.0,11.0,11.0
+Threonine,Histidine,11.0,11.0,
+Succinate,Arabinose,11.0,,11.0
+Citrate,Maltose,11.0,,11.0
+Citrate,Melibiose,11.0,,11.0
+Citrate,Rhamnose,11.0,,11.0
+Xylose,lactic acid,11.0,11.0,
+Citrate,Xylose,11.0,,11.0
+Xylose,Gluconate,11.0,11.0,
+Xylose,GlcNAc,11.0,11.0,
+Proline,Trehalose,11.0,,11.0
+Melibiose,Threonine,11.0,11.0,
+Arabinose,Fumarate,11.0,11.0,
+Xylose,Malic acid,11.0,11.0,
+Melibiose,Arginine,11.0,11.0,
+Melibiose,Histidine,11.0,11.0,
+Arabinose,Lysine,11.0,11.0,
+Maltose,Galactose,11.0,11.0,
+Maltose,GlcNAc,11.0,11.0,
+Maltose,Arginine,11.0,11.0,
+Melibiose,Malic acid,11.0,11.0,
+Trehalose,lactic acid,11.0,11.0,
+Melibiose,GlcNAc,11.0,11.0,
+Lactose,lactic acid,11.0,11.0,
+Rhamnose,Malic acid,11.0,11.0,
+Rhamnose,Fumarate,11.0,11.0,
+Xylose,Histidine,11.0,11.0,
+Xylose,Arginine,11.0,11.0,
+Xylose,Threonine,11.0,11.0,
+Proline,Lactose,11.0,,11.0
+Acetate,Arabinose,11.0,,11.0
+Serine,Arabinose,11.0,,11.0
+Proline,lactic acid,11.0,11.0,11.0
+Maltose,Malic acid,11.0,11.0,
+Maltose,Threonine,11.0,11.0,
+Galactose,Xylose,11.0,,11.0
+Galactose,Melibiose,11.0,,11.0
+Maltose,Histidine,11.0,11.0,
+Acetate,Histidine,11.0,11.0,
+Glucose,Melibiose,11.0,,11.0
+Glucose,Xylose,11.0,,11.0
+Glucose,Maltose,11.0,,11.0
+Ribose,Melibiose,11.0,,11.0
+Ribose,Xylose,11.0,,11.0
+Ribose,Maltose,11.0,,11.0
+Arabinose,Gluconate,12.0,12.0,
+Gluconate,Histidine,12.0,12.0,
+Gluconate,Arginine,12.0,12.0,13.0
+Proline,Xylose,12.0,,12.0
+Proline,Maltose,12.0,,12.0
+Arabinose,lactic acid,12.0,12.0,
+Melibiose,lactic acid,12.0,12.0,
+Proline,Melibiose,12.0,,12.0
+Galactose,Histidine,12.0,12.0,
+Maltose,lactic acid,12.0,12.0,
+Rhamnose,Lysine,12.0,12.0,
+Arabinose,Threonine,12.0,12.0,
+Arabinose,Arginine,12.0,12.0,
+Citrate,Arabinose,12.0,,12.0
+Arabinose,Malic acid,12.0,12.0,
+Arabinose,Histidine,12.0,12.0,
+Arabinose,GlcNAc,12.0,12.0,
+Glucose,Arabinose,12.0,,12.0
+Ribose,Arabinose,12.0,,12.0
+Galactose,Arabinose,12.0,,12.0
+Proline,Gluconate,13.0,13.0,13.0
+Rhamnose,Arginine,13.0,13.0,
+Rhamnose,Histidine,13.0,13.0,
+Proline,Arabinose,13.0,,13.0
+Rhamnose,Gluconate,13.0,13.0,
+Proline,Rhamnose,14.0,,14.0
+Succinate,Sucrose,,,
+Alanine,Sucrose,,,
+Proline,Sucrose,,,
+Acetate,Sucrose,,,
+Mannitol,Sorbitol,,,
+Mannitol,Maltose,,,
+Mannitol,Mannose,,,
+Mannitol,Trehalose,,,
+Mannitol,Lactose,,,
+Mannitol,Melibiose,,,
+Mannitol,Fructose,,,
+Mannitol,Arabinose,,,
+Mannitol,Rhamnose,,,
+Mannitol,Xylose,,,
+Mannitol,Sucrose,,,
+Citrate,Sucrose,,,
+Glucose,Sucrose,,,
+Ribose,Sucrose,,,
+Glycerol,Sucrose,,,
+Serine,Sucrose,,,
+Sorbitol,Maltose,,,
+Sorbitol,Mannose,,,
+Sorbitol,Trehalose,,,
+Sorbitol,Lactose,,,
+Sorbitol,Melibiose,,,
+Sorbitol,Fructose,,,
+Sorbitol,Arabinose,,,
+Sorbitol,Rhamnose,,,
+Sorbitol,Xylose,,,
+Sorbitol,Sucrose,,,
+Maltose,Mannose,,,
+Maltose,Trehalose,,,
+Maltose,Lactose,,,
+Maltose,Melibiose,,,
+Maltose,Fructose,,,
+Maltose,Arabinose,,,
+Maltose,Rhamnose,,,
+Maltose,Xylose,,,
+Maltose,Sucrose,,,
+Galactose,Sucrose,,,
+Mannose,Trehalose,,,
+Mannose,Lactose,,,
+Mannose,Melibiose,,,
+Mannose,Fructose,,,
+Mannose,Arabinose,,,
+Mannose,Rhamnose,,,
+Mannose,Xylose,,,
+Mannose,Sucrose,,,
+Trehalose,Lactose,,,
+Trehalose,Melibiose,,,
+Trehalose,Fructose,,,
+Trehalose,Arabinose,,,
+Trehalose,Rhamnose,,,
+Trehalose,Xylose,,,
+Trehalose,Sucrose,,,
+Lactose,Melibiose,,,
+Lactose,Fructose,,,
+Lactose,Arabinose,,,
+Lactose,Rhamnose,,,
+Lactose,Xylose,,,
+Lactose,Sucrose,,,
+Melibiose,Fructose,,,
+Melibiose,Arabinose,,,
+Melibiose,Rhamnose,,,
+Melibiose,Xylose,,,
+Melibiose,Sucrose,,,
+Fructose,Arabinose,,,
+Fructose,Rhamnose,,,
+Fructose,Xylose,,,
+Fructose,Sucrose,,,
+Arabinose,Rhamnose,,,
+Arabinose,Xylose,,,
+Arabinose,Sucrose,,,
+Rhamnose,Xylose,,,
+Rhamnose,Sucrose,,,
+Xylose,Sucrose,,,
+GlcNAc,Sucrose,,,
+Sucrose,Gluconate,,,
+Sucrose,lactic acid,,,
+Sucrose,Fumarate,,,
+Sucrose,Malic acid,,,
+Sucrose,Pyruvate,,,
+Sucrose,Aspartate,,,
+Sucrose,Glutamate,,,
+Sucrose,Threonine,,,
+Sucrose,Arginine,,,
+Sucrose,Histidine,,,
+Sucrose,Lysine,,,
