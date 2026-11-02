@@ -1,0 +1,34 @@
+species,carbon,n_essential_reactions
+ECOR68,Acetate,235
+ECOR68,Alanine,237
+ECOR68,Arabinose,237
+ECOR68,Arginine,233
+ECOR68,Aspartate,233
+ECOR68,Citrate,239
+ECOR68,Fructose,235
+ECOR68,Fumarate,234
+ECOR68,Galactose,240
+ECOR68,GlcNAc,236
+ECOR68,Gluconate,234
+ECOR68,Glucose,236
+ECOR68,Glutamate,237
+ECOR68,Glycerol,239
+ECOR68,Lactose,241
+ECOR68,Lysine,239
+ECOR68,Malic acid,234
+ECOR68,Maltose,236
+ECOR68,Mannitol,235
+ECOR68,Mannose,236
+ECOR68,Melibiose,243
+ECOR68,Proline,235
+ECOR68,Pyruvate,242
+ECOR68,Rhamnose,243
+ECOR68,Ribose,234
+ECOR68,Serine,231
+ECOR68,Sorbitol,235
+ECOR68,Succinate,232
+ECOR68,Sucrose,235
+ECOR68,Threonine,236
+ECOR68,Trehalose,236
+ECOR68,Xylose,236
+ECOR68,lactic acid,238

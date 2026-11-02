@@ -1,0 +1,34 @@
+species,carbon,n_essential_reactions
+ECOR64,Acetate,240
+ECOR64,Alanine,243
+ECOR64,Arabinose,242
+ECOR64,Arginine,236
+ECOR64,Aspartate,238
+ECOR64,Citrate,239
+ECOR64,Fructose,240
+ECOR64,Fumarate,239
+ECOR64,Galactose,245
+ECOR64,GlcNAc,241
+ECOR64,Gluconate,240
+ECOR64,Glucose,241
+ECOR64,Glutamate,242
+ECOR64,Glycerol,245
+ECOR64,Lactose,246
+ECOR64,Lysine,246
+ECOR64,Malic acid,239
+ECOR64,Maltose,241
+ECOR64,Mannitol,241
+ECOR64,Mannose,241
+ECOR64,Melibiose,248
+ECOR64,Proline,240
+ECOR64,Pyruvate,243
+ECOR64,Rhamnose,243
+ECOR64,Ribose,240
+ECOR64,Serine,237
+ECOR64,Sorbitol,241
+ECOR64,Succinate,237
+ECOR64,Sucrose,240
+ECOR64,Threonine,241
+ECOR64,Trehalose,241
+ECOR64,Xylose,242
+ECOR64,lactic acid,243
