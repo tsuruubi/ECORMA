@@ -1,0 +1,1975 @@
+metabolite,name,formula,carbon_atom
+10fthf_c,10-Formyltetrahydrofolate,C20H21N7O7,Presence
+12dgr120_c,"1,2-Diacyl-sn-glycerol (didodecanoyl, n-C12:0)",C27H52O5,Presence
+12dgr140_c,"1,2-Diacyl-sn-glycerol (ditetradecanoyl, n-C14:0)",C31H60O5,Presence
+12dgr140_p,"1,2-Diacyl-sn-glycerol (ditetradecanoyl, n-C14:0)",C31H60O5,Presence
+12dgr141_c,"1,2-Diacyl-sn-glycerol (ditetradec-7-enoyl, n-C14:1)",C31H56O5,Presence
+12dgr160_c,"1,2-Diacyl-sn-glycerol (dihexadecanoyl, n-C16:0)",C35H68O5,Presence
+12dgr160_p,"1,2-Diacyl-sn-glycerol (dihexadecanoyl, n-C16:0)",C35H68O5,Presence
+12dgr161_c,"1,2-Diacyl-sn-glycerol (dihexadec-9-enoyl, n-C16:1)",C35H64O5,Presence
+12dgr180_c,"1,2-Diacyl-sn-glycerol (dioctadecanoyl, n-C18:0)",C39H76O5,Presence
+12dgr180_p,"1,2-Diacyl-sn-glycerol (dioctadecanoyl, n-C18:0)",C39H76O5,Presence
+12dgr181_c,"1,2-Diacyl-sn-glycerol (dioctadec-11-enoyl, n-C18:1)",C39H72O5,Presence
+12dgr181_p,"1,2-Diacyl-sn-glycerol (dioctadec-11-enoyl, n-C18:1)",C39H72O5,Presence
+12ppd__R_c,"(R)-Propane-1,2-diol",C3H8O2,Presence
+12ppd__R_e,"(R)-Propane-1,2-diol",C3H8O2,Presence
+12ppd__R_p,"(R)-Propane-1,2-diol",C3H8O2,Presence
+12ppd__S_c,"(S)-Propane-1,2-diol",C3H8O2,Presence
+12ppd__S_e,"(S)-Propane-1,2-diol",C3H8O2,Presence
+12ppd__S_p,"(S)-Propane-1,2-diol",C3H8O2,Presence
+13dpg_c,3-Phospho-D-glyceroyl phosphate,C3H4O10P2,Presence
+13ppd_c,"1,3-Propanediol",C3H8O2,Presence
+14dhncoa_c,"1,4-dihydroxy-2-napthoyl-CoA",C32H38N7O19P3S,Presence
+14glucan_c,"1,4-alpha-D-glucan",C36H62O31,Presence
+14glucan_e,"1,4-alpha-D-glucan",C36H62O31,Presence
+14glucan_p,"1,4-alpha-D-glucan",C36H62O31,Presence
+15dap_c,"1,5-Diaminopentane",C5H16N2,Presence
+15dap_e,"1,5-Diaminopentane",C5H16N2,Presence
+15dap_p,"1,5-Diaminopentane",C5H16N2,Presence
+1agpe120_p,1-Acyl-sn-glycero-3-phosphoethanolamine (n-C12:0),C17H36NO7P,Presence
+1agpe141_p,1-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:1),C19H38NO7P,Presence
+1agpe161_p,1-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:1),C21H42NO7P,Presence
+1agpg120_p,1-Acyl-sn-glycero-3-phosphoglycerol (n-C12:0),C18H36O9P,Presence
+1agpg141_p,1-Acyl-sn-glycero-3-phosphoglycerol (n-C14:1),C20H38O9P,Presence
+1agpg161_p,1-Acyl-sn-glycero-3-phosphoglycerol (n-C16:1),C22H42O9P,Presence
+1ddecg3p_c,1-dodecanoyl-sn-glycerol 3-phosphate,C15H29O7P,Presence
+1ddecg3p_p,1-dodecanoyl-sn-glycerol 3-phosphate,C15H29O7P,Presence
+1hdec9eg3p_c,1-hexadec-9-enoyl-sn-glycerol 3-phosphate,C19H35O7P,Presence
+1hdec9eg3p_p,1-hexadec-9-enoyl-sn-glycerol 3-phosphate,C19H35O7P,Presence
+1p2cbxl_c,1-Pyrroline-2-carboxylate,C5H6NO2,Presence
+1pyr5c_c,1-Pyrroline-5-carboxylate,C5H6NO2,Presence
+1tdec7eg3p_c,1-tetradec-7-enoyl-sn-glycerol 3-phosphate,C17H31O7P,Presence
+1tdec7eg3p_p,1-tetradec-7-enoyl-sn-glycerol 3-phosphate,C17H31O7P,Presence
+23camp_e,"2',3'-Cyclic AMP",C10H11N5O6P,Presence
+23camp_p,"2',3'-Cyclic AMP",C10H11N5O6P,Presence
+23ccmp_e,"2',3'-Cyclic CMP",C9H11N3O7P,Presence
+23ccmp_p,"2',3'-Cyclic CMP",C9H11N3O7P,Presence
+23cgmp_e,"2',3'-Cyclic GMP",C10H11N5O7P,Presence
+23cgmp_p,"2',3'-Cyclic GMP",C10H11N5O7P,Presence
+23cump_e,"2',3'-Cyclic UMP",C9H10N2O8P,Presence
+23cump_p,"2',3'-Cyclic UMP",C9H10N2O8P,Presence
+23dappa_c,"2,3-diaminopropionate",C3H8N2O2,Presence
+23dappa_e,"2,3-diaminopropionate",C3H8N2O2,Presence
+23dappa_p,"2,3-diaminopropionate",C3H8N2O2,Presence
+23ddhb_c,"2,3-Dihydro-2,3-dihydroxybenzoate",C7H7O4,Presence
+23dhacoa_c,"2,3-dehydroadipyl-CoA",C27H37N7O19P3S,Presence
+23dhb_c,"2,3-Dihydroxybenzoate",C7H5O4,Presence
+23dhba_c,"(2,3-Dihydroxybenzoyl)adenylate",C17H17N5O10P,Presence
+23dhbzs2_c,2-3-dihydroxybenzoylserine dimer,C20H19N2O11,Presence
+23dhbzs3_c,2-3-dihydroxybenzoylserine trimer,C30H28N3O16,Presence
+23dhbzs_c,"2,3-dihydroxybenzoylserine",C10H10NO6,Presence
+23dhdp_c,"2,3-Dihydrodipicolinate",C7H5NO4,Presence
+23dhmb_c,"(R)-2,3-Dihydroxy-3-methylbutanoate",C5H9O4,Presence
+23dhmp_c,"(R)-2,3-Dihydroxy-3-methylpentanoate",C6H11O4,Presence
+25aics_c,(S)-2-[5-Amino-1-(5-phospho-D-ribosyl)imidazole-4-carboxamido]succinate,C13H15N4O12P,Presence
+25dkglcn_c,"2,5-diketo-D-gluconate",C6H7O7,Presence
+25dkglcn_e,"2,5-diketo-D-gluconate",C6H7O7,Presence
+25dkglcn_p,"2,5-diketo-D-gluconate",C6H7O7,Presence
+25drapp_c,"2,5-Diamino-6-(ribosylamino)-4-(3H)-pyrimidinone 5'-phosphate",C9H14N5O8P,Presence
+26dap_LL_c,"LL-2,6-Diaminoheptanedioate",C7H14N2O4,Presence
+26dap__M_c,"Meso-2,6-Diaminoheptanedioate",C7H14N2O4,Presence
+26dap__M_e,"Meso-2,6-Diaminoheptanedioate",C7H14N2O4,Presence
+26dap__M_p,"Meso-2,6-Diaminoheptanedioate",C7H14N2O4,Presence
+2agpe120_c,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C12:0),C17H36NO7P,Presence
+2agpe120_p,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C12:0),C17H36NO7P,Presence
+2agpe140_c,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:0),C19H40NO7P,Presence
+2agpe140_p,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:0),C19H40NO7P,Presence
+2agpe141_c,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:1),C19H38NO7P,Presence
+2agpe141_p,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:1),C19H38NO7P,Presence
+2agpe160_c,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:0),C21H44NO7P,Presence
+2agpe160_p,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:0),C21H44NO7P,Presence
+2agpe161_c,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:1),C21H42NO7P,Presence
+2agpe161_p,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:1),C21H42NO7P,Presence
+2agpe180_c,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:0),C23H48NO7P,Presence
+2agpe180_p,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:0),C23H48NO7P,Presence
+2agpe181_c,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:1),C23H46NO7P,Presence
+2agpe181_p,2-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:1),C23H46NO7P,Presence
+2agpg120_c,2-Acyl-sn-glycero-3-phosphoglycerol (n-C12:0),C18H36O9P,Presence
+2agpg120_p,2-Acyl-sn-glycero-3-phosphoglycerol (n-C12:0),C18H36O9P,Presence
+2agpg140_c,2-Acyl-sn-glycero-3-phosphoglycerol (n-C14:0),C20H40O9P,Presence
+2agpg140_p,2-Acyl-sn-glycero-3-phosphoglycerol (n-C14:0),C20H40O9P,Presence
+2agpg141_c,2-Acyl-sn-glycero-3-phosphoglycerol (n-C14:1),C20H38O9P,Presence
+2agpg141_p,2-Acyl-sn-glycero-3-phosphoglycerol (n-C14:1),C20H38O9P,Presence
+2agpg160_c,2-Acyl-sn-glycero-3-phosphoglycerol (n-C16:0),C22H44O9P,Presence
+2agpg160_p,2-Acyl-sn-glycero-3-phosphoglycerol (n-C16:0),C22H44O9P,Presence
+2agpg161_c,2-Acyl-sn-glycero-3-phosphoglycerol (n-C16:1),C22H42O9P,Presence
+2agpg161_p,2-Acyl-sn-glycero-3-phosphoglycerol (n-C16:1),C22H42O9P,Presence
+2agpg180_c,2-Acyl-sn-glycero-3-phosphoglycerol (n-C18:0),C24H48O9P,Presence
+2agpg180_p,2-Acyl-sn-glycero-3-phosphoglycerol (n-C18:0),C24H48O9P,Presence
+2agpg181_c,2-Acyl-sn-glycero-3-phosphoglycerol (n-C18:1),C24H46O9P,Presence
+2agpg181_p,2-Acyl-sn-glycero-3-phosphoglycerol (n-C18:1),C24H46O9P,Presence
+2ahbut_c,(S)-2-Aceto-2-hydroxybutanoate,C6H9O4,Presence
+2ameph_c,2-Aminoethylphosphonate,C2H8NO3P,Presence
+2ameph_e,2-Aminoethylphosphonate,C2H8NO3P,Presence
+2ameph_p,2-Aminoethylphosphonate,C2H8NO3P,Presence
+2amsa_c,2-Aminomalonate semialdehyde,C3H5NO3,Presence
+2aobut_c,L-2-Amino-3-oxobutanoate,C4H7NO3,Presence
+2cpr5p_c,1-(2-Carboxyphenylamino)-1-deoxy-D-ribulose 5-phosphate,C12H13NO9P,Presence
+2dda7p_c,2-Dehydro-3-deoxy-D-arabino-heptonate 7-phosphate,C7H10O10P,Presence
+2ddecg3p_c,2-dodecanoyl-sn-glycerol 3-phosphate,C15H30O7P,Presence
+2ddecg3p_p,2-dodecanoyl-sn-glycerol 3-phosphate,C15H30O7P,Presence
+2ddg6p_c,2-Dehydro-3-deoxy-D-gluconate 6-phosphate,C6H8O9P,Presence
+2ddglcn_c,2-Dehydro-3-deoxy-D-gluconate,C6H9O6,Presence
+2ddglcn_e,2-Dehydro-3-deoxy-D-gluconate,C6H9O6,Presence
+2ddglcn_p,2-Dehydro-3-deoxy-D-gluconate,C6H9O6,Presence
+2dh3dgal6p_c,2-Dehydro-3-deoxy-D-galactonate 6-phosphate,C6H8O9P,Presence
+2dh3dgal_c,2-Dehydro-3-deoxy-D-galactonate,C6H9O6,Presence
+2dhglcn_c,2-Dehydro-D-gluconate,C6H9O7,Presence
+2dhglcn_e,2-Dehydro-D-gluconate,C6H9O7,Presence
+2dhglcn_p,2-Dehydro-D-gluconate,C6H9O7,Presence
+2dhguln_c,2-Dehydro-L-gulonate,C6H9O7,Presence
+2dhp_c,2-Dehydropantoate,C6H9O4,Presence
+2dmmq8_c,2-Demethylmenaquinone 8,C50H70O2,Presence
+2dmmql8_c,2-Demethylmenaquinol 8,C50H72O2,Presence
+2dr1p_c,2-Deoxy-D-ribose 1-phosphate,C5H9O7P,Presence
+2dr5p_c,2-Deoxy-D-ribose 5-phosphate,C5H9O7P,Presence
+2h3oppan_c,2-Hydroxy-3-oxopropanoate,C3H3O4,Presence
+2hdec9eg3p_c,2-hexadec-9-enoyl-sn-glycerol 3-phosphate,C19H36O7P,Presence
+2hdec9eg3p_p,2-hexadec-9-enoyl-sn-glycerol 3-phosphate,C19H36O7P,Presence
+2ins_c,2-Inosose,C6H10O6,Presence
+2ippm_c,2-Isopropylmaleate,C7H8O4,Presence
+2kmb_c,2-keto-4-methylthiobutyrate,C5H7O3S,Presence
+2mahmp_c,2-Methyl-4-amino-5-hydroxymethylpyrimidine diphosphate,C6H8N3O7P2,Presence
+2mcacn_c,Cis-2-Methylaconitate,C7H5O6,Presence
+2mcit_c,2-Methylcitrate,C7H7O7,Presence
+2me4p_c,2-C-methyl-D-erythritol 4-phosphate,C5H11O7P,Presence
+2mecdp_c,"2-C-methyl-D-erythritol 2,4-cyclodiphosphate",C5H10O9P2,Presence
+2obut_c,2-Oxobutanoate,C4H5O3,Presence
+2obut_e,2-Oxobutanoate,C4H5O3,Presence
+2ohph_c,2-Octaprenyl-6-hydroxyphenol,C46H70O2,Presence
+2oph_c,2-Octaprenylphenol,C46H70O,Presence
+2oxpaccoa_c,2-oxepin-2(3H)-ylideneacetyl-CoA,C29H38N7O18P3S,Presence
+2p4c2me_c,2-phospho-4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol,C14H22N3O17P3,Presence
+2pg_c,D-Glycerate 2-phosphate,C3H4O7P,Presence
+2sephchc_c,2-succinyl-5-enolpyruvyl-6-hydroxy-3-cyclohexene-1-carboxylate,C14H13O9,Presence
+2shchc_c,"2-Succinyl-6-hydroxy-2,4-cyclohexadiene-1-carboxylate",C11H10O6,Presence
+2tdec7eg3p_c,2-tetradec-7-enoyl-sn-glycerol 3-phosphate,C17H32O7P,Presence
+2tdec7eg3p_p,2-tetradec-7-enoyl-sn-glycerol 3-phosphate,C17H32O7P,Presence
+34dhpac_e,"3,4-Dihydroxyphenylacetaldehyde",C8H8O3,Presence
+34dhpac_p,"3,4-Dihydroxyphenylacetaldehyde",C8H8O3,Presence
+34hpp_c,3-(4-Hydroxyphenyl)pyruvate,C9H7O4,Presence
+35cgmp_c,"3',5'-Cyclic GMP",C10H11N5O7P,Presence
+3aib_c,L-3-Amino-isobutanoate,C4H9NO2,Presence
+3amac_c,3-Aminoacrylate,C3H4NO2,Presence
+3amp_e,3  AMP C10H12N5O7P,C10H12N5O7P,Presence
+3amp_p,3  AMP C10H12N5O7P,C10H12N5O7P,Presence
+3c2hmp_c,3-Carboxy-2-hydroxy-4-methylpentanoate,C7H10O5,Presence
+3c3hmp_c,3-Carboxy-3-hydroxy-4-methylpentanoate,C7H10O5,Presence
+3c4mop_c,3-Carboxy-4-methyl-2-oxopentanoate,C7H8O5,Presence
+3cmp_e,3  CMP C9H12N3O8P,C9H12N3O8P,Presence
+3cmp_p,3  CMP C9H12N3O8P,C9H12N3O8P,Presence
+3dhgulnp_c,3-keto-L-gulonate-6-phosphate,C6H8O10P,Presence
+3dhq_c,3-Dehydroquinate,C7H9O6,Presence
+3dhsk_c,3-Dehydroshikimate,C7H7O5,Presence
+3fe4s_c,[3Fe-4S] damaged iron-sulfur cluster,Fe3S4,Absence
+3gmp_e,Guanosine 3  phosphate C10H12N5O8P,C10H12N5O8P,Presence
+3gmp_p,Guanosine 3  phosphate C10H12N5O8P,C10H12N5O8P,Presence
+3hadpcoa_c,(3S)-3-Hydroxyadipyl-CoA,C27H39N7O20P3S,Presence
+3hbcoa_c,(S)-3-Hydroxybutanoyl-CoA,C25H38N7O18P3S,Presence
+3hcinnm_c,3-hydroxycinnamic acid,C9H7O3,Presence
+3hcinnm_e,3-hydroxycinnamic acid,C9H7O3,Presence
+3hcinnm_p,3-hydroxycinnamic acid,C9H7O3,Presence
+3hdcoa_c,(S)-3-Hydroxydecanoyl-CoA,C31H50N7O18P3S,Presence
+3hddcoa_c,(S)-3-Hydroxydodecanoyl-CoA,C33H54N7O18P3S,Presence
+3hhcoa_c,(S)-3-Hydroxyhexanoyl-CoA,C27H42N7O18P3S,Presence
+3hhdcoa_c,(S)-3-Hydroxyhexadecanoyl-CoA,C37H62N7O18P3S,Presence
+3hocoa_c,(S)-3-Hydroxyoctanoyl-CoA,C29H46N7O18P3S,Presence
+3hodcoa_c,(S)-3-Hydroxyoctadecanoyl-CoA,C39H66N7O18P3S,Presence
+3hppnl_c,3-Hydroxypropanal,C3H6O2,Presence
+3hpppn_c,3-(3-hydroxy-phenyl)propionate,C9H9O3,Presence
+3hpppn_e,3-(3-hydroxy-phenyl)propionate,C9H9O3,Presence
+3hpppn_p,3-(3-hydroxy-phenyl)propionate,C9H9O3,Presence
+3htdcoa_c,(S)-3-Hydroxytetradecanoyl-CoA,C35H58N7O18P3S,Presence
+3ig3p_c,C'-(3-Indolyl)-glycerol 3-phosphate,C11H12NO6P,Presence
+3mb_e,3-Methylbutanoic acid,C5H9O2,Presence
+3mb_p,3-Methylbutanoic acid,C5H9O2,Presence
+3mob_c,3-Methyl-2-oxobutanoate,C5H7O3,Presence
+3mop_c,(S)-3-Methyl-2-oxopentanoate,C6H9O3,Presence
+3odcoa_c,3-Oxodecanoyl-CoA,C31H48N7O18P3S,Presence
+3oddcoa_c,3-Oxododecanoyl-CoA,C33H52N7O18P3S,Presence
+3ohcoa_c,3-Oxohexanoyl-CoA,C27H40N7O18P3S,Presence
+3ohdcoa_c,3-Oxohexadecanoyl-CoA,C37H60N7O18P3S,Presence
+3ohodcoa_c,3-Oxooctadecanoyl-CoA,C39H64N7O18P3S,Presence
+3oocoa_c,3-Oxooctanoyl-CoA,C29H44N7O18P3S,Presence
+3ophb_c,3-Octaprenyl-4-hydroxybenzoate,C47H69O3,Presence
+3otdcoa_c,3-Oxotetradecanoyl-CoA,C35H56N7O18P3S,Presence
+3oxdhscoa_c,"3-oxo-5,6-dehydrosuberyl-CoA",C29H39N7O20P3S,Presence
+3pg_c,3-Phospho-D-glycerate,C3H4O7P,Presence
+3pg_e,3-Phospho-D-glycerate,C3H4O7P,Presence
+3pg_p,3-Phospho-D-glycerate,C3H4O7P,Presence
+3php_c,3-Phosphohydroxypyruvate,C3H2O7P,Presence
+3psme_c,5-O-(1-Carboxyvinyl)-3-phosphoshikimate,C10H9O10P,Presence
+3uib_c,3-Ureidoisobutyrate,C5H9N2O3,Presence
+3ump_e,3  UMP C9H11N2O9P,C9H11N2O9P,Presence
+3ump_p,3  UMP C9H11N2O9P,C9H11N2O9P,Presence
+4abut_c,4-Aminobutanoate,C4H9NO2,Presence
+4abut_e,4-Aminobutanoate,C4H9NO2,Presence
+4abut_p,4-Aminobutanoate,C4H9NO2,Presence
+4abutn_c,4-Aminobutanal,C4H10NO,Presence
+4abz_c,4-Aminobenzoate,C7H6NO2,Presence
+4abzglu_c,4-aminobenzoyl-glutamate,C12H12N2O5,Presence
+4abzglu_e,4-aminobenzoyl-glutamate,C12H12N2O5,Presence
+4abzglu_p,4-aminobenzoyl-glutamate,C12H12N2O5,Presence
+4adcho_c,4-amino-4-deoxychorismate,C10H10NO5,Presence
+4ahmmp_c,4-Amino-5-hydroxymethyl-2-methylpyrimidine,C6H9N3O,Presence
+4ampm_c,4-Amino-2-methyl-5-phosphomethylpyrimidine,C6H8N3O4P,Presence
+4c2me_c,4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol,C14H23N3O14P2,Presence
+4crsol_c,P-Cresol,C7H8O,Presence
+4fe4s_c,[4Fe-4S] iron-sulfur cluster,Fe4S4,Absence
+4h2opntn_c,4-Hydroxy-2-oxopentanoate,C5H7O4,Presence
+4hba_c,4-Hydroxy-benzyl alcohol,C7H8O2,Presence
+4hba_e,4-Hydroxy-benzyl alcohol,C7H8O2,Presence
+4hbz_c,4-Hydroxybenzoate,C7H5O3,Presence
+4hbz_e,4-Hydroxybenzoate,C7H5O3,Presence
+4hbz_p,4-Hydroxybenzoate,C7H5O3,Presence
+4hoxpacd_e,4-Hydroxyphenylacetaldehyde,C8H8O2,Presence
+4hoxpacd_p,4-Hydroxyphenylacetaldehyde,C8H8O2,Presence
+4hthr_c,4-Hydroxy-L-threonine,C4H9NO4,Presence
+4hthr_e,4-Hydroxy-L-threonine,C4H9NO4,Presence
+4hthr_p,4-Hydroxy-L-threonine,C4H9NO4,Presence
+4mhetz_c,4-Methyl-5-(2-hydroxyethyl)-thiazole,C6H9NOS,Presence
+4mop_c,4-Methyl-2-oxopentanoate,C6H9O3,Presence
+4mpetz_c,4-Methyl-5-(2-phosphoethyl)-thiazole,C6H8NO4PS,Presence
+4pasp_c,4-Phospho-L-aspartate,C4H6NO7P,Presence
+4per_c,4-Phospho-D-erythronate,C4H6O8P,Presence
+4ppan_c,D-4'-Phosphopantothenate,C9H15NO8P,Presence
+4ppcys_c,N-((R)-4-Phosphopantothenoyl)-L-cysteine,C12H20N2O9PS,Presence
+4r5au_c,4-(1-D-Ribitylamino)-5-aminouracil,C9H16N4O6,Presence
+56dthm_c,"5,6-Dihydrothymine",C5H8N2O2,Presence
+56dura_c,"5,6-dihydrouracil",C4H6N2O2,Presence
+5aizc_c,5-amino-1-(5-phospho-D-ribosyl)imidazole-4-carboxylate,C9H11N3O9P,Presence
+5aop_c,5-Amino-4-oxopentanoate,C5H9NO3,Presence
+5aprbu_c,5-Amino-6-(5'-phosphoribitylamino)uracil,C9H15N4O9P,Presence
+5apru_c,5-Amino-6-(5'-phosphoribosylamino)uracil,C9H13N4O9P,Presence
+5aptn_c,5-Aminopentanoate,C5H11NO2,Presence
+5caiz_c,5-phosphoribosyl-5-carboxyaminoimidazole,C9H11N3O9P,Presence
+5dglcn_c,5-Dehydro-D-gluconate,C6H9O7,Presence
+5dglcn_e,5-Dehydro-D-gluconate,C6H9O7,Presence
+5dglcn_p,5-Dehydro-D-gluconate,C6H9O7,Presence
+5dh4dglc_c,5-Dehydro-4-deoxy-D-glucarate,C6H6O7,Presence
+5drib_c,5'-deoxyribose,C5H10O4,Presence
+5drib_e,5'-deoxyribose,C5H10O4,Presence
+5fthf_c,5-Formyltetrahydrofolate,C20H21N7O7,Presence
+5hiu_c,5-Hydroxyisourate,C5H3N4O4,Presence
+5houdic_c,"5-Hydroxy-2-oxo-4-ureido-2,5-dihydro-1H-imidazole-5-carboxylate",C5H5N4O5,Presence
+5mcsn_c,5-Methylcytosine,C5H7N3O,Presence
+5mdr1p_c,5-Methylthio-5-deoxy-D-ribose 1-phosphate,C6H11O7PS,Presence
+5mdru1p_c,5-Methylthio-5-deoxy-D-ribulose 1-phosphate,C6H11O7PS,Presence
+5mdru1p_e,5-Methylthio-5-deoxy-D-ribulose 1-phosphate,C6H11O7PS,Presence
+5mta_c,5-Methylthioadenosine,C11H15N5O3S,Presence
+5mthf_c,5-Methyltetrahydrofolate,C20H24N7O6,Presence
+5mtr_c,5-Methylthio-D-ribose,C6H12O4S,Presence
+5pg35pg_c,5-Phosphoguanylyl(3->5)guanosine,C20H23N10O15P2,Presence
+6apa_e,6 Aminopenicillanic acid C8H12N2O3S,C8H12N2O3S,Presence
+6apa_p,6 Aminopenicillanic acid C8H12N2O3S,C8H12N2O3S,Presence
+6hmhpt_c,6-hydroxymethyl dihydropterin,C7H9N5O2,Presence
+6hmhptpp_c,6-hydroxymethyl-dihydropterin pyrophosphate,C7H8N5O8P2,Presence
+6p2dhglcn_c,6-Phospho-2-dehydro-D-gluconate,C6H11O10P,Presence
+6pgc_c,6-Phospho-D-gluconate,C6H10O10P,Presence
+6pgg_c,"6-Phospho-beta-D-glucosyl-(1,4)-D-glucose",C12H21O14P,Presence
+6pgl_c,"6-phospho-D-glucono-1,5-lactone",C6H9O9P,Presence
+ACP_c,Acyl carrier protein,C384H603N96O142P0S3,Presence
+LalaDgluMdapDala_c,"L-alanine-D-glutamate-meso-2,6-diaminoheptanedioate-D-alanine",C18H30N5O9,Presence
+LalaDgluMdapDala_e,"L-alanine-D-glutamate-meso-2,6-diaminoheptanedioate-D-alanine",C18H30N5O9,Presence
+LalaDgluMdapDala_p,"L-alanine-D-glutamate-meso-2,6-diaminoheptanedioate-D-alanine",C18H30N5O9,Presence
+LalaDgluMdap_c,"L-alanine-D-glutamate-meso-2,6-diaminoheptanedioate",C15H25N4O8,Presence
+LalaDgluMdap_e,"L-alanine-D-glutamate-meso-2,6-diaminoheptanedioate",C15H25N4O8,Presence
+LalaDgluMdap_p,"L-alanine-D-glutamate-meso-2,6-diaminoheptanedioate",C15H25N4O8,Presence
+LalaDglu_c,L-alanine-D-glutamate,C8H13N2O5,Presence
+LalaDglu_e,L-alanine-D-glutamate,C8H13N2O5,Presence
+LalaDglu_p,L-alanine-D-glutamate,C8H13N2O5,Presence
+LalaLglu_c,L-alanine-L-glutamate,C8H13N2O5,Presence
+LalaLglu_e,L-alanine-L-glutamate,C8H13N2O5,Presence
+LalaLglu_p,L-alanine-L-glutamate,C8H13N2O5,Presence
+Pald_c,Phosphonoacetaldehyde,C2H3O4P,Presence
+R3hdec4coa_c, 3 Hydroxy 4Z decenoyl CoA,C31H48N7O18P3S,Presence
+R3hdec4e_c, 3 Hydroxy 4Z decenic acid,C10H17O3,Presence
+R3hdec4e_e, 3 Hydroxy 4Z decenic acid,C10H17O3,Presence
+R3hdec4e_p, 3 Hydroxy 4Z decenic acid,C10H17O3,Presence
+S2hglut_c,(S)-2-Hydroxyglutarate,C5H6O5,Presence
+Sfglutth_c,S-Formylglutathione,C11H16N3O7S,Presence
+aacald_c,Aminoacetaldehyde,C2H6NO,Presence
+aacoa_c,Acetoacetyl-CoA,C25H36N7O18P3S,Presence
+ac_c,Acetate,C2H3O2,Presence
+ac_e,Acetate,C2H3O2,Presence
+ac_p,Acetate,C2H3O2,Presence
+acac_c,Acetoacetate,C4H5O3,Presence
+acac_e,Acetoacetate,C4H5O3,Presence
+acac_p,Acetoacetate,C4H5O3,Presence
+acald_c,Acetaldehyde,C2H4O,Presence
+acald_e,Acetaldehyde,C2H4O,Presence
+acald_p,Acetaldehyde,C2H4O,Presence
+accoa_c,Acetyl-CoA,C23H34N7O17P3S,Presence
+acetol_c,Acetol cytosol,C3H6O2,Presence
+acg5p_c,N-Acetyl-L-glutamyl 5-phosphate,C7H9NO8P,Presence
+acg5sa_c,N-Acetyl-L-glutamate 5-semialdehyde,C7H10NO4,Presence
+acgal1p_e,N-Acetyl-D-galactosamine 1-phosphate,C8H14NO9P,Presence
+acgal1p_p,N-Acetyl-D-galactosamine 1-phosphate,C8H14NO9P,Presence
+acgal_e,N-Acetyl-D-galactosamine,C8H15NO6,Presence
+acgal_p,N-Acetyl-D-galactosamine,C8H15NO6,Presence
+acgam1p_c,N-Acetyl-D-glucosamine 1-phosphate,C8H14NO9P,Presence
+acgam1p_e,N-Acetyl-D-glucosamine 1-phosphate,C8H14NO9P,Presence
+acgam1p_p,N-Acetyl-D-glucosamine 1-phosphate,C8H14NO9P,Presence
+acgam6p_c,N-Acetyl-D-glucosamine 6-phosphate,C8H14NO9P,Presence
+acgam_c,N-Acetyl-D-glucosamine,C8H15NO6,Presence
+acgam_e,N-Acetyl-D-glucosamine,C8H15NO6,Presence
+acgam_p,N-Acetyl-D-glucosamine,C8H15NO6,Presence
+acglu_c,N-Acetyl-L-glutamate,C7H9NO5,Presence
+acglu_e,N-Acetyl-L-glutamate,C7H9NO5,Presence
+acmana_c,N-Acetyl-D-mannosamine,C8H15NO6,Presence
+acmana_e,N-Acetyl-D-mannosamine,C8H15NO6,Presence
+acmana_p,N-Acetyl-D-mannosamine,C8H15NO6,Presence
+acmanap_c,N-Acetyl-D-mannosamine 6-phosphate,C8H14NO9P,Presence
+acmum6p_c,N-acetylmuramate 6-phosphate,C11H17NO11P,Presence
+acmum_e,N-Acetylmuramate,C11H18NO8,Presence
+acmum_p,N-Acetylmuramate,C11H18NO8,Presence
+acnam_c,N-Acetylneuraminate,C11H18NO9,Presence
+acnam_e,N-Acetylneuraminate,C11H18NO9,Presence
+acnam_p,N-Acetylneuraminate,C11H18NO9,Presence
+acon_C_c,Cis-Aconitate,C6H3O6,Presence
+acon_C_e,Cis-Aconitate,C6H3O6,Presence
+acon_C_p,Cis-Aconitate,C6H3O6,Presence
+acon_c,Cis-Aconitate,C6H3O6,Presence
+acorn_c,N2-Acetyl-L-ornithine,C7H14N2O3,Presence
+acser_c,O-Acetyl-L-serine,C5H9NO4,Presence
+acser_e,O-Acetyl-L-serine,C5H9NO4,Presence
+acser_p,O-Acetyl-L-serine,C5H9NO4,Presence
+actn__R_c, R  Acetoin C4H8O2,C4H8O2,Presence
+actn__R_e, R  Acetoin C4H8O2,C4H8O2,Presence
+actp_c,Acetyl phosphate,C2H3O5P,Presence
+adcob1nda_c,Adenosyl-cobyrinate-a-c-diamide,C55CoH68N11O15,Presence
+ade_c,Adenine,C5H5N5,Presence
+ade_e,Adenine,C5H5N5,Presence
+ade_p,Adenine,C5H5N5,Presence
+adhlam_c,S-Acetyldihydrolipoamide,C10H19NO2S2,Presence
+adn_c,Adenosine,C10H13N5O4,Presence
+adn_e,Adenosine,C10H13N5O4,Presence
+adn_p,Adenosine,C10H13N5O4,Presence
+adp_c,ADP C10H12N5O10P2,C10H12N5O10P2,Presence
+adpglc_c,ADPglucose C16H23N5O15P2,C16H23N5O15P2,Presence
+adprib_c,ADPribose C15H21N5O14P2,C15H21N5O14P2,Presence
+agm_c,Agmatine,C5H16N4,Presence
+agm_e,Agmatine,C5H16N4,Presence
+agm_p,Agmatine,C5H16N4,Presence
+ahcys_c,S-Adenosyl-L-homocysteine,C14H20N6O5S,Presence
+ahdt_c,"2-Amino-4-hydroxy-6-(erythro-1,2,3-trihydroxypropyl)dihydropteridine triphosphate",C9H12N5O13P3,Presence
+aicar_c,5-Amino-1-(5-Phospho-D-ribosyl)imidazole-4-carboxamide,C9H13N4O8P,Presence
+air_c,5-amino-1-(5-phospho-D-ribosyl)imidazole,C8H12N3O7P,Presence
+akg_c,2-Oxoglutarate,C5H4O5,Presence
+akg_e,2-Oxoglutarate,C5H4O5,Presence
+akg_p,2-Oxoglutarate,C5H4O5,Presence
+ala_B_c,Beta-Alanine,C3H7NO2,Presence
+ala_B_e,Beta-Alanine,C3H7NO2,Presence
+ala_B_p,Beta-Alanine,C3H7NO2,Presence
+ala__D_c,D-Alanine,C3H7NO2,Presence
+ala__D_e,D-Alanine,C3H7NO2,Presence
+ala__D_p,D-Alanine,C3H7NO2,Presence
+ala__L_c,L-Alanine,C3H7NO2,Presence
+ala__L_e,L-Alanine,C3H7NO2,Presence
+ala__L_p,L-Alanine,C3H7NO2,Presence
+alaala_c,D-Alanyl-D-alanine,C6H12N2O3,Presence
+alaala_e,D-Alanyl-D-alanine,C6H12N2O3,Presence
+alaala_p,D-Alanyl-D-alanine,C6H12N2O3,Presence
+alac__S_c,(S)-2-Acetolactate,C5H7O4,Presence
+all6p_c,D-Allose 6-phosphate,C6H11O9P,Presence
+all__D_c,D-Allose,C6H12O6,Presence
+all__D_e,D-Allose,C6H12O6,Presence
+all__D_p,D-Allose,C6H12O6,Presence
+allphn_c,Allophanate C2H3N2O3,C2H3N2O3,Presence
+alltn__R_c,    Allantoin,C4H6N4O3,Presence
+alltn_c,Allantoin,C4H6N4O3,Presence
+alltn_e,Allantoin,C4H6N4O3,Presence
+alltn_p,Allantoin,C4H6N4O3,Presence
+alltt_c,Allantoate,C4H7N4O4,Presence
+allul6p_c,Allulose 6-phosphate,C6H11O9P,Presence
+altrn_c,D-Altronate,C6H11O7,Presence
+amet_c,S-Adenosyl-L-methionine,C15H23N6O5S,Presence
+ametam_c,S-Adenosylmethioninamine,C14H24N6O3S,Presence
+amp_c,AMP C10H12N5O7P,C10H12N5O7P,Presence
+amp_e,AMP C10H12N5O7P,C10H12N5O7P,Presence
+amp_p,AMP C10H12N5O7P,C10H12N5O7P,Presence
+anhgm3p_c,N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramyl-tripeptide,C34H52N6O19,Presence
+anhgm3p_p,N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramyl-tripeptide,C34H52N6O19,Presence
+anhgm4p_c,N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramyl-tetrapeptide,C37H57N7O20,Presence
+anhgm4p_p,N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramyl-tetrapeptide,C37H57N7O20,Presence
+anhgm_c,N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramic acid,C19H29N2O12,Presence
+anhgm_e,N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramic acid,C19H29N2O12,Presence
+anhgm_p,N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramic acid,C19H29N2O12,Presence
+anhm3p_c,"1,6-anhydrous-N-Acetylmuramyl-tripeptide",C26H39N5O14,Presence
+anhm4p_c,"1,6-anhydrous-N-Acetylmuramyl-tetrapeptide",C29H44N6O15,Presence
+anhm_c,"1,6-anhydrous-N-Acetylmuramate",C11H16NO7,Presence
+anth_c,Anthranilate,C7H6NO2,Presence
+ap4a_c,"P1,P4-Bis(5'-adenosyl) tetraphosphate",C20H24N10O19P4,Presence
+aps_c,Adenosine 5'-phosphosulfate,C10H12N5O10PS,Presence
+arab__D_c,D Arabinose C5H10O5,C5H10O5,Presence
+arab__D_e,D Arabinose C5H10O5,C5H10O5,Presence
+arab__D_p,D Arabinose C5H10O5,C5H10O5,Presence
+arab__L_c,L-Arabinose,C5H10O5,Presence
+arab__L_e,L-Arabinose,C5H10O5,Presence
+arab__L_p,L-Arabinose,C5H10O5,Presence
+arbt6p_c,Arbutin 6-phosphate,C12H15O10P,Presence
+arbt6p_e,Arbutin 6-phosphate,C12H15O10P,Presence
+arbt_e,Arbutin C12H16O7,C12H16O7,Presence
+arbt_p,Arbutin C12H16O7,C12H16O7,Presence
+arg__L_c,L-Arginine,C6H15N4O2,Presence
+arg__L_e,L-Arginine,C6H15N4O2,Presence
+arg__L_p,L-Arginine,C6H15N4O2,Presence
+argsuc_c,N(omega)-(L-Arginino)succinate,C10H17N4O6,Presence
+ascb6p_c,L-ascorbate-6-phosphate,C6H7O9P,Presence
+ascb__L_e,L-Ascorbate,C6H8O6,Presence
+ascb__L_p,L-Ascorbate,C6H8O6,Presence
+asn__L_c,L-Asparagine,C4H8N2O3,Presence
+asn__L_e,L-Asparagine,C4H8N2O3,Presence
+asn__L_p,L-Asparagine,C4H8N2O3,Presence
+aso3_c,Arsenite,H3AsO3,Absence
+aso3_e,Arsenite,H3AsO3,Absence
+aso3_p,Arsenite,H3AsO3,Absence
+asp__L_c,L-Aspartate,C4H6NO4,Presence
+asp__L_e,L-Aspartate,C4H6NO4,Presence
+asp__L_p,L-Aspartate,C4H6NO4,Presence
+aspsa_c,L-Aspartate 4-semialdehyde,C4H7NO3,Presence
+athr__L_c,L-Allo-threonine,C4H9NO3,Presence
+atp_c,ATP C10H12N5O13P3,C10H12N5O13P3,Presence
+b2coa_c,Crotonoyl-CoA,C25H36N7O17P3S,Presence
+betald_c,Betaine aldehyde,C5H12NO,Presence
+bglycogen_c,Branching glycogen,C24H42O21,Presence
+btal_c,Butanal C4H8O,C4H8O,Presence
+btcoa_c,Butanoyl-CoA,C25H38N7O17P3S,Presence
+btd_RR_c, R R  2 3 Butanediol C4H10O2,C4H10O2,Presence
+btd_RR_e, R R  2 3 Butanediol C4H10O2,C4H10O2,Presence
+btn_c,Biotin,C10H15N2O3S,Presence
+but_c,Butyrate (n-C4:0),C4H7O2,Presence
+but_e,Butyrate (n-C4:0),C4H7O2,Presence
+but_p,Butyrate (n-C4:0),C4H7O2,Presence
+butpi_c,Butanoyl phosphate,C4H7O5P,Presence
+butso3_c,Butanesulfonate,C4H9O3S,Presence
+butso3_e,Butanesulfonate,C4H9O3S,Presence
+butso3_p,Butanesulfonate,C4H9O3S,Presence
+bz_c,Benzoate,C7H5O2,Presence
+bz_e,Benzoate,C7H5O2,Presence
+bz_p,Benzoate,C7H5O2,Presence
+ca2_c,Calcium,Ca,Absence
+ca2_e,Calcium,Ca,Absence
+ca2_p,Calcium,Ca,Absence
+cala_c,N-Carbamoyl-beta-alanine,C4H7N2O3,Presence
+camp_c,CAMP C10H11N5O6P,C10H11N5O6P,Presence
+cbasp_c,N-Carbamoyl-L-aspartate,C5H6N2O5,Presence
+cbm_c,Carbamate,CH2NO2,Presence
+cbp_c,Carbamoyl phosphate,CH2NO5P,Presence
+cd2_c,Cadmium,Cd,Absence
+cd2_e,Cadmium,Cd,Absence
+cd2_p,Cadmium,Cd,Absence
+cdigmp_c,Cyclic diguanosine monophosphate,C20H22N10O14P2,Presence
+cdp_c,CDP C9H12N3O11P2,C9H12N3O11P2,Presence
+cdpdddecg_c,"CDP-1,2-didodecanoylglycerol",C36H63N3O15P2,Presence
+cdpdhdec9eg_c,"CDP-1,2-dihexadec-9-enoylglycerol",C44H75N3O15P2,Presence
+cdpdhdecg_c,"CDP-1,2-dihexadecanoylglycerol",C44H79N3O15P2,Presence
+cdpdodec11eg_c,"CDP-1,2-dioctadec-11-enoylglycerol",C48H83N3O15P2,Presence
+cdpdodecg_c,"CDP-1,2-dioctadecanoylglycerol",C48H87N3O15P2,Presence
+cdpdtdec7eg_c,"CDP-1,2-ditetradec-7-enoylglycerol",C40H67N3O15P2,Presence
+cdpdtdecg_c,"CDP-1,2-ditetradecanoylglycerol",C40H71N3O15P2,Presence
+cechddd_c,"Cis-3-(3-carboxyethyl)-3,5-cyclohexadiene-1,2-diol",C9H11O4,Presence
+cell4_p,Cellulose (n=4 repeating units),C24H42O21,Presence
+cellb_e,Cellobiose,C12H22O11,Presence
+cellb_p,Cellobiose,C12H22O11,Presence
+cenchddd_c,"Cis-3-(3-carboxyethenyl)-3,5-cyclohexadiene-1,2-diol",C9H9O4,Presence
+cgly_c,Cys Gly C5H10N2O3S,C5H10N2O3S,Presence
+cgly_e,Cys Gly C5H10N2O3S,C5H10N2O3S,Presence
+cgly_p,Cys Gly C5H10N2O3S,C5H10N2O3S,Presence
+ch4s_c,Methanethiol CH4S,CH4S,Presence
+ch4s_e,Methanethiol CH4S,CH4S,Presence
+chol_c,Choline C5H14NO,C5H14NO,Presence
+chol_e,Choline C5H14NO,C5H14NO,Presence
+chol_p,Choline C5H14NO,C5H14NO,Presence
+chols_c,Choline sulfate,C5H13NO4S,Presence
+chols_e,Choline sulfate,C5H13NO4S,Presence
+chor_c,Chorismate,C10H8O6,Presence
+chtbs6p_c,Diacetylchitobiose-6-phosphate,C16H27N2O14P,Presence
+chtbs_e,"N,N'-diacetylchitobiose",C16H28N2O11,Presence
+chtbs_p,"N,N'-diacetylchitobiose",C16H28N2O11,Presence
+cinnm_c,Trans-Cinnamate,C9H7O2,Presence
+cinnm_e,Trans-Cinnamate,C9H7O2,Presence
+cinnm_p,Trans-Cinnamate,C9H7O2,Presence
+cit_c,Citrate,C6H5O7,Presence
+cit_e,Citrate,C6H5O7,Presence
+cit_p,Citrate,C6H5O7,Presence
+citr__L_c,L-Citrulline,C6H13N3O3,Presence
+cl_c,Chloride,Cl,Absence
+cl_e,Chloride,Cl,Absence
+cl_p,Chloride,Cl,Absence
+clpn120_p,"Cardiolipin (tetradodecanoyl, n-C12:0)",C57H108O17P2,Presence
+clpn140_p,"Cardiolipin (tetratetradecanoyl, n-C14:0)",C65H124O17P2,Presence
+clpn141_p,"Cardiolipin (tetratetradec-7-enoyl, n-C14:1)",C65H116O17P2,Presence
+clpn160_c,"Cardiolipin (tetrahexadecanoyl, n-C16:0)",C73H140O17P2,Presence
+clpn160_p,"Cardiolipin (tetrahexadecanoyl, n-C16:0)",C73H140O17P2,Presence
+clpn161_p,"Cardiolipin (tetrahexadec-9-enoyl, n-C16:1)",C73H132O17P2,Presence
+clpn180_p,"Cardiolipin (tetraoctadecanoyl, n-C18:0)",C81H156O17P2,Presence
+clpn181_p,"Cardiolipin (tetraoctadec-11-enoyl, n-C18:1)",C81H148O17P2,Presence
+cm_e,Chloramphenicol,C11H12Cl2N2O5,Presence
+cm_p,Chloramphenicol,C11H12Cl2N2O5,Presence
+cmcbtt_c,"Carboxymycobactin T (R=8 carbon, final carbon is carboxyl group)",C33H48N5O13,Presence
+cmp_c,CMP C9H12N3O8P,C9H12N3O8P,Presence
+cmp_e,CMP C9H12N3O8P,C9H12N3O8P,Presence
+cmp_p,CMP C9H12N3O8P,C9H12N3O8P,Presence
+co2_c,CO2 CO2,CO2,Presence
+co2_e,CO2 CO2,CO2,Presence
+co2_p,CO2 CO2,CO2,Presence
+coa_c,Coenzyme A,C21H32N7O16P3S,Presence
+cob1nda_c,Cob-I-yrinate-a-c-diamide,C45CoH56N6O12,Presence
+cobalt2_c,Co2+,Co,Absence
+cobalt2_e,Co2+,Co,Absence
+cobalt2_p,Co2+,Co,Absence
+cpppg3_c,Coproporphyrinogen III,C36H40N4O8,Presence
+crn__D_c,D-Carnitine,C7H15NO3,Presence
+crn__D_p,D-Carnitine,C7H15NO3,Presence
+crn_c,L-Carnitine,C7H15NO3,Presence
+crn_e,L-Carnitine,C7H15NO3,Presence
+crn_p,L-Carnitine,C7H15NO3,Presence
+crncoa_c,L-Carnitinyl-CoA,C28H46N8O18P3S,Presence
+csn_c,Cytosine,C4H5N3O,Presence
+csn_e,Cytosine,C4H5N3O,Presence
+csn_p,Cytosine,C4H5N3O,Presence
+ctbt_c,Crotonobetaine,C7H13NO2,Presence
+ctbt_e,Crotonobetaine,C7H13NO2,Presence
+ctbt_p,Crotonobetaine,C7H13NO2,Presence
+ctbtcoa_c,Crotonobetainyl-CoA,C28H44N8O17P3S,Presence
+ctp_c,CTP C9H12N3O14P3,C9H12N3O14P3,Presence
+cu2_c,Copper,Cu,Absence
+cu2_e,Copper,Cu,Absence
+cu2_p,Copper,Cu,Absence
+cu_e,Cu+,Cu,Absence
+cu_p,Cu+,Cu,Absence
+cyan_c,Hydrogen cyanide,CHN,Presence
+cyan_e,Hydrogen cyanide,CHN,Presence
+cyan_p,Hydrogen cyanide,CHN,Presence
+cynt_c,Cyanate,CNO,Presence
+cynt_e,Cyanate,CNO,Presence
+cynt_p,Cyanate,CNO,Presence
+cys__D_c,D-Cysteine,C3H7NO2S,Presence
+cys__L_c,L-Cysteine,C3H7NO2S,Presence
+cys__L_e,L-Cysteine,C3H7NO2S,Presence
+cys__L_p,L-Cysteine,C3H7NO2S,Presence
+cyst__L_c,L-Cystathionine,C7H14N2O4S,Presence
+cytd_c,Cytidine,C9H13N3O5,Presence
+cytd_e,Cytidine,C9H13N3O5,Presence
+cytd_p,Cytidine,C9H13N3O5,Presence
+dad_2_c,Deoxyadenosine,C10H13N5O3,Presence
+dad_2_e,Deoxyadenosine,C10H13N5O3,Presence
+dad_2_p,Deoxyadenosine,C10H13N5O3,Presence
+dad_5_c,5'-Deoxyadenosine,C10H13N5O3,Presence
+dadp_c,DADP C10H12N5O9P2,C10H12N5O9P2,Presence
+damp_c,DAMP C10H12N5O6P,C10H12N5O6P,Presence
+damp_e,DAMP C10H12N5O6P,C10H12N5O6P,Presence
+damp_p,DAMP C10H12N5O6P,C10H12N5O6P,Presence
+datp_c,DATP C10H12N5O12P3,C10H12N5O12P3,Presence
+db4p_c,"3,4-dihydroxy-2-butanone 4-phosphate",C4H8O6P,Presence
+dc2coa_c,Trans-Dec-2-enoyl-CoA,C31H48N7O17P3S,Presence
+dca_e,Decanoate (n-C10:0),C10H19O2,Presence
+dca_p,Decanoate (n-C10:0),C10H19O2,Presence
+dcacoa_c,Decanoyl-CoA (n-C10:0CoA),C31H50N7O17P3S,Presence
+dcamp_c,"N6-(1,2-Dicarboxyethyl)-AMP",C14H14N5O11P,Presence
+dcdp_c,DCDP C9H12N3O10P2,C9H12N3O10P2,Presence
+dcmp_c,DCMP C9H12N3O7P,C9H12N3O7P,Presence
+dcmp_e,DCMP C9H12N3O7P,C9H12N3O7P,Presence
+dcmp_p,DCMP C9H12N3O7P,C9H12N3O7P,Presence
+dctp_c,DCTP C9H12N3O13P3,C9H12N3O13P3,Presence
+dcyt_c,Deoxycytidine,C9H13N3O4,Presence
+dcyt_e,Deoxycytidine,C9H13N3O4,Presence
+dcyt_p,Deoxycytidine,C9H13N3O4,Presence
+dd2coa_c,Trans-Dodec-2-enoyl-CoA,C33H52N7O17P3S,Presence
+ddcaACP_c,Dodecanoyl-ACP (n-C12:0ACP),C396H625N96O143P0S3,Presence
+ddca_c,Dodecanoate (n-C12:0),C12H23O2,Presence
+ddca_e,Dodecanoate (n-C12:0),C12H23O2,Presence
+ddca_p,Dodecanoate (n-C12:0),C12H23O2,Presence
+ddcacoa_c,Dodecanoyl-CoA (n-C12:0CoA),C33H54N7O17P3S,Presence
+ddcap_c,Dodecanoly-phosphate (n-C12:0),C12H24O5P,Presence
+dec4_2_coa_c,2 trans 4 cis decadienoyl CoA,C31H46N7O17P3S,Presence
+dgal6p_c,D-Galactose 6-phosphate,C6H11O9P,Presence
+dgdp_c,DGDP C10H12N5O10P2,C10H12N5O10P2,Presence
+dgmp_c,DGMP C10H12N5O7P,C10H12N5O7P,Presence
+dgmp_e,DGMP C10H12N5O7P,C10H12N5O7P,Presence
+dgmp_p,DGMP C10H12N5O7P,C10H12N5O7P,Presence
+dgsn_c,Deoxyguanosine,C10H13N5O4,Presence
+dgsn_e,Deoxyguanosine,C10H13N5O4,Presence
+dgsn_p,Deoxyguanosine,C10H13N5O4,Presence
+dgtp_c,DGTP C10H12N5O13P3,C10H12N5O13P3,Presence
+dha_c,Dihydroxyacetone,C3H6O3,Presence
+dha_e,Dihydroxyacetone,C3H6O3,Presence
+dha_p,Dihydroxyacetone,C3H6O3,Presence
+dhap_c,Dihydroxyacetone phosphate,C3H5O6P,Presence
+dhcinnm_c,"2,3-dihydroxicinnamic acid",C9H7O4,Presence
+dhcrn_c,3 dehydrocarnitine,C7H13NO3,Presence
+dhcrncoa_c,3 dehydrocarnitine coenzyme A,C28H44N8O18P3S,Presence
+dhf_c,"7,8-Dihydrofolate",C19H19N7O6,Presence
+dhgly_c,Dehydroglycine,C2H2NO2,Presence
+dhlam_c,Dihydrolipoamide C8H17NOS2,C8H17NOS2,Presence
+dhna_c,"1,4-Dihydroxy-2-naphthoate",C11H7O4,Presence
+dhnpt_c,Dihydroneopterin,C9H13N5O4,Presence
+dhor__S_c,(S)-Dihydroorotate,C5H5N2O4,Presence
+dhpmp_c,Dihydroneopterin monophosphate,C9H12N5O7P,Presence
+dhpppn_c,"3-(2,3-Dihydroxyphenyl)propanoate",C9H9O4,Presence
+dhpt_c,Dihydropteroate,C14H13N6O3,Presence
+dhptd_c,"4,5-dihydroxy-2,3-pentanedione",C5H8O4,Presence
+dhptdd_c,"3-hydroxy-5-phosphonooxypentane-2,4-dione",C5H7O7P,Presence
+dhptdp_c,"(4S)-4-hydroxy-5-phosphonooxypentane-2,3-dione",C5H7O7P,Presence
+dimp_c,DIMP C10H12N4O7P,C10H11N4O7P,Presence
+dimp_e,DIMP C10H12N4O7P,C10H11N4O7P,Presence
+dimp_p,DIMP C10H12N4O7P,C10H11N4O7P,Presence
+din_c,Deoxyinosine,C10H12N4O4,Presence
+din_e,Deoxyinosine,C10H12N4O4,Presence
+din_p,Deoxyinosine,C10H12N4O4,Presence
+ditp_c,DITP(4-),C10H11N4O13P3,Presence
+dmgly_c,"N,N-Dimethylglycine",C4H9NO2,Presence
+dmlz_c,"6,7-Dimethyl-8-(1-D-ribityl)lumazine",C13H19N4O6,Presence
+dmpp_c,Dimethylallyl diphosphate,C5H9O7P2,Presence
+dms_e,Dimethyl sulfide,C2H6S,Presence
+dms_p,Dimethyl sulfide,C2H6S,Presence
+dmso_e,Dimethyl sulfoxide,C2H6OS,Presence
+dmso_p,Dimethyl sulfoxide,C2H6OS,Presence
+dnad_c,Deamino-NAD+,C21H24N6O15P2,Presence
+dopa_e,Dopamine,C8H12NO2,Presence
+dopa_p,Dopamine,C8H12NO2,Presence
+doxrbcn_e,Doxorubicin,C27H30NO11,Presence
+doxrbcn_p,Doxorubicin,C27H30NO11,Presence
+dpcoa_c,Dephospho-CoA,C21H33N7O13P2S,Presence
+drib_c,Deoxyribose C5H10O4,C5H10O4,Presence
+drib_e,Deoxyribose C5H10O4,C5H10O4,Presence
+drib_p,Deoxyribose C5H10O4,C5H10O4,Presence
+dscl_c,Dihydrosirohydrochlorin,C42H41N4O16,Presence
+dtbt_c,Dethiobiotin,C10H17N2O3,Presence
+dtdp_c,DTDP C10H13N2O11P2,C10H13N2O11P2,Presence
+dtmp_c,DTMP C10H13N2O8P,C10H13N2O8P,Presence
+dtmp_e,DTMP C10H13N2O8P,C10H13N2O8P,Presence
+dtmp_p,DTMP C10H13N2O8P,C10H13N2O8P,Presence
+dttp_c,DTTP C10H13N2O14P3,C10H13N2O14P3,Presence
+dudp_c,DUDP C9H11N2O11P2,C9H11N2O11P2,Presence
+dump_c,DUMP C9H11N2O8P,C9H11N2O8P,Presence
+dump_e,DUMP C9H11N2O8P,C9H11N2O8P,Presence
+dump_p,DUMP C9H11N2O8P,C9H11N2O8P,Presence
+duri_c,Deoxyuridine,C9H12N2O5,Presence
+duri_e,Deoxyuridine,C9H12N2O5,Presence
+duri_p,Deoxyuridine,C9H12N2O5,Presence
+dutp_c,DUTP C9H11N2O14P3,C9H11N2O14P3,Presence
+dxyl5p_c,1-deoxy-D-xylulose 5-phosphate,C5H9O7P,Presence
+dxyl_c,1-deoxy-D-xylulose,C5H10O4,Presence
+dxyl_e,1-deoxy-D-xylulose,C5H10O4,Presence
+dxyl_p,1-deoxy-D-xylulose,C5H10O4,Presence
+e4p_c,D-Erythrose 4-phosphate,C4H7O7P,Presence
+eig3p_c,D-erythro-1-(Imidazol-4-yl)glycerol 3-phosphate,C6H9N2O6P,Presence
+enter_c,Enterochelin,C30H26N3O15,Presence
+enter_e,Enterochelin,C30H26N3O15,Presence
+enter_p,Enterochelin,C30H26N3O15,Presence
+etha_c,Ethanolamine,C2H8NO,Presence
+etha_e,Ethanolamine,C2H8NO,Presence
+etha_p,Ethanolamine,C2H8NO,Presence
+ethso3_c,Ethanesulfonate,C2H5O3S,Presence
+ethso3_e,Ethanesulfonate,C2H5O3S,Presence
+ethso3_p,Ethanesulfonate,C2H5O3S,Presence
+etoh_c,Ethanol,C2H6O,Presence
+etoh_e,Ethanol,C2H6O,Presence
+etoh_p,Ethanol,C2H6O,Presence
+f1p_c,D-Fructose 1-phosphate,C6H11O9P,Presence
+f6p_c,D-Fructose 6-phosphate,C6H11O9P,Presence
+f6p_e,D-Fructose 6-phosphate,C6H11O9P,Presence
+f6p_p,D-Fructose 6-phosphate,C6H11O9P,Presence
+fad_c,Flavin adenine dinucleotide oxidized,C27H33N9O15P2,Presence
+fad_e,Flavin adenine dinucleotide oxidized,C27H33N9O15P2,Presence
+fad_p,Flavin adenine dinucleotide oxidized,C27H33N9O15P2,Presence
+fadh2_c,Flavin adenine dinucleotide reduced,C27H35N9O15P2,Presence
+fald_c,Formaldehyde,CH2O,Presence
+fald_e,Formaldehyde,CH2O,Presence
+fald_p,Formaldehyde,CH2O,Presence
+fc1p_c,L-Fuculose 1-phosphate,C6H11O8P,Presence
+fcl__L_c,L-fuculose,C6H12O5,Presence
+fcmcbtt_c,"Iron(III) chelated carboxymycobactin T (R=8 carbon, final carbon is carboxyl group)",C33FeH49N5O13,Presence
+fdp_c,"D-Fructose 1,6-bisphosphate",C6H10O12P2,Presence
+fdxo_2_2_c,Oxidized ferredoxin,Fe2S2,Absence
+fdxrd_c,Reduced ferredoxin,Fe2S2,Absence
+fe2_c,Fe2+ mitochondria,Fe,Absence
+fe2_e,Fe2+ mitochondria,Fe,Absence
+fe2_p,Fe2+ mitochondria,Fe,Absence
+fe3_c,Iron (Fe3+),Fe,Absence
+fe3_e,Iron (Fe3+),Fe,Absence
+fe3_p,Iron (Fe3+),Fe,Absence
+fe3dcit_c,Fe(III)dicitrate,C12FeH10O14,Presence
+fe3dcit_e,Fe(III)dicitrate,C12FeH10O14,Presence
+fe3dcit_p,Fe(III)dicitrate,C12FeH10O14,Presence
+fe3dhbzs3_c,2-3-dihydroxybenzoylserine trimer-Fe-III,C30FeH29N3O16,Presence
+fe3dhbzs3_e,2-3-dihydroxybenzoylserine trimer-Fe-III,C30FeH28N3O16,Presence
+fe3dhbzs3_p,2-3-dihydroxybenzoylserine trimer-Fe-III,C30FeH28N3O16,Presence
+fe3dhbzs_c,"Ferric 2,3-dihydroxybenzoylserine",C10H10FeNO6,Presence
+fe3dhbzs_e,"Ferric 2,3-dihydroxybenzoylserine",C10H10FeNO6,Presence
+fe3dhbzs_p,"Ferric 2,3-dihydroxybenzoylserine",C10H10FeNO6,Presence
+fe3mcbtt_e,Iron III  chelated mycobactin T,C47FeH77N5O10,Presence
+fe3pyovd_kt_e,Ferrypyoverdine  P putida KT2440 specific,C27FeH48N10O15,Presence
+fe3pyovd_kt_p,Ferrypyoverdine  P putida KT2440 specific,C27FeH48N10O15,Presence
+feenter_c,Fe-enterobactin,C30FeH26N3O15,Presence
+feenter_e,Fe-enterobactin,C30FeH26N3O15,Presence
+feenter_p,Fe-enterobactin,C30FeH26N3O15,Presence
+feoxam_c,Generic ferrioxamine-Fe-III,C25H45FeN6O8,Presence
+feoxam_e,Generic ferrioxamine-Fe-III,C25H45FeN6O8,Presence
+feoxam_p,Generic ferrioxamine-Fe-III,C25H45FeN6O8,Presence
+feoxam_un_c,Ferroxamine minus Fe(3),C25H45N6O8,Presence
+feoxam_un_e,Ferroxamine minus Fe(3),C25H45N6O8,Presence
+feoxam_un_p,Ferroxamine minus Fe(3),C25H45N6O8,Presence
+fgam_c,N2-Formyl-N1-(5-phospho-D-ribosyl)glycinamide,C8H13N2O9P,Presence
+ficytc_c,Ferricytochrome c C42H52FeN8O6S2,C33FeH31N4O4,Presence
+fldox_c,Flavodoxin (oxidized) - obsolete,H,Absence
+fldrd_c,Flavodoxin (reduced) - obsolete,H3,Absence
+fmnRD_c,Flavin mononucleotide reduced C17H21N4O9P,C17H23N4O9P,Presence
+fmn_c,FMN C17H19N4O9P,C17H21N4O9P,Presence
+fmn_e,FMN C17H19N4O9P,C17H21N4O9P,Presence
+fmn_p,FMN C17H19N4O9P,C17H21N4O9P,Presence
+fmnh2_c,Reduced FMN,C17H23N4O9P,Presence
+focytc_c,Ferrocytochrome c C42H53FeN8O6S2,C33H32FeN4O4,Presence
+for_c,Formate,CHO2,Presence
+for_e,Formate,CHO2,Presence
+for_p,Formate,CHO2,Presence
+forcoa_c,Formyl-CoA(4-),C22H32N7O17P3S,Presence
+fpram_c,2-(Formamido)-N1-(5-phospho-D-ribosyl)acetamidine,C8H14N3O8P,Presence
+fprica_c,5-Formamido-1-(5-phospho-D-ribosyl)imidazole-4-carboxamide,C10H13N4O9P,Presence
+frdp_c,Farnesyl diphosphate,C15H25O7P2,Presence
+fru_c,D-Fructose,C6H12O6,Presence
+fru_e,D-Fructose,C6H12O6,Presence
+fru_p,D-Fructose,C6H12O6,Presence
+frulys_c,Fructoselysine,C12H25N2O7,Presence
+frulys_e,Fructoselysine,C12H25N2O7,Presence
+frulys_p,Fructoselysine,C12H25N2O7,Presence
+frulysp_c,Fructoselysine Phosphate,C12H24N2O10P,Presence
+fruur_c,D-Fructuronate,C6H9O7,Presence
+fruur_e,D-Fructuronate,C6H9O7,Presence
+fruur_p,D-Fructuronate,C6H9O7,Presence
+fuc__L_c,L-Fucose,C6H12O5,Presence
+fuc__L_e,L-Fucose,C6H12O5,Presence
+fuc__L_p,L-Fucose,C6H12O5,Presence
+fum_c,Fumarate,C4H2O4,Presence
+fum_e,Fumarate,C4H2O4,Presence
+fum_p,Fumarate,C4H2O4,Presence
+fusa_e,Fusidic acid,C31H47O6,Presence
+fusa_p,Fusidic acid,C31H47O6,Presence
+g1p_B_c,Beta D Glucose 1 phosphate C6H11O9P,C6H11O9P,Presence
+g1p_c,D-Glucose 1-phosphate,C6H11O9P,Presence
+g1p_e,D-Glucose 1-phosphate,C6H11O9P,Presence
+g1p_p,D-Glucose 1-phosphate,C6H11O9P,Presence
+g3p_c,Glyceraldehyde 3-phosphate,C3H5O6P,Presence
+g3pc_c,Sn-Glycero-3-phosphocholine,C8H20NO6P,Presence
+g3pc_e,Sn-Glycero-3-phosphocholine,C8H20NO6P,Presence
+g3pc_p,Sn-Glycero-3-phosphocholine,C8H20NO6P,Presence
+g3pe_c,Sn-Glycero-3-phosphoethanolamine,C5H14NO6P,Presence
+g3pe_e,Sn-Glycero-3-phosphoethanolamine,C5H14NO6P,Presence
+g3pe_p,Sn-Glycero-3-phosphoethanolamine,C5H14NO6P,Presence
+g3pg_c,Glycerophosphoglycerol,C6H14O8P,Presence
+g3pg_e,Glycerophosphoglycerol,C6H14O8P,Presence
+g3pg_p,Glycerophosphoglycerol,C6H14O8P,Presence
+g3pi_c,Sn-Glycero-3-phospho-1-inositol,C9H18O11P,Presence
+g3pi_e,Sn-Glycero-3-phospho-1-inositol,C9H18O11P,Presence
+g3pi_p,Sn-Glycero-3-phospho-1-inositol,C9H18O11P,Presence
+g3ps_c,Glycerophosphoserine,C6H13NO8P,Presence
+g3ps_e,Glycerophosphoserine,C6H13NO8P,Presence
+g3ps_p,Glycerophosphoserine,C6H13NO8P,Presence
+g6p_B_c,Beta D glucose 6 phosphate C6H11O9P,C6H11O9P,Presence
+g6p_B_e,Beta D glucose 6 phosphate C6H11O9P,C6H11O9P,Presence
+g6p_c,D-Glucose 6-phosphate,C6H11O9P,Presence
+g6p_e,D-Glucose 6-phosphate,C6H11O9P,Presence
+g6p_p,D-Glucose 6-phosphate,C6H11O9P,Presence
+gal1p_c,Alpha-D-Galactose 1-phosphate,C6H11O9P,Presence
+gal1p_e,Alpha-D-Galactose 1-phosphate,C6H11O9P,Presence
+gal1p_p,Alpha-D-Galactose 1-phosphate,C6H11O9P,Presence
+gal_bD_e,Beta D-Galactose,C6H12O6,Presence
+gal_bD_p,Beta D-Galactose,C6H12O6,Presence
+gal_c,D-Galactose,C6H12O6,Presence
+gal_e,D-Galactose,C6H12O6,Presence
+gal_p,D-Galactose,C6H12O6,Presence
+galam6p_c,D Galactosamine 6 phosphate C6H14NO8P,C6H13NO8P,Presence
+galam_e,D Galactosamine C6H13NO5,C6H14NO5,Presence
+galam_p,D Galactosamine C6H13NO5,C6H14NO5,Presence
+galct__D_c,D-Galactarate,C6H8O8,Presence
+galct__D_e,D-Galactarate,C6H8O8,Presence
+galct__D_p,D-Galactarate,C6H8O8,Presence
+galctn__D_c,D-Galactonate,C6H11O7,Presence
+galctn__D_e,D-Galactonate,C6H11O7,Presence
+galctn__D_p,D-Galactonate,C6H11O7,Presence
+galctn__L_c,L-Galactonate,C6H11O7,Presence
+galctn__L_e,L-Galactonate,C6H11O7,Presence
+galctn__L_p,L-Galactonate,C6H11O7,Presence
+galt1p_c,Galactitol 1-phosphate,C6H13O9P,Presence
+galt_e,Galactitol,C6H14O6,Presence
+galt_p,Galactitol,C6H14O6,Presence
+galur_c,D-Galacturonate,C6H9O7,Presence
+galur_e,D-Galacturonate,C6H9O7,Presence
+galur_p,D-Galacturonate,C6H9O7,Presence
+gam1p_c,D-Glucosamine 1-phosphate,C6H13NO8P,Presence
+gam6p_c,D-Glucosamine 6-phosphate,C6H13NO8P,Presence
+gam6p_e,D-Glucosamine 6-phosphate,C6H13NO8P,Presence
+gam6p_p,D-Glucosamine 6-phosphate,C6H13NO8P,Presence
+gam_e,D-Glucosamine,C6H14NO5,Presence
+gam_p,D-Glucosamine,C6H14NO5,Presence
+gar_c,N1-(5-Phospho-D-ribosyl)glycinamide,C7H14N2O8P,Presence
+gbbtn_c,Gamma-butyrobetaine,C7H15NO2,Presence
+gbbtn_e,Gamma-butyrobetaine,C7H15NO2,Presence
+gbbtn_p,Gamma-butyrobetaine,C7H15NO2,Presence
+gcald_c,Glycolaldehyde,C2H4O2,Presence
+gcvHL_ADPr_c,N-Lipoyl ADP-ribose gcvh-L protein,C23H36N6O21P4S2,Presence
+gcvHL_nhLA_c,N-Lipoyl gcvh-L protein,C8H16NO8P2S2,Presence
+gdp_c,GDP C10H12N5O11P2,C10H12N5O11P2,Presence
+gdp_e,GDP C10H12N5O11P2,C10H12N5O11P2,Presence
+gdp_p,GDP C10H12N5O11P2,C10H12N5O11P2,Presence
+gdpmann_c,GDP-D-mannose,C16H23N5O16P2,Presence
+gdptp_c,Guanosine 3'-diphosphate 5'-triphosphate,C10H11N5O20P5,Presence
+gg4abut_c,Gamma-glutamyl-gamma aminobutyric acid,C9H15N2O5,Presence
+ggbutal_c,Gamma-glutamyl-gamma-butyraldehyde,C9H16N2O4,Presence
+ggptrc_c,Gamma-glutamyl-putrescine,C9H20N3O3,Presence
+glc_D_B_c,Beta-D-Glucose,C6H12O6,Presence
+glc__D_c,D-Glucose,C6H12O6,Presence
+glc__D_e,D-Glucose,C6H12O6,Presence
+glc__D_p,D-Glucose,C6H12O6,Presence
+glc__aD_c,Alpha D-glucose,C6H12O6,Presence
+glc__bD_c,D-Glucose,C6H12O6,Presence
+glcn_c,D-Gluconate,C6H11O7,Presence
+glcn_e,D-Gluconate,C6H11O7,Presence
+glcn_p,D-Gluconate,C6H11O7,Presence
+glcr_c,D-Glucarate,C6H8O8,Presence
+glcr_e,D-Glucarate,C6H8O8,Presence
+glcr_p,D-Glucarate,C6H8O8,Presence
+glcur1p_e,D-Glucuronate 1-phosphate,C6H8O10P,Presence
+glcur1p_p,D-Glucuronate 1-phosphate,C6H8O10P,Presence
+glcur_c,D-Glucuronate,C6H9O7,Presence
+glcur_e,D-Glucuronate,C6H9O7,Presence
+glcur_p,D-Glucuronate,C6H9O7,Presence
+gln__L_c,L-Glutamine,C5H10N2O3,Presence
+gln__L_e,L-Glutamine,C5H10N2O3,Presence
+gln__L_p,L-Glutamine,C5H10N2O3,Presence
+glu1sa_c,L-Glutamate 1-semialdehyde,C5H9NO3,Presence
+glu5p_c,L-Glutamate 5-phosphate,C5H8NO7P,Presence
+glu5sa_c,L-Glutamate 5-semialdehyde,C5H9NO3,Presence
+glu__D_c,D-Glutamate,C5H8NO4,Presence
+glu__L_c,L-Glutamate,C5H8NO4,Presence
+glu__L_e,L-Glutamate,C5H8NO4,Presence
+glu__L_p,L-Glutamate,C5H8NO4,Presence
+glucys_c,Gamma-L-Glutamyl-L-cysteine,C8H13N2O5S,Presence
+glutar_c,Glutarate,C5H6O4,Presence
+glutcoa_c,Glutaryl-CoA mitochondria,C26H37N7O19P3S,Presence
+glutrna_c,L-Glutamyl-tRNA(Glu),C33H41N12O24P3,Presence
+glx_c,Glyoxylate,C2HO3,Presence
+gly_c,Glycine,C2H5NO2,Presence
+gly_e,Glycine,C2H5NO2,Presence
+gly_p,Glycine,C2H5NO2,Presence
+glyald_c,D-Glyceraldehyde,C3H6O3,Presence
+glyald_e,D-Glyceraldehyde,C3H6O3,Presence
+glyald_p,D-Glyceraldehyde,C3H6O3,Presence
+glyb_c,Glycine betaine,C5H11NO2,Presence
+glyb_e,Glycine betaine,C5H11NO2,Presence
+glyb_p,Glycine betaine,C5H11NO2,Presence
+glybcoa_c,Glycine betaine coenzyme A,C26H42N8O17P3S,Presence
+glyc2p_c,Glycerol 2-phosphate,C3H7O6P,Presence
+glyc2p_e,Glycerol 2-phosphate,C3H7O6P,Presence
+glyc2p_p,Glycerol 2-phosphate,C3H7O6P,Presence
+glyc3p_c,Glycerol 3-phosphate,C3H7O6P,Presence
+glyc3p_e,Glycerol 3-phosphate,C3H7O6P,Presence
+glyc3p_p,Glycerol 3-phosphate,C3H7O6P,Presence
+glyc__R_c,(R)-Glycerate,C3H5O4,Presence
+glyc__R_e,(R)-Glycerate,C3H5O4,Presence
+glyc__R_p,(R)-Glycerate,C3H5O4,Presence
+glyc_c,Glycerol,C3H8O3,Presence
+glyc_e,Glycerol,C3H8O3,Presence
+glyc_p,Glycerol,C3H8O3,Presence
+glyclt_c,Glycolate C2H3O3,C2H3O3,Presence
+glyclt_e,Glycolate C2H3O3,C2H3O3,Presence
+glyclt_p,Glycolate C2H3O3,C2H3O3,Presence
+glycogen_c,Glycogen C6H10O5,C24H42O21,Presence
+gmp_c,GMP C10H12N5O8P,C10H12N5O8P,Presence
+gmp_e,GMP C10H12N5O8P,C10H12N5O8P,Presence
+gmp_p,GMP C10H12N5O8P,C10H12N5O8P,Presence
+grdp_c,Geranyl diphosphate,C10H17O7P2,Presence
+grxox_c,Glutaredoxin (oxidized),C6H7NO2S2,Presence
+grxrd_c,Glutaredoxin (reduced),C6H9NO2S2,Presence
+gsn_c,Guanosine,C10H13N5O5,Presence
+gsn_e,Guanosine,C10H13N5O5,Presence
+gsn_p,Guanosine,C10H13N5O5,Presence
+gthox_c,Oxidized glutathione,C20H30N6O12S2,Presence
+gthrd_c,Reduced glutathione,C10H16N3O6S,Presence
+gthrd_e,Reduced glutathione,C10H16N3O6S,Presence
+gthrd_p,Reduced glutathione,C10H16N3O6S,Presence
+gtp_c,GTP C10H12N5O14P3,C10H12N5O14P3,Presence
+gtp_e,GTP C10H12N5O14P3,C10H12N5O14P3,Presence
+gtp_p,GTP C10H12N5O14P3,C10H12N5O14P3,Presence
+gtspmd_c,Glutathionylspermidine,C17H36N6O5S,Presence
+gua_c,Guanine,C5H5N5O,Presence
+gua_e,Guanine,C5H5N5O,Presence
+gua_p,Guanine,C5H5N5O,Presence
+h2_c,Hydrogen,H2,Absence
+h2_e,Hydrogen,H2,Absence
+h2_p,Hydrogen,H2,Absence
+h2mb4p_c,1-hydroxy-2-methyl-2-(E)-butenyl 4-diphosphate,C5H9O8P2,Presence
+h2o2_c,Hydrogen peroxide,H2O2,Absence
+h2o2_e,Hydrogen peroxide,H2O2,Absence
+h2o2_p,Hydrogen peroxide,H2O2,Absence
+h2o_c,H2O H2O,H2O,Absence
+h2o_e,H2O H2O,H2O,Absence
+h2o_p,H2O H2O,H2O,Absence
+h2s_c,Hydrogen sulfide,H2S,Absence
+h2s_e,Hydrogen sulfide,H2S,Absence
+h2s_p,Hydrogen sulfide,H2S,Absence
+h_c,H+,H,Absence
+h_e,H+,H,Absence
+h_p,H+,H,Absence
+hco3_c,Bicarbonate,CHO3,Presence
+hcys__L_c,L-Homocysteine,C4H9NO2S,Presence
+hdca_c,Hexadecanoate (n-C16:0),C16H31O2,Presence
+hdca_e,Hexadecanoate (n-C16:0),C16H31O2,Presence
+hdca_p,Hexadecanoate (n-C16:0),C16H31O2,Presence
+hdcea_c,Hexadecenoate (n-C16:1),C16H29O2,Presence
+hdcea_e,Hexadecenoate (n-C16:1),C16H29O2,Presence
+hdcea_p,Hexadecenoate (n-C16:1),C16H29O2,Presence
+hdceap_c,Hexadecanoyl-phosphate (n-C16:1),C16H30O5P,Presence
+hdcoa_c,Hexadecenoyl-CoA (n-C16:1CoA),C37H60N7O17P3S,Presence
+hdd2coa_c,Trans-Hexadec-2-enoyl-CoA,C37H60N7O17P3S,Presence
+hdeACP_c,Cis-hexadec-9-enoyl-[acyl-carrier protein] (n-C16:1),C400H631N96O143P0S3,Presence
+hemeO_c,Heme O C49H56FeN4O5,C49FeH56N4O5,Presence
+hethmpp_c,Hydroxy ethyl Thiamin diphosphate,C14H20N4O8P2S,Presence
+hg2_c,Mercury  charged 2  Hg,Hg,Absence
+hg2_e,Mercury  charged 2  Hg,Hg,Absence
+hg2_p,Mercury  charged 2  Hg,Hg,Absence
+his__L_c,L-Histidine,C6H9N3O2,Presence
+his__L_e,L-Histidine,C6H9N3O2,Presence
+his__L_p,L-Histidine,C6H9N3O2,Presence
+hisp_c,L-Histidinol phosphate,C6H11N3O4P,Presence
+histd_c,L-Histidinol,C6H12N3O,Presence
+hkndd_c,"2-Hydroxy-6-oxonona-2,4-diene-1,9-dioate",C9H8O6,Presence
+hkntd_c,2-hydroxy-6-ketononatrienedioate,C9H6O6,Presence
+hmbil_c,Hydroxymethylbilane,C40H38N4O17,Presence
+hmgth_c,Hydroxymethylglutathione,C11H18N3O7S,Presence
+hom__L_c,L-Homoserine,C4H9NO3,Presence
+hom__L_e,L-Homoserine,C4H9NO3,Presence
+hom__L_p,L-Homoserine,C4H9NO3,Presence
+hpyr_c,Hydroxypyruvate,C3H3O4,Presence
+hqn_c,Hydroquinone,C6H6O2,Presence
+hqn_e,Hydroquinone,C6H6O2,Presence
+hx2coa_c,Trans-Hex-2-enoyl-CoA,C27H40N7O17P3S,Presence
+hxa_c,Hexanoate (n-C6:0),C6H11O2,Presence
+hxa_e,Hexanoate (n-C6:0),C6H11O2,Presence
+hxa_p,Hexanoate (n-C6:0),C6H11O2,Presence
+hxan_c,Hypoxanthine,C5H4N4O,Presence
+hxan_e,Hypoxanthine,C5H4N4O,Presence
+hxan_p,Hypoxanthine,C5H4N4O,Presence
+hxcoa_c,Hexanoyl-CoA (n-C6:0CoA),C27H42N7O17P3S,Presence
+iasp_c,Iminoaspartate,C4H3NO4,Presence
+ichor_c,Isochorismate,C10H8O6,Presence
+icit_c,Isocitrate,C6H5O7,Presence
+icit_e,Isocitrate,C6H5O7,Presence
+icit_p,Isocitrate,C6H5O7,Presence
+idon__L_c,L-Idonate,C6H11O7,Presence
+idon__L_e,L-Idonate,C6H11O7,Presence
+idon__L_p,L-Idonate,C6H11O7,Presence
+idp_c,IDP C10H11N4O11P2,C10H11N4O11P2,Presence
+ile__L_c,L-Isoleucine,C6H13NO2,Presence
+ile__L_e,L-Isoleucine,C6H13NO2,Presence
+ile__L_p,L-Isoleucine,C6H13NO2,Presence
+imacp_c,3-(Imidazol-4-yl)-2-oxopropyl phosphate,C6H7N2O5P,Presence
+imp_c,IMP C10H11N4O8P,C10H11N4O8P,Presence
+imp_e,IMP C10H11N4O8P,C10H11N4O8P,Presence
+imp_p,IMP C10H11N4O8P,C10H11N4O8P,Presence
+indole_c,Indole,C8H7N,Presence
+indole_e,Indole,C8H7N,Presence
+indole_p,Indole,C8H7N,Presence
+indpyr_c,Indolepyruvate C11H8NO3,C11H8NO3,Presence
+inost_c,Myo-Inositol,C6H12O6,Presence
+inost_e,Myo-Inositol,C6H12O6,Presence
+inost_p,Myo-Inositol,C6H12O6,Presence
+ins_c,Inosine,C10H12N4O5,Presence
+ins_e,Inosine,C10H12N4O5,Presence
+ins_p,Inosine,C10H12N4O5,Presence
+ipdp_c,Isopentenyl diphosphate,C5H9O7P2,Presence
+isetac_c,Isethionic acid,C2H5O4S,Presence
+isetac_e,Isethionic acid,C2H5O4S,Presence
+isetac_p,Isethionic acid,C2H5O4S,Presence
+istfrnB_e,Iron bound extracellular staphyloferrin B,C19FeH22N2O18,Presence
+itp_c,ITP C10H11N4O14P3,C10H11N4O14P3,Presence
+ivcoa_c,Isovaleryl-CoA,C26H40N7O17P3S,Presence
+k_c,Potassium,K,Absence
+k_e,Potassium,K,Absence
+k_p,Potassium,K,Absence
+lac6p_c,Lactose-6-phosphate,C12H21O14P,Presence
+lac__D_c,D-Lactate,C3H5O3,Presence
+lac__D_e,D-Lactate,C3H5O3,Presence
+lac__D_p,D-Lactate,C3H5O3,Presence
+lac__L_c,L-Lactate,C3H5O3,Presence
+lac__L_e,L-Lactate,C3H5O3,Presence
+lac__L_p,L-Lactate,C3H5O3,Presence
+lald__D_c,D-Lactaldehyde,C3H6O2,Presence
+lald__L_c,L-Lactaldehyde,C3H6O2,Presence
+lcts_c,Lactose C12H22O11,C12H22O11,Presence
+lcts_e,Lactose C12H22O11,C12H22O11,Presence
+lcts_p,Lactose C12H22O11,C12H22O11,Presence
+leu__L_c,L-Leucine,C6H13NO2,Presence
+leu__L_e,L-Leucine,C6H13NO2,Presence
+leu__L_p,L-Leucine,C6H13NO2,Presence
+lgt__S_c,(R)-S-Lactoylglutathione,C13H20N3O8S,Presence
+lipoamp_c,Lipoyl-AMP,C18H25N5O8PS2,Presence
+lipoate_c,Lipoate,C8H13O2S2,Presence
+lipoate_e,Lipoate,C8H13O2S2,Presence
+lipoate_p,Lipoate,C8H13O2S2,Presence
+lipopb_c,Lipoate (protein bound),C8H13OS2,Presence
+lpam_c,Lipoamide C8H15NOS2,C8H15NOS2,Presence
+lys__L_c,L-Lysine,C6H15N2O2,Presence
+lys__L_e,L-Lysine,C6H15N2O2,Presence
+lys__L_p,L-Lysine,C6H15N2O2,Presence
+lyx__L_c,L-Lyxose,C5H10O5,Presence
+lyx__L_e,L-Lyxose,C5H10O5,Presence
+lyx__L_p,L-Lyxose,C5H10O5,Presence
+malACP_c,Malonyl-[acyl-carrier protein],C387H604N96O145P0S3,Presence
+mal__D_c,D-Malate,C4H4O5,Presence
+mal__D_e,D-Malate,C4H4O5,Presence
+mal__D_p,D-Malate,C4H4O5,Presence
+mal__L_c,L-Malate,C4H4O5,Presence
+mal__L_e,L-Malate,C4H4O5,Presence
+mal__L_p,L-Malate,C4H4O5,Presence
+malcoa_c,Malonyl CoA C24H33N7O19P3S,C24H33N7O19P3S,Presence
+malt6p_c,Maltose 6'-phosphate,C12H21O14P,Presence
+malt_c,Maltose C12H22O11,C12H22O11,Presence
+malt_e,Maltose C12H22O11,C12H22O11,Presence
+malt_p,Maltose C12H22O11,C12H22O11,Presence
+malthp_c,Maltoheptaose,C42H72O36,Presence
+malthp_e,Maltoheptaose,C42H72O36,Presence
+malthx_c,Maltohexaose,C36H62O31,Presence
+malthx_e,Maltohexaose,C36H62O31,Presence
+malthx_p,Maltohexaose,C36H62O31,Presence
+maltpt_c,Maltopentaose,C30H52O26,Presence
+maltpt_e,Maltopentaose,C30H52O26,Presence
+maltpt_p,Maltopentaose,C30H52O26,Presence
+malttr_c,Maltotriose C18H32O16,C18H32O16,Presence
+malttr_e,Maltotriose C18H32O16,C18H32O16,Presence
+malttr_p,Maltotriose C18H32O16,C18H32O16,Presence
+maltttr_c,Maltotetraose,C24H42O21,Presence
+maltttr_e,Maltotetraose,C24H42O21,Presence
+maltttr_p,Maltotetraose,C24H42O21,Presence
+man1p_c,D-Mannose 1-phosphate,C6H11O9P,Presence
+man6p_c,D-Mannose 6-phosphate,C6H11O9P,Presence
+man6p_e,D-Mannose 6-phosphate,C6H11O9P,Presence
+man6p_p,D-Mannose 6-phosphate,C6H11O9P,Presence
+man6pglyc_c,2(alpha-D-Mannosyl-6-phosphate)-D-glycerate,C9H14O12P,Presence
+man_c,D-Mannose,C6H12O6,Presence
+man_e,D-Mannose,C6H12O6,Presence
+man_p,D-Mannose,C6H12O6,Presence
+mana_c,D-Mannonate,C6H11O7,Presence
+manglyc_e,2(alpha-D-Mannosyl)-D-glycerate,C9H15O9,Presence
+manglyc_p,2(alpha-D-Mannosyl)-D-glycerate,C9H15O9,Presence
+mcbtt_e,Mycobactin T,C47H77N5O10,Presence
+mdhdhf_c,"(2R,4S)-2-methyl-2,4-dihydroxydihydrofuran-3-one",C5H8O4,Presence
+melib_c,Melibiose C12H22O11,C12H22O11,Presence
+melib_e,Melibiose C12H22O11,C12H22O11,Presence
+melib_p,Melibiose C12H22O11,C12H22O11,Presence
+meoh_c,Methanol,CH4O,Presence
+meoh_e,Methanol,CH4O,Presence
+meoh_p,Methanol,CH4O,Presence
+mercppyr_c,Mercaptopyruvate,C3H3O3S,Presence
+met__D_c,D-Methionine,C5H11NO2S,Presence
+met__D_e,D-Methionine,C5H11NO2S,Presence
+met__D_p,D-Methionine,C5H11NO2S,Presence
+met__L_c,L-Methionine,C5H11NO2S,Presence
+met__L_e,L-Methionine,C5H11NO2S,Presence
+met__L_p,L-Methionine,C5H11NO2S,Presence
+metglcur_c,1-O-methyl-Beta-D-glucuronate,C7H11O7,Presence
+metglcur_e,1-O-methyl-Beta-D-glucuronate,C7H11O7,Presence
+metglcur_p,1-O-methyl-Beta-D-glucuronate,C7H11O7,Presence
+methf_c,"5,10-Methenyltetrahydrofolate",C20H20N7O6,Presence
+metsox_R__L_c,L-methionine-R-sulfoxide,C5H11NO3S,Presence
+metsox_R__L_e,L-methionine-R-sulfoxide,C5H11NO3S,Presence
+metsox_R__L_p,L-methionine-R-sulfoxide,C5H11NO3S,Presence
+metsox_S__L_c,L-Methionine Sulfoxide,C5H11NO3S,Presence
+mg2_c,Magnesium,Mg,Absence
+mg2_e,Magnesium,Mg,Absence
+mg2_p,Magnesium,Mg,Absence
+mi1p__D_c,1D-myo-Inositol 1-phosphate,C6H11O9P,Presence
+micit_c,Methylisocitrate,C7H7O7,Presence
+minohp_e,Myo-Inositol hexakisphosphate,C6H6O24P6,Presence
+minohp_p,Myo-Inositol hexakisphosphate,C6H6O24P6,Presence
+mlthf_c,"5,10-Methylenetetrahydrofolate",C20H21N7O6,Presence
+mmcoa__R_c,(R)-Methylmalonyl-CoA,C25H35N7O19P3S,Presence
+mmcoa__S_c,(S)-Methylmalonyl-CoA,C25H35N7O19P3S,Presence
+mmtsa_c,(S)-Methylmalonate semialdehyde,C4H5O3,Presence
+mn2_c,Manganese,Mn,Absence
+mn2_e,Manganese,Mn,Absence
+mn2_p,Manganese,Mn,Absence
+mnl1p_c,D-Mannitol 1-phosphate,C6H13O9P,Presence
+mnl_e,D-Mannitol,C6H14O6,Presence
+mnl_p,D-Mannitol,C6H14O6,Presence
+mobd_c,Molybdate,MoO4,Absence
+mobd_e,Molybdate,MoO4,Absence
+mobd_p,Molybdate,MoO4,Absence
+mql8_c,Menaquinol 8,C51H74O2,Presence
+mqn8_c,Menaquinone 8,C51H72O2,Presence
+msa_c,Malonate semialdehyde,C3H3O3,Presence
+mso3_c,Methanesulfonate,CH3O3S,Presence
+mso3_e,Methanesulfonate,CH3O3S,Presence
+mso3_p,Methanesulfonate,CH3O3S,Presence
+mthgxl_c,Methylglyoxal,C3H4O2,Presence
+mththf_c,"(2R,4S)-2-methyl-2,3,3,4-tetrahydroxytetrahydrofuran",C5H10O5,Presence
+mththf_e,"(2R,4S)-2-methyl-2,3,3,4-tetrahydroxytetrahydrofuran",C5H10O5,Presence
+mththf_p,"(2R,4S)-2-methyl-2,3,3,4-tetrahydroxytetrahydrofuran",C5H10O5,Presence
+murein3p3p_p,"Two linked disacharide tripeptide murein units (uncrosslinked, middle of chain)",C68H104N12O38,Presence
+murein3px3p_p,"Two disacharide linked murein units, tripeptide crosslinked tripeptide (A2pm->A2pm) (middle of chain)",C68H102N12O37,Presence
+murein3px4p_p,"Two disacharide linked murein units, tripeptide crosslinked tetrapeptide (A2pm->D-ala) (middle of chain)",C71H107N13O38,Presence
+murein4p3p_p,"Two linked disacharide tetrapeptide and tripeptide murein units (uncrosslinked, middle of chain)",C71H109N13O39,Presence
+murein4p4p_p,"Two linked disacharide tetrapeptide murein units (uncrosslinked, middle of chain)",C74H114N14O40,Presence
+murein4px4p4p_p,"Three disacharide linked murein units (tetrapeptide crosslinked tetrapeptide (A2pm->D-ala), one uncrosslinked tetrapaptide) (middle of chain)",C111H169N21O59,Presence
+murein4px4p_p,"Two disacharide linked murein units, tetrapeptide corsslinked tetrapeptide (A2pm->D-ala) (middle of chain)",C74H112N14O39,Presence
+murein4px4px4p_p,Three disacharide linked murein units (tetrapeptide crosslinked tetrapeptide (A2pm->D-ala) & tetrapeptide corsslinked tetrapeptide (A2pm->D-ala)) (middle of chain),C111H167N21O58,Presence
+murein5p3p_p,"Two linked disacharide pentapeptide and tripeptide murein units (uncrosslinked, middle of chain)",C74H114N14O40,Presence
+murein5p4p_p,"Two linked disacharide pentapeptide and tetrapeptide murein units (uncrosslinked, middle of chain)",C77H119N15O41,Presence
+murein5p5p5p_p,"Three linked disacharide pentapeptide murein units (uncrosslinked, middle of chain)",C120H186N24O63,Presence
+murein5p5p_p,"Two linked disacharide pentapeptide murein units (uncrosslinked, middle of chain)",C80H124N16O42,Presence
+murein5px3p_p,"Two disacharide linked murein units, pentapeptide corsslinked tripeptide (A2pm->A2pm) (middle of chain)",C74H112N14O39,Presence
+murein5px4p_p,"Two disacharide linked murein units, pentapeptide crosslinked tetrapeptide (A2pm->D-ala) (middle of chain)",C77H117N15O40,Presence
+murein5px4px4p_p,Three disacharide linked murein units (pentapeptide crosslinked tetrapeptide (A2pm->D-ala) tetrapeptide corsslinked tetrapeptide (A2pm->D-ala)) (middle of chain),C114H172N22O59,Presence
+n2o_c,Nitrous oxide,N2O,Absence
+n2o_e,Nitrous oxide,N2O,Absence
+n2o_p,Nitrous oxide,N2O,Absence
+na1_c,Sodium,Na,Absence
+na1_e,Sodium,Na,Absence
+na1_p,Sodium,Na,Absence
+nac_c,Nicotinate,C6H4NO2,Presence
+nac_e,Nicotinate,C6H4NO2,Presence
+nac_p,Nicotinate,C6H4NO2,Presence
+nad_c,Nicotinamide adenine dinucleotide,C21H26N7O14P2,Presence
+nadh_c,Nicotinamide adenine dinucleotide - reduced,C21H27N7O14P2,Presence
+nadhx__R_c,(R)-NADHX,C21H29N7O15P2,Presence
+nadhx__S_c,"Adenosine 5'-(3-{5-[(2S)-5-carbamoyl-2-hydroxy-3,4-dihydropyridin-1-yl]-5-deoxy-?-D-ribofuranosyl} dihydrogen diphosphate)",C21H29N7O15P2,Presence
+nadp_c,Nicotinamide adenine dinucleotide phosphate,C21H25N7O17P3,Presence
+nadph_c,Nicotinamide adenine dinucleotide phosphate - reduced,C21H26N7O17P3,Presence
+nadphx__R_c,(R)-NADPHX,C21H28N7O18P3,Presence
+nadphx__S_c,(S)-NADPHX,C21H28N7O18P3,Presence
+ncam_c,Nicotinamide,C6H6N2O,Presence
+ncam_e,Nicotinamide,C6H6N2O,Presence
+nh3_c,Ammonia,H3N,Absence
+nh4_c,Ammonium,H4N,Absence
+nh4_e,Ammonium,H4N,Absence
+nh4_p,Ammonium,H4N,Absence
+ni2_c,Nickel,Ni,Absence
+ni2_e,Nickel,Ni,Absence
+ni2_p,Nickel,Ni,Absence
+nicrnt_c,Nicotinate D-ribonucleotide,C11H12NO9P,Presence
+nmn_c,NMN C11H14N2O8P,C11H14N2O8P,Presence
+nmn_e,NMN C11H14N2O8P,C11H14N2O8P,Presence
+nmn_p,NMN C11H14N2O8P,C11H14N2O8P,Presence
+no2_c,Nitrite,NO2,Absence
+no2_e,Nitrite,NO2,Absence
+no2_p,Nitrite,NO2,Absence
+no3_c,Nitrate,NO3,Absence
+no3_e,Nitrate,NO3,Absence
+no3_p,Nitrate,NO3,Absence
+no_c,Nitric oxide,NO,Absence
+no_e,Nitric oxide,NO,Absence
+no_p,Nitric oxide,NO,Absence
+novbcn_e,Novobiocin,C31H35N2O11,Presence
+novbcn_p,Novobiocin,C31H35N2O11,Presence
+o2_c,O2 O2,O2,Absence
+o2_e,O2 O2,O2,Absence
+o2_p,O2 O2,O2,Absence
+o2s_c,Superoxide anion,O2,Absence
+o2s_e,Superoxide anion,O2,Absence
+o2s_p,Superoxide anion,O2,Absence
+oaa_c,Oxaloacetate,C4H2O5,Presence
+oaa_e,Oxaloacetate,C4H2O5,Presence
+oaa_p,Oxaloacetate,C4H2O5,Presence
+oc2coa_c,Trans-Oct-2-enoyl-CoA,C29H44N7O17P3S,Presence
+ocACP_c,Octanoyl-ACP (n-C8:0ACP),C392H617N96O143P0S3,Presence
+occoa_c,Octanoyl-CoA (n-C8:0CoA),C29H46N7O17P3S,Presence
+ocdca_c,Octadecanoate (n-C18:0),C18H35O2,Presence
+ocdca_e,Octadecanoate (n-C18:0),C18H35O2,Presence
+ocdca_p,Octadecanoate (n-C18:0),C18H35O2,Presence
+ocdcea_c,Octadecenoate (n-C18:1),C18H33O2,Presence
+ocdcea_e,Octadecenoate (n-C18:1),C18H33O2,Presence
+ocdcea_p,Octadecenoate (n-C18:1),C18H33O2,Presence
+octa_c,Octanoate (n-C8:0),C8H15O2,Presence
+octa_e,Octanoate (n-C8:0),C8H15O2,Presence
+octa_p,Octanoate (n-C8:0),C8H15O2,Presence
+octdp_c,All-trans-Octaprenyl diphosphate,C40H65O7P2,Presence
+od2coa_c,Trans-Octadec-2-enoyl-CoA,C39H64N7O17P3S,Presence
+odecoa_c,Octadecenoyl-CoA (n-C18:1CoA),C39H64N7O17P3S,Presence
+ohpb_c,2-Oxo-3-hydroxy-4-phosphobutanoate,C4H4O8P,Presence
+op4en_c,2-Oxopent-4-enoate,C5H5O3,Presence
+orn__L_c,L Ornithine C5H13N2O2,C5H13N2O2,Presence
+orn_c,Ornithine,C5H13N2O2,Presence
+orn_e,Ornithine,C5H13N2O2,Presence
+orn_p,Ornithine,C5H13N2O2,Presence
+orot5p_c,Orotidine 5'-phosphate,C10H10N2O11P,Presence
+orot_c,Orotate C5H3N2O4,C5H3N2O4,Presence
+orot_e,Orotate C5H3N2O4,C5H3N2O4,Presence
+orot_p,Orotate C5H3N2O4,C5H3N2O4,Presence
+oxa_c,Oxalate,C2O4,Presence
+oxa_e,Oxalate,C2O4,Presence
+oxa_p,Oxalate,C2O4,Presence
+oxadpcoa_c,3-Oxoadipyl-CoA,C27H37N7O20P3S,Presence
+oxalcoa_c,Oxalyl-CoA,C23H31N7O19P3S,Presence
+oxptn_c,5-Oxopentanoate,C5H7O3,Presence
+p3pyr_c,3-Phosphonopyruvate,C3H5O6P,Presence
+pa120_c,"1,2-didodecanoyl-sn-glycerol 3-phosphate",C27H51O8P,Presence
+pa120_p,"1,2-didodecanoyl-sn-glycerol 3-phosphate",C27H51O8P,Presence
+pa140_c,"1,2-ditetradecanoyl-sn-glycerol 3-phosphate",C31H59O8P,Presence
+pa140_p,"1,2-ditetradecanoyl-sn-glycerol 3-phosphate",C31H59O8P,Presence
+pa141_c,"1,2-ditetradec-7-enoyl-sn-glycerol 3-phosphate",C31H55O8P,Presence
+pa141_p,"1,2-ditetradec-7-enoyl-sn-glycerol 3-phosphate",C31H55O8P,Presence
+pa160_c,"1,2-dihexadecanoyl-sn-glycerol 3-phosphate",C35H67O8P,Presence
+pa160_p,"1,2-dihexadecanoyl-sn-glycerol 3-phosphate",C35H67O8P,Presence
+pa161_c,"1,2-dihexadec-9-enoyl-sn-glycerol 3-phosphate",C35H63O8P,Presence
+pa161_p,"1,2-dihexadec-9-enoyl-sn-glycerol 3-phosphate",C35H63O8P,Presence
+pa180_c,"1,2-dioctadecanoyl-sn-glycerol 3-phosphate",C39H75O8P,Presence
+pa180_p,"1,2-dioctadecanoyl-sn-glycerol 3-phosphate",C39H75O8P,Presence
+pa181_c,"1,2-dioctadec-11-enoyl-sn-glycerol 3-phosphate",C39H71O8P,Presence
+pa181_p,"1,2-dioctadec-11-enoyl-sn-glycerol 3-phosphate",C39H71O8P,Presence
+pac_c,Phenylacetic acid,C8H7O2,Presence
+pac_e,Phenylacetic acid,C8H7O2,Presence
+pac_p,Phenylacetic acid,C8H7O2,Presence
+pacald_c,Phenylacetaldehyde,C8H8O,Presence
+pacald_e,Phenylacetaldehyde,C8H8O,Presence
+pacald_p,Phenylacetaldehyde,C8H8O,Presence
+pan4p_c,Pantetheine 4'-phosphate,C11H21N2O7PS,Presence
+pant__R_c,(R)-Pantoate,C6H11O4,Presence
+pap_c,"Adenosine 3',5'-bisphosphate",C10H11N5O10P2,Presence
+paps_c,3'-Phosphoadenylyl sulfate,C10H11N5O13P2S,Presence
+pdx5p_c,Pyridoxine 5'-phosphate,C8H10NO6P,Presence
+pe120_c,"Phosphatidylethanolamine (didodecanoyl, n-C12:0)",C29H58NO8P,Presence
+pe120_p,"Phosphatidylethanolamine (didodecanoyl, n-C12:0)",C29H58NO8P,Presence
+pe140_c,"Phosphatidylethanolamine (ditetradecanoyl, n-C14:0)",C33H66NO8P,Presence
+pe140_p,"Phosphatidylethanolamine (ditetradecanoyl, n-C14:0)",C33H66NO8P,Presence
+pe141_c,"Phosphatidylethanolamine (ditetradec-7-enoyl, n-C14:1)",C33H62NO8P,Presence
+pe141_p,"Phosphatidylethanolamine (ditetradec-7-enoyl, n-C14:1)",C33H62NO8P,Presence
+pe160_c,"Phosphatidylethanolamine (dihexadecanoyl, n-C16:0)",C37H74NO8P,Presence
+pe160_p,"Phosphatidylethanolamine (dihexadecanoyl, n-C16:0)",C37H74NO8P,Presence
+pe161_c,"Phosphatidylethanolamine (dihexadec-9enoyl, n-C16:1)",C37H70NO8P,Presence
+pe161_p,"Phosphatidylethanolamine (dihexadec-9enoyl, n-C16:1)",C37H70NO8P,Presence
+pe180_c,"Phosphatidylethanolamine (dioctadecanoyl, n-C18:0)",C41H82NO8P,Presence
+pe180_p,"Phosphatidylethanolamine (dioctadecanoyl, n-C18:0)",C41H82NO8P,Presence
+pe181_c,"Phosphatidylethanolamine (dioctadec-11-enoyl, n-C18:1)",C41H78NO8P,Presence
+pe181_p,"Phosphatidylethanolamine (dioctadec-11-enoyl, n-C18:1)",C41H78NO8P,Presence
+peamn_e,Phenethylamine,C8H12N,Presence
+peamn_p,Phenethylamine,C8H12N,Presence
+peng_e,Penicillin G C16H18N2O4S,C16H17N2O4S,Presence
+peng_p,Penicillin G C16H18N2O4S,C16H17N2O4S,Presence
+pep_c,Phosphoenolpyruvate,C3H2O6P,Presence
+pg120_c,"Phosphatidylglycerol (didodecanoyl, n-C12:0)",C30H58O10P,Presence
+pg120_p,"Phosphatidylglycerol (didodecanoyl, n-C12:0)",C30H58O10P,Presence
+pg140_c,"Phosphatidylglycerol (ditetradecanoyl, n-C14:0)",C34H66O10P,Presence
+pg140_p,"Phosphatidylglycerol (ditetradecanoyl, n-C14:0)",C34H66O10P,Presence
+pg141_c,"Phosphatidylglycerol (ditetradec-7-enoyl, n-C14:1)",C34H62O10P,Presence
+pg141_p,"Phosphatidylglycerol (ditetradec-7-enoyl, n-C14:1)",C34H62O10P,Presence
+pg160_c,"Phosphatidylglycerol (dihexadecanoyl, n-C16:0)",C38H74O10P,Presence
+pg160_p,"Phosphatidylglycerol (dihexadecanoyl, n-C16:0)",C38H74O10P,Presence
+pg161_c,"Phosphatidylglycerol (dihexadec-9-enoyl, n-C16:1)",C38H70O10P,Presence
+pg161_p,"Phosphatidylglycerol (dihexadec-9-enoyl, n-C16:1)",C38H70O10P,Presence
+pg180_c,"Phosphatidylglycerol (dioctadecanoyl, n-C18:0)",C42H82O10P,Presence
+pg180_p,"Phosphatidylglycerol (dioctadecanoyl, n-C18:0)",C42H82O10P,Presence
+pg181_c,"Phosphatidylglycerol (dioctadec-11-enoyl, n-C18:1)",C42H78O10P,Presence
+pg181_p,"Phosphatidylglycerol (dioctadec-11-enoyl, n-C18:1)",C42H78O10P,Presence
+pgp120_c,"Phosphatidylglycerophosphate (didodecanoyl, n-C12:0)",C30H57O13P2,Presence
+pgp120_p,"Phosphatidylglycerophosphate (didodecanoyl, n-C12:0)",C30H57O13P2,Presence
+pgp140_c,"Phosphatidylglycerophosphate (ditetradecanoyl, n-C14:0)",C34H65O13P2,Presence
+pgp140_p,"Phosphatidylglycerophosphate (ditetradecanoyl, n-C14:0)",C34H65O13P2,Presence
+pgp141_c,"Phosphatidylglycerophosphate (ditetradec-7-enoyl, n-C14:1)",C34H61O13P2,Presence
+pgp141_p,"Phosphatidylglycerophosphate (ditetradec-7-enoyl, n-C14:1)",C34H61O13P2,Presence
+pgp160_c,"Phosphatidylglycerophosphate (dihexadecanoyl, n-C16:0)",C38H73O13P2,Presence
+pgp160_p,"Phosphatidylglycerophosphate (dihexadecanoyl, n-C16:0)",C38H73O13P2,Presence
+pgp161_c,"Phosphatidylglycerophosphate (dihexadec-9-enoyl, n-C16:1)",C38H69O13P2,Presence
+pgp161_p,"Phosphatidylglycerophosphate (dihexadec-9-enoyl, n-C16:1)",C38H69O13P2,Presence
+pgp180_c,"Phosphatidylglycerophosphate (dioctadecanoyl, n-C18:0)",C42H81O13P2,Presence
+pgp180_p,"Phosphatidylglycerophosphate (dioctadecanoyl, n-C18:0)",C42H81O13P2,Presence
+pgp181_c,"Phosphatidylglycerophosphate (dioctadec-11-enoyl, n-C18:1)",C42H77O13P2,Presence
+pgp181_p,"Phosphatidylglycerophosphate (dioctadec-11-enoyl, n-C18:1)",C42H77O13P2,Presence
+phaccoa_c,Phenylacetyl-CoA,C29H38N7O17P3S,Presence
+phe__L_c,L-Phenylalanine,C9H11NO2,Presence
+phe__L_e,L-Phenylalanine,C9H11NO2,Presence
+phe__L_p,L-Phenylalanine,C9H11NO2,Presence
+pheme_c,Protoheme C34H30FeN4O4,C34H30FeN4O4,Presence
+phom_c,O-Phospho-L-homoserine,C4H8NO6P,Presence
+phpyr_c,Phenylpyruvate,C9H7O3,Presence
+phthr_c,O-Phospho-4-hydroxy-L-threonine,C4H8NO7P,Presence
+pi_c,Phosphate,HO4P,Absence
+pi_e,Phosphate,HO4P,Absence
+pi_p,Phosphate,HO4P,Absence
+pmtcoa_c,Palmitoyl-CoA (n-C16:0CoA),C37H62N7O17P3S,Presence
+pnto__R_c,(R)-Pantothenate,C9H16NO5,Presence
+pnto__R_e,(R)-Pantothenate,C9H16NO5,Presence
+pnto__R_p,(R)-Pantothenate,C9H16NO5,Presence
+poaac_c,Peroxyaminoacrylate,C3H5NO3,Presence
+ppa_c,Propionate (n-C3:0),C3H5O2,Presence
+ppa_e,Propionate (n-C3:0),C3H5O2,Presence
+ppa_p,Propionate (n-C3:0),C3H5O2,Presence
+ppal_c,Propanal,C3H6O,Presence
+ppal_e,Propanal,C3H6O,Presence
+ppal_p,Propanal,C3H6O,Presence
+ppap_c,Propanoyl phosphate,C3H5O5P,Presence
+ppbng_c,Porphobilinogen,C10H13N2O4,Presence
+ppcoa_c,Propanoyl-CoA,C24H36N7O17P3S,Presence
+ppgpp_c,"Guanosine 3',5'-bis(diphosphate)",C10H11N5O17P4,Presence
+pphn_c,Prephenate,C10H8O6,Presence
+ppi_c,Diphosphate,HO7P2,Absence
+ppp9_c,Protoporphyrin,C34H32N4O4,Presence
+pppg9_c,Protoporphyrinogen IX,C34H38N4O4,Presence
+pppi_c,Inorganic triphosphate,HO10P3,Absence
+pppn_c,Phenylpropanoate,C9H9O2,Presence
+pppn_e,Phenylpropanoate,C9H9O2,Presence
+pppn_p,Phenylpropanoate,C9H9O2,Presence
+pprdn_c,Piperideine,C5H9N,Presence
+ppt_e,Phosphonate,HO3P,Absence
+ppt_p,Phosphonate,HO3P,Absence
+pqq_c,Pyrroloquinoline-quinone,C14H2N2O8,Presence
+pqq_p,Pyrroloquinoline-quinone,C14H2N2O8,Presence
+pqqh2_c,Reduced pyrroloquinoline-quinone,C14H4N2O8,Presence
+pqqh2_p,Reduced pyrroloquinoline-quinone,C14H4N2O8,Presence
+pram_c,5-Phospho-beta-D-ribosylamine,C5H11NO7P,Presence
+pran_c,N-(5-Phospho-D-ribosyl)anthranilate,C12H13NO9P,Presence
+prbamp_c,1-(5-Phosphoribosyl)-AMP,C15H19N5O14P2,Presence
+prbatp_c,1-(5-Phosphoribosyl)-ATP,C15H19N5O20P4,Presence
+prfp_c,1-(5-Phosphoribosyl)-5-[(5-phosphoribosylamino)methylideneamino]imidazole-4-carboxamide,C15H21N5O15P2,Presence
+prlp_c,5-[(5-phospho-1-deoxyribulos-1-ylamino)methylideneamino]-1-(5-phosphoribosyl)imidazole-4-carboxamide,C15H21N5O15P2,Presence
+pro__D_c,D-Proline,C5H8NO2,Presence
+pro__L_c,L-Proline,C5H9NO2,Presence
+pro__L_e,L-Proline,C5H9NO2,Presence
+pro__L_p,L-Proline,C5H9NO2,Presence
+progly_c,L-Prolinylglycine,C7H12N2O3,Presence
+progly_e,L-Prolinylglycine,C7H12N2O3,Presence
+progly_p,L-Prolinylglycine,C7H12N2O3,Presence
+prpncoa_c,Propenoyl-CoA,C24H34N7O17P3S,Presence
+prpp_c,5-Phospho-alpha-D-ribose 1-diphosphate,C5H8O14P3,Presence
+ps120_c,"Phosphatidylserine (didodecanoyl, n-C12:0)",C30H57NO10P,Presence
+ps141_c,"Phosphatidylserine (ditetradec-7-enoyl, n-C14:1)",C34H61NO10P,Presence
+ps161_c,"Phosphatidylserine (dihexadec-9-enoyl, n-C16:1)",C38H69NO10P,Presence
+psclys_c,Psicoselysine,C12H25N2O7,Presence
+psclys_e,Psicoselysine,C12H25N2O7,Presence
+psclys_p,Psicoselysine,C12H25N2O7,Presence
+psd5p_c,Pseudouridine 5  phosphate C9H11N2O9P,C9H11N2O9P,Presence
+pser__L_c,O-Phospho-L-serine,C3H6NO6P,Presence
+pser__L_e,O-Phospho-L-serine,C3H6NO6P,Presence
+pser__L_p,O-Phospho-L-serine,C3H6NO6P,Presence
+psuri_c,Pseudouridine,C9H12N2O6,Presence
+psuri_e,Pseudouridine,C9H12N2O6,Presence
+psuri_p,Pseudouridine,C9H12N2O6,Presence
+ptd1ino160_c,Phosphatidyl 1D myo inositol,C41H78O13P,Presence
+ptrc_c,Putrescine,C4H14N2,Presence
+ptrc_e,Putrescine,C4H14N2,Presence
+ptrc_p,Putrescine,C4H14N2,Presence
+pyam5p_c,Pyridoxamine 5'-phosphate,C8H12N2O5P,Presence
+pydam_c,Pyridoxamine,C8H13N2O2,Presence
+pydx5p_c,Pyridoxal 5'-phosphate,C8H8NO6P,Presence
+pydx_c,Pyridoxal,C8H9NO3,Presence
+pydx_e,Pyridoxal,C8H9NO3,Presence
+pydx_p,Pyridoxal,C8H9NO3,Presence
+pydxn_c,Pyridoxine,C8H11NO3,Presence
+pyovd_kt_e,Pyoverdine  P putida specific,C27H48N10O15,Presence
+pyovd_kt_p,Pyoverdine  P putida specific,C27H48N10O15,Presence
+pyr_c,Pyruvate,C3H3O3,Presence
+pyr_e,Pyruvate,C3H3O3,Presence
+pyr_p,Pyruvate,C3H3O3,Presence
+q8_c,Ubiquinone-8,C49H74O4,Presence
+q8h2_c,Ubiquinol-8,C49H76O4,Presence
+quin_c,Quinate,C7H11O6,Presence
+quin_e,Quinate,C7H11O6,Presence
+quin_p,Quinate,C7H11O6,Presence
+quln_c,Quinolinate,C7H3NO4,Presence
+r1p_c,Alpha-D-Ribose 1-phosphate,C5H9O8P,Presence
+r5p_c,Alpha-D-Ribose 5-phosphate,C5H9O8P,Presence
+r5p_e,Alpha-D-Ribose 5-phosphate,C5H9O8P,Presence
+r5p_p,Alpha-D-Ribose 5-phosphate,C5H9O8P,Presence
+raffin_e,Raffinose C18H32O16,C18H32O16,Presence
+raffin_p,Raffinose C18H32O16,C18H32O16,Presence
+rbflvrd_c,Reduced riboflavin,C17H24N4O6,Presence
+rbl__D_c,D-Ribulose,C5H10O5,Presence
+rbl__L_c,L-Ribulose,C5H10O5,Presence
+rephaccoa_c,"Ring 1,2-epoxyphenylacetyl-CoA",C29H38N7O18P3S,Presence
+rhcys_c,S-Ribosyl-L-homocysteine,C9H17NO6S,Presence
+rib__D_c,D-Ribose,C5H10O5,Presence
+rib__D_e,D-Ribose,C5H10O5,Presence
+rib__D_p,D-Ribose,C5H10O5,Presence
+ribflv_c,Riboflavin C17H20N4O6,C17H22N4O6,Presence
+rml1p_c,L-Rhamnulose 1-phosphate,C6H11O8P,Presence
+rml_c,L-Rhamnulose,C6H12O5,Presence
+rmn_c,L-Rhamnose,C6H12O5,Presence
+rmn_e,L-Rhamnose,C6H12O5,Presence
+rmn_p,L-Rhamnose,C6H12O5,Presence
+rnam_c,N Ribosylnicotinamide C11H15N2O5,C11H15N2O5,Presence
+rnam_e,N Ribosylnicotinamide C11H15N2O5,C11H15N2O5,Presence
+ru5p__D_c,D-Ribulose 5-phosphate,C5H9O8P,Presence
+ru5p__L_c,L-Ribulose 5-phosphate,C5H9O8P,Presence
+s17bp_c,"Sedoheptulose 1,7-bisphosphate",C7H12O13P2,Presence
+s7p_c,Sedoheptulose 7-phosphate,C7H13O10P,Presence
+s_c,Sulfur,S,Absence
+s_e,Sulfur,S,Absence
+salchs4_c,Salmochelin-S4,C42H46N3O25,Presence
+salchs4_e,Salmochelin-S4,C42H46N3O25,Presence
+salchs4_p,Salmochelin-S4,C42H46N3O25,Presence
+salchs4fe_c,Salmochelin-S4-Fe-III,C42FeH47N3O25,Presence
+salchs4fe_e,Salmochelin-S4-Fe-III,C42FeH46N3O25,Presence
+salchs4fe_p,Salmochelin-S4-Fe-III,C42FeH46N3O25,Presence
+sarcs_c,Sarcosine C3H7NO2,C3H7NO2,Presence
+sbt6p_c,D-Sorbitol 6-phosphate,C6H13O9P,Presence
+sbt__D_c,D-Sorbitol,C6H14O6,Presence
+sbt__D_e,D-Sorbitol,C6H14O6,Presence
+sbt__D_p,D-Sorbitol,C6H14O6,Presence
+sbzcoa_c,O-Succinylbenzoyl-CoA,C32H39N7O20P3S,Presence
+scl_c,Sirohydrochlorin,C42H39N4O16,Presence
+sel_c,Selenate,O4Se,Absence
+sel_e,Selenate,O4Se,Absence
+sel_p,Selenate,O4Se,Absence
+ser__D_c,D-Serine,C3H7NO3,Presence
+ser__D_e,D-Serine,C3H7NO3,Presence
+ser__D_p,D-Serine,C3H7NO3,Presence
+ser__L_c,L-Serine,C3H7NO3,Presence
+ser__L_e,L-Serine,C3H7NO3,Presence
+ser__L_p,L-Serine,C3H7NO3,Presence
+seramp_c,L-seryl-AMP,C13H19N6O9P,Presence
+sheme_c,Siroheme C42H36FeN4O16,C42H36FeN4O16,Presence
+skm5p_c,Shikimate 5-phosphate,C7H8O8P,Presence
+skm_c,Shikimate,C7H9O5,Presence
+skm_e,Shikimate,C7H9O5,Presence
+skm_p,Shikimate,C7H9O5,Presence
+sl26da_c,"N-Succinyl-LL-2,6-diaminoheptanedioate",C11H16N2O7,Presence
+sl2a6o_c,N-Succinyl-2-L-amino-6-oxoheptanedioate,C11H12NO8,Presence
+slnt_c,Selenite,O3Se,Absence
+slnt_e,Selenite,O3Se,Absence
+slnt_p,Selenite,O3Se,Absence
+so3_c,Sulfite,O3S,Absence
+so3_e,Sulfite,O3S,Absence
+so3_p,Sulfite,O3S,Absence
+so4_c,Sulfate,O4S,Absence
+so4_e,Sulfate,O4S,Absence
+so4_p,Sulfate,O4S,Absence
+spmd_c,Spermidine,C7H22N3,Presence
+spmd_e,Spermidine,C7H22N3,Presence
+spmd_p,Spermidine,C7H22N3,Presence
+ssaltpp_c,Succinate semialdehyde-thiamin diphosphate anion,C16H21N4O10P2S,Presence
+stcoa_c,Stearoyl-CoA (n-C18:0CoA),C39H66N7O17P3S,Presence
+stfrnB_c,Staphyloferrin B,C19H22N2O18,Presence
+stfrnB_e,Staphyloferrin B,C19H22N2O18,Presence
+suc6p_c,Sucrose 6-phosphate,C12H21O14P,Presence
+sucarg_c,N2-Succinyl-L-arginine,C10H17N4O5,Presence
+sucbz_c,O-Succinylbenzoate,C11H8O5,Presence
+succ_c,Succinate,C4H4O4,Presence
+succ_e,Succinate,C4H4O4,Presence
+succ_p,Succinate,C4H4O4,Presence
+succoa_c,Succinyl-CoA,C25H35N7O19P3S,Presence
+sucglu_c,N2-Succinyl-L-glutamate,C9H10NO7,Presence
+sucgsa_c,N2-Succinyl-L-glutamate 5-semialdehyde,C9H11NO6,Presence
+suchms_c,O-Succinyl-L-homoserine,C8H12NO6,Presence
+sucorn_c,N2-Succinyl-L-ornithine,C9H15N2O5,Presence
+sucr_e,Sucrose C12H22O11,C12H22O11,Presence
+sucr_p,Sucrose C12H22O11,C12H22O11,Presence
+sucsal_c,Succinic semialdehyde,C4H5O3,Presence
+sulfac_c,Sulfoacetate,C2H2O5S,Presence
+sulfac_e,Sulfoacetate,C2H2O5S,Presence
+sulfac_p,Sulfoacetate,C2H2O5S,Presence
+tag1p__D_c,D-Tagatose-1-phosphate,C6H13O9P,Presence
+tag6p__D_c,D-Tagatose 6-phosphate,C6H11O9P,Presence
+tag__D_e,D-Tagatose,C6H14O6,Presence
+tag__D_p,D-Tagatose,C6H14O6,Presence
+tagdp__D_c,"D-Tagatose 1,6-biphosphate",C6H10O12P2,Presence
+tagur_c,D-Tagaturonate,C6H9O7,Presence
+tartr__D_c,D-tartrate,C4H4O6,Presence
+tartr__D_e,D-tartrate,C4H4O6,Presence
+tartr__D_p,D-tartrate,C4H4O6,Presence
+tartr__L_c,L-tartrate,C4H4O6,Presence
+tartr__L_e,L-tartrate,C4H4O6,Presence
+tartr__L_p,L-tartrate,C4H4O6,Presence
+taur_c,Taurine C2H7NO3S,C2H7NO3S,Presence
+taur_e,Taurine C2H7NO3S,C2H7NO3S,Presence
+taur_p,Taurine C2H7NO3S,C2H7NO3S,Presence
+tcynt_c,Thiocyanate,CNS,Presence
+tcynt_e,Thiocyanate,CNS,Presence
+tcynt_p,Thiocyanate,CNS,Presence
+td2coa_c,Trans-Tetradec-2-enoyl-CoA,C35H56N7O17P3S,Presence
+tdcoa_c,Tetradecanoyl-CoA (n-C14:0CoA),C35H58N7O17P3S,Presence
+tdeACP_c,Cis-tetradec-7-enoyl-[acyl-carrier protein] (n-C14:1),C398H627N96O143P0S3,Presence
+tdecoa_c,Tetradecenoyl-CoA (n-C14:1CoA),C35H56N7O17P3S,Presence
+tet_e,Tetrathionate,O6S4,Absence
+tet_p,Tetrathionate,O6S4,Absence
+tgt_e,Tagatose,C6H12O6,Presence
+thdp_c,"2,3,4,5-Tetrahydrodipicolinate",C7H7NO4,Presence
+thf_c,"5,6,7,8-Tetrahydrofolate",C19H21N7O6,Presence
+thm_c,Thiamin,C12H17N4OS,Presence
+thm_e,Thiamin,C12H17N4OS,Presence
+thm_p,Thiamin,C12H17N4OS,Presence
+thmmp_c,Thiamin monophosphate,C12H16N4O4PS,Presence
+thmpp_c,Thiamine diphosphate,C12H16N4O7P2S,Presence
+thr__L_c,L-Threonine,C4H9NO3,Presence
+thr__L_e,L-Threonine,C4H9NO3,Presence
+thr__L_p,L-Threonine,C4H9NO3,Presence
+thrp_e,L-Threonine O-3-phosphate,C4H8NO6P,Presence
+thrp_p,L-Threonine O-3-phosphate,C4H8NO6P,Presence
+thym_c,Thymine C5H6N2O2,C5H6N2O2,Presence
+thym_e,Thymine C5H6N2O2,C5H6N2O2,Presence
+thym_p,Thymine C5H6N2O2,C5H6N2O2,Presence
+thymd_c,Thymidine C10H14N2O5,C10H14N2O5,Presence
+thymd_e,Thymidine C10H14N2O5,C10H14N2O5,Presence
+thymd_p,Thymidine C10H14N2O5,C10H14N2O5,Presence
+tma_e,Trimethylamine,C3H10N,Presence
+tma_p,Trimethylamine,C3H10N,Presence
+tmao_e,Trimethylamine N-oxide,C3H9NO,Presence
+tmao_p,Trimethylamine N-oxide,C3H9NO,Presence
+tol_c,Toluene,C7H8,Presence
+tol_e,Toluene,C7H8,Presence
+tol_p,Toluene,C7H8,Presence
+trdox_c,Oxidized thioredoxin,C10H12N4O4S2,Presence
+trdrd_c,Reduced thioredoxin,C10H14N4O4S2,Presence
+tre6p_c,"Alpha,alpha'-Trehalose 6-phosphate",C12H21O14P,Presence
+tre6p_e,"Alpha,alpha'-Trehalose 6-phosphate",C12H21O14P,Presence
+tre_c,Trehalose,C12H22O11,Presence
+tre_e,Trehalose,C12H22O11,Presence
+tre_p,Trehalose,C12H22O11,Presence
+trnaglu_c,TRNA (Glu),C28H34N11O21P3,Presence
+trp__L_c,L-Tryptophan,C11H12N2O2,Presence
+trp__L_e,L-Tryptophan,C11H12N2O2,Presence
+trp__L_p,L-Tryptophan,C11H12N2O2,Presence
+tsul_c,Thiosulfate,O3S2,Absence
+tsul_e,Thiosulfate,O3S2,Absence
+tsul_p,Thiosulfate,O3S2,Absence
+ttdca_c,Tetradecanoate (n-C14:0),C14H27O2,Presence
+ttdca_e,Tetradecanoate (n-C14:0),C14H27O2,Presence
+ttdca_p,Tetradecanoate (n-C14:0),C14H27O2,Presence
+ttdcea_c,Tetradecenoate (n-C14:1),C14H25O2,Presence
+ttdcea_e,Tetradecenoate (n-C14:1),C14H25O2,Presence
+ttdcea_p,Tetradecenoate (n-C14:1),C14H25O2,Presence
+ttdceap_c,Tetradecanoyl-phosphate (n-C14:1),C14H26O5P,Presence
+ttrcyc_e,Tetracycline,C22H24N2O8,Presence
+ttrcyc_p,Tetracycline,C22H24N2O8,Presence
+tym_e,Tyramine,C8H12NO,Presence
+tym_p,Tyramine,C8H12NO,Presence
+tyr__L_c,L-Tyrosine,C9H11NO3,Presence
+tyr__L_e,L-Tyrosine,C9H11NO3,Presence
+tyr__L_p,L-Tyrosine,C9H11NO3,Presence
+tyrp_e,Phosphotyrosine,C9H10NO6P,Presence
+tyrp_p,Phosphotyrosine,C9H10NO6P,Presence
+uaagmda_c,"Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-ala-D-glu-meso-2,6-diaminopimeloyl-D-ala-D-ala",C95H153N8O28P2,Presence
+uaccg_c,UDP-N-acetyl-3-O-(1-carboxyvinyl)-D-glucosamine,C20H26N3O19P2,Presence
+uacgam_c,UDP-N-acetyl-D-glucosamine,C17H25N3O17P2,Presence
+uacgam_e,UDP-N-acetyl-D-glucosamine,C17H25N3O17P2,Presence
+uacgam_p,UDP-N-acetyl-D-glucosamine,C17H25N3O17P2,Presence
+uagmda_c,"Undecaprenyl-diphospho-N-acetylmuramoyl-L-alanyl-D-glutamyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine",C87H140N7O23P2,Presence
+uama_c,UDP-N-acetylmuramoyl-L-alanine,C23H33N4O20P2,Presence
+uamag_c,UDP-N-acetylmuramoyl-L-alanyl-D-glutamate,C28H39N5O23P2,Presence
+uamr_c,UDP-N-acetylmuramate,C20H28N3O19P2,Presence
+udcpdp_c,Undecaprenyl diphosphate,C55H90O7P2,Presence
+udcpp_c,Undecaprenyl phosphate,C55H90O4P,Presence
+udp_c,UDP C9H11N2O12P2,C9H11N2O12P2,Presence
+udpacgal_e,UDP-N-acetyl-D-galactosamine,C17H25N3O17P2,Presence
+udpacgal_p,UDP-N-acetyl-D-galactosamine,C17H25N3O17P2,Presence
+udpg_c,UDPglucose,C15H22N2O17P2,Presence
+udpg_e,UDPglucose,C15H22N2O17P2,Presence
+udpg_p,UDPglucose,C15H22N2O17P2,Presence
+udpgal_c,UDPgalactose,C15H22N2O17P2,Presence
+udpgal_e,UDPgalactose,C15H22N2O17P2,Presence
+udpgal_p,UDPgalactose,C15H22N2O17P2,Presence
+udpglcur_e,UDP-D-glucuronate,C15H19N2O18P2,Presence
+udpglcur_p,UDP-D-glucuronate,C15H19N2O18P2,Presence
+ugmd_c,"UDP-N-acetylmuramoyl-L-alanyl-D-gamma-glutamyl-meso-2,6-diaminopimelate",C35H51N7O26P2,Presence
+ugmda_c,"UDP-N-acetylmuramoyl-L-alanyl-D-glutamyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine",C41H61N9O28P2,Presence
+um4p_c,"UDP-N-acetylmuramoyl-L-alanyl-D-gamma-glutamyl-meso-2,6-diaminopimelate-D-alanine",C38H56N8O27P2,Presence
+ump_c,UMP C9H11N2O9P,C9H11N2O9P,Presence
+ump_e,UMP C9H11N2O9P,C9H11N2O9P,Presence
+ump_p,UMP C9H11N2O9P,C9H11N2O9P,Presence
+uppg3_c,Uroporphyrinogen III,C40H36N4O16,Presence
+ura_c,Uracil,C4H4N2O2,Presence
+ura_e,Uracil,C4H4N2O2,Presence
+ura_p,Uracil,C4H4N2O2,Presence
+uracp_c,Ureidoacrylate peracid,C4H6N2O4,Presence
+urate_c,Urate C5H4N4O3,C5H4N4O3,Presence
+urate_e,Urate C5H4N4O3,C5H4N4O3,Presence
+urate_p,Urate C5H4N4O3,C5H4N4O3,Presence
+urdgci_c,S-ureidoglycine,C3H7N3O3,Presence
+urdglyc_c,(-)-Ureidoglycolate,C3H5N2O4,Presence
+urea_c,Urea CH4N2O,CH4N2O,Presence
+urea_e,Urea CH4N2O,CH4N2O,Presence
+urea_p,Urea CH4N2O,CH4N2O,Presence
+uri_c,Uridine,C9H12N2O6,Presence
+uri_e,Uridine,C9H12N2O6,Presence
+uri_p,Uridine,C9H12N2O6,Presence
+utp_c,UTP C9H11N2O15P3,C9H11N2O15P3,Presence
+val__L_c,L-Valine,C5H11NO2,Presence
+val__L_e,L-Valine,C5H11NO2,Presence
+val__L_p,L-Valine,C5H11NO2,Presence
+xan_c,Xanthine,C5H4N4O2,Presence
+xan_e,Xanthine,C5H4N4O2,Presence
+xan_p,Xanthine,C5H4N4O2,Presence
+xmp_c,Xanthosine 5'-phosphate,C10H11N4O9P,Presence
+xmp_e,Xanthosine 5'-phosphate,C10H11N4O9P,Presence
+xmp_p,Xanthosine 5'-phosphate,C10H11N4O9P,Presence
+xtp_c,XTP,C10H11N4O15P3,Presence
+xtsn_c,Xanthosine,C10H12N4O6,Presence
+xtsn_e,Xanthosine,C10H12N4O6,Presence
+xtsn_p,Xanthosine,C10H12N4O6,Presence
+xu5p__D_c,D-Xylulose 5-phosphate,C5H9O8P,Presence
+xu5p__L_c,L-Xylulose 5-phosphate,C5H9O8P,Presence
+xyl__D_c,D-Xylose,C5H10O5,Presence
+xyl__D_e,D-Xylose,C5H10O5,Presence
+xyl__D_p,D-Xylose,C5H10O5,Presence
+xylu__D_c,D-Xylulose,C5H10O5,Presence
+xylu__L_c,L-Xylulose,C5H10O5,Presence
+xylu__L_e,L-Xylulose,C5H10O5,Presence
+xylu__L_p,L-Xylulose,C5H10O5,Presence
+zn2_c,Zinc,Zn,Absence
+zn2_e,Zinc,Zn,Absence
+zn2_p,Zinc,Zn,Absence
+13ppd_e,"1,3-Propanediol",C3H8O2,Presence
+13ppd_p,"1,3-Propanediol",C3H8O2,Presence
+24dhhed_c,"2,4-Dihydroxyhept-2-enedioate",C7H8O6,Presence
+2hadnt_c,2 Hydroxylamino 4 6 dinitrotoluene,HNO,Absence
+2hh24dd_c,2-Hydroxyhepta-2-4-dienedioate,C7H6O5,Presence
+2hyoxplac_c,2-Hydroxyphenylacetate,C8H7O3,Presence
+2m35mdntha_c,N  2 methyl 3 5 dinitrophenyl  4 methyl 3 5 dinitroaniline,HN,Absence
+2m35mdntha_e,N  2 methyl 3 5 dinitrophenyl  4 methyl 3 5 dinitroaniline,HN,Absence
+2mop_c,2-Methyl-3-oxopropanoate,C4H5O3,Presence
+2pg_e,D-Glycerate 2-phosphate,C3H4O7P,Presence
+2pg_p,D-Glycerate 2-phosphate,C3H4O7P,Presence
+2pglyc_c,2-Phosphoglycolate,C2H2O6P,Presence
+2pglyc_e,2-Phosphoglycolate,C2H2O6P,Presence
+34dhbz_c,"3,4-Dihydroxybenzoate",C7H5O4,Presence
+34dhpacet_c,3-4-Dihydroxyphenylacetate,C8H7O4,Presence
+35dnta_c,N N bis 3 5 dinitrotolyl  amine,HN,Absence
+35dnta_e,N N bis 3 5 dinitrotolyl  amine,HN,Absence
+3aib__D_c,D-3-Amino-isobutanoate,C4H9NO2,Presence
+3gmp_c,Guanosine 3  phosphate C10H12N5O8P,C10H12N5O8P,Presence
+3hoctACP_c,(R)-3-Hydroxyoctanoyl-[acyl-carrier protein],C392H617N96O144P0S3,Presence
+3mb_c,3-Methylbutanoic acid,C5H9O2,Presence
+3oxoadp_c,3-Oxoadipate,C6H6O5,Presence
+3padsel_c,3'-Phosphoadenylylselenate,C10H11N5O13P2Se,Presence
+4cml_c,4-Carboxymuconolactone,C7H4O6,Presence
+4fumacac_c,4 Fumarylacetoacetate C8H6O6,C8H6O6,Presence
+4hadnt_c,4 Hydroxylamino 2 6 dinitrotoluene,HNO,Absence
+4hbald_e,4-Hydroxybenzaldehyde,C7H6O2,Presence
+4hbald_p,4-Hydroxybenzaldehyde,C7H6O2,Presence
+4hoxpac_c,4 Hydroxyphenylacetic acid C8H8O3,C8H7O3,Presence
+4hoxpac_e,4 Hydroxyphenylacetic acid C8H8O3,C8H7O3,Presence
+4hoxpac_p,4 Hydroxyphenylacetic acid C8H8O3,C8H7O3,Presence
+4mlacac_c,4 Maleylacetoacetate C8H6O6,C8H6O6,Presence
+5cmhm_c,5-Carboxymethyl-2-hydroxymuconate,C8H5O7,Presence
+5cmhmsa_c,2-Hydroxy-5-carboxymethylmuconate-Semialdehyde,C8H6O6,Presence
+5cohe_c,5-Carboxy-2-oxohept-3-enedioate,C8H5O7,Presence
+5odhf2a_c,"5-Oxo-4,5-dihydrofuran-2-acetate",C6H5O4,Presence
+6hnac_c,6-Hydroxynicotinate,C6H4NO3,Presence
+8aonn_c,8-Amino-7-oxononanoate,C9H17NO3,Presence
+CCbuttc_c,"Cis,cis-Butadiene-1,2,4-tricarboxylate",C7H3O6,Presence
+R_3hocoa_c,(R)-Hydroxyoctanoyl-CoA,C29H46N7O18P3S,Presence
+aact_c,Aminoacetone,C3H8NO,Presence
+abt__D_c,D-Arabitol,C5H12O5,Presence
+abt__D_e,D-Arabitol,C5H12O5,Presence
+actn__S_c,S-acetoin,C4H8O2,Presence
+ad_c,Acetamide,C2H5NO,Presence
+ad_e,Acetamide,C2H5NO,Presence
+adcobhex_c,Adenosyl-cobyric acid,C55H76CoN15O11,Presence
+adocbi_c,Adenosyl cobinamide,C58H84CoN16O11,Presence
+adocbip_c,Adenosyl cobinamide phosphate,C58H83CoN16O14P,Presence
+adsel_c,Adenylylselenate,C10H12N5O10PSe,Presence
+amob_c,S-Adenosyl-4-methylthio-2-oxobutanoate,C15H19N5O6S,Presence
+apc_e,Ampicillin,C16H19N3O4S,Presence
+apc_p,Ampicillin,C16H19N3O4S,Presence
+appl_c,1-Aminopropan-2-ol,C3H10NO,Presence
+applp_c,D-1-Aminopropan-2-ol O-phosphate,C3H9NO4P,Presence
+aso4_c,Arsenate,HAsO4,Absence
+aso4_e,Arsenate,HAsO4,Absence
+aso4_p,Arsenate,HAsO4,Absence
+asp__D_c,D-Aspartate,C4H6NO4,Presence
+bhb_c,(R)-3-Hydroxybutanoate,C4H7O3,Presence
+bhb_e,(R)-3-Hydroxybutanoate,C4H7O3,Presence
+bhb_p,(R)-3-Hydroxybutanoate,C4H7O3,Presence
+btd_RR_p, R R  2 3 Butanediol C4H10O2,C4H10O2,Presence
+btn_e,Biotin,C10H15N2O3S,Presence
+bzsucc_c,Benzylsuccinate,C11H10O4,Presence
+bzsuccoa_c,Benzylsuccinyl-CoA,C32H41N7O19P3S,Presence
+cm_c,Chloramphenicol,C11H12Cl2N2O5,Presence
+cmcbtt_e,"Carboxymycobactin T (R=8 carbon, final carbon is carboxyl group)",C33H48N5O13,Presence
+cmcbtt_p,"Carboxymycobactin T (R=8 carbon, final carbon is carboxyl group)",C33H48N5O13,Presence
+dann_c,"7,8-Diaminononanoate",C9H21N2O2,Presence
+dca_c,Decanoate (n-C10:0),C10H19O2,Presence
+dhmpt_c,Dihydromonapterin,C9H13N5O4,Presence
+dhpyr_c,"2,5-Dihydroxypyridine",C5H5NO2,Presence
+diact_c,Diacetyl C4H6O2,C4H6O2,Presence
+dxylnt_e,D-Xylonate,C5H9O6,Presence
+dxylnt_p,D-Xylonate,C5H9O6,Presence
+frmd_e,Formamide,CH3NO,Presence
+frmd_p,Formamide,CH3NO,Presence
+gal_bD_c,Beta D-Galactose,C6H12O6,Presence
+hgentis_c,Homogentisate C8H7O4,C8H7O4,Presence
+hmgcoa_c,Hydroxymethylglutaryl CoA C27H39N7O20P3S,C27H39N7O20P3S,Presence
+hmpscoa_c,(Hydroxymethylphenyl)succinyl-CoA,C32H41N7O20P3S,Presence
+m_xyl_c,M-Xylene,C8H10,Presence
+m_xyl_e,M-Xylene,C8H10,Presence
+m_xyl_p,M-Xylene,C8H10,Presence
+male_c,Maleate,C4H2O4,Presence
+malm_c,Maleamate,C4H4NO3,Presence
+metox__R_c,L methionine R oxide C5H11NO3S,C5H11NO3S,Presence
+metox__R_e,L methionine R oxide C5H11NO3S,C5H11NO3S,Presence
+metox_c,L Methionine S oxide C5H11NO3S,C5H11NO3S,Presence
+metox_e,L Methionine S oxide C5H11NO3S,C5H11NO3S,Presence
+metsox_S__L_e,L-Methionine Sulfoxide,C5H11NO3S,Presence
+metsox_S__L_p,L-Methionine Sulfoxide,C5H11NO3S,Presence
+nfmalm_c,N-Formyl maleamic acid,C5H4NO4,Presence
+orn__L_e,L Ornithine C5H13N2O2,C5H13N2O2,Presence
+p_xyl_c,P-methyltoluene,C8H10,Presence
+p_xyl_e,P-methyltoluene,C8H10,Presence
+p_xyl_p,P-methyltoluene,C8H10,Presence
+pea_c,Phenylethyl alcohol,C8H9O,Presence
+pea_e,Phenylethyl alcohol,C8H9O,Presence
+peamn_c,Phenethylamine,C8H12N,Presence
+pep_e,Phosphoenolpyruvate,C3H2O6P,Presence
+pep_p,Phosphoenolpyruvate,C3H2O6P,Presence
+pheme_e,Protoheme C34H30FeN4O4,C34H30FeN4O4,Presence
+pheme_p,Protoheme C34H30FeN4O4,C34H30FeN4O4,Presence
+phitcoa_c,E-Phenylitaconyl-CoA,C32H39N7O19P3S,Presence
+pime_c,Pimelate,C7H10O4,Presence
+pime_e,Pimelate,C7H10O4,Presence
+pmcoa_c,Pimeloyl-CoA,C28H41N7O19P3S,Presence
+ppap_e,Propanoyl phosphate,C3H5O5P,Presence
+ppoh_c,1-Propanol,C3H8O,Presence
+ppoh_e,1-Propanol,C3H8O,Presence
+ppoh_p,1-Propanol,C3H8O,Presence
+rbt_c,Ribitol,C5H12O5,Presence
+rbt_e,Ribitol,C5H12O5,Presence
+rnam_p,N Ribosylnicotinamide C11H15N2O5,C11H15N2O5,Presence
+salc_c,Salicylate,C7H5O3,Presence
+scys__L_c,S-Sulfo-L-cysteine,C3H6NO5S2,Presence
+thmnp_c,Tetrahydromonapterin,C9H15N5O4,Presence
+thrp_c,L-Threonine O-3-phosphate,C4H8NO6P,Presence
+tnt_c,2 4 6 Trinitrotoluene,NO2,Absence
+tnt_e,2 4 6 Trinitrotoluene,NO2,Absence
+tnt_p,2 4 6 Trinitrotoluene,NO2,Absence
+tntmdh_c,2 4 6 trinitrotoluene  Meisenheimer dihydride complex,H2NO2,Absence
+tntmmh_c,2 4 6 Trinitrotoluene Meisenheimer monohydride complex,HNO2,Absence
+toct2eACP_c,Trans-Oct-2-enoyl-[acyl-carrier protein],C392H615N96O143P0S3,Presence
+tton_e,Trithionate,H2O6S3,Absence
+ttrcyc_c,Tetracycline,C22H24N2O8,Presence
+udpacgal_c,UDP-N-acetyl-D-galactosamine,C17H25N3O17P2,Presence
+vanlt_c,Vanillate,C8H7O4,Presence
+vanlt_e,Vanillate,C8H7O4,Presence
+vanlt_p,Vanillate,C8H7O4,Presence
+2ahhmp_c,2 Amino 4 hydroxy 6 hydroxymethyl 7 8 dihydropteridine C7H9N5O2,C7H9N5O2,Presence
+34dhpha_c,3-4-Dihydroxyphenylacetate,C8H7O4,Presence
+3hoxpac_c,3 Hydroxyphenylacetic acid C8H8O3,C8H7O3,Presence
+3hoxpac_e,3 Hydroxyphenylacetic acid C8H8O3,C8H7O3,Presence
+3hoxpac_p,3 Hydroxyphenylacetic acid C8H8O3,C8H7O3,Presence
+cys__D_e,D-Cysteine,C3H7NO2S,Presence
+cys__D_p,D-Cysteine,C3H7NO2S,Presence
+pald_c,Phosphonoacetaldehyde,C2H3O4P,Presence
+phnac_c,Phosphonoacetate,C2H2O5P,Presence
+pydam_e,Pyridoxamine,C8H13N2O2,Presence
+pydam_p,Pyridoxamine,C8H13N2O2,Presence
+4hbald_c,4-Hydroxybenzaldehyde,C7H6O2,Presence
+4hoxpacd_c,4-Hydroxyphenylacetaldehyde,C8H8O2,Presence
+4hphac_c,4-Hydroxyphenylacetate,C8H7O3,Presence
+4hphac_e,4-Hydroxyphenylacetate,C8H7O3,Presence
+4hphac_p,4-Hydroxyphenylacetate,C8H7O3,Presence
+diact_e,Diacetyl C4H6O2,C4H6O2,Presence
+Largn_c,L-Arogenate,C10H13NO5,Presence
+abg4_c,4-aminobenzoate-glutamate,C12H11N2O5,Presence
+abg4_e,4-aminobenzoate-glutamate,C12H11N2O5,Presence
+bzal_c,Benzaldehyde,C7H6O,Presence
+bzal_e,Benzaldehyde,C7H6O,Presence
+citr__L_e,L-Citrulline,C6H13N3O3,Presence
+entermg_c,Enterobactin monoglycosylated,C36H36N3O20,Presence
+id3acald_c,Indole 3 acetaldehyde C10H9NO,C10H9NO,Presence
+id3acald_e,Indole 3 acetaldehyde C10H9NO,C10H9NO,Presence
+salchs1_c,Salmochelin-S1,C26H29N2O16,Presence
+salchs2_c,Salmochelin-S2,C42H47N3O26,Presence
+salchs2fe_c,Salmochelin-S2-Fe-III,C42FeH48N3O26,Presence
+salchs2fe_e,Salmochelin-S2-Fe-III,C42FeH48N3O26,Presence
+salchs2fe_p,Salmochelin-S2-Fe-III,C42FeH48N3O26,Presence
+salchsx_c,Salmochelin-SX,C16H20NO11,Presence
+salchsx_e,Salmochelin-SX,C16H20NO11,Presence
+salchsx_p,Salmochelin-SX,C16H20NO11,Presence
+2mpdhl_c,S-(2-Methylpropanoyl)-dihydrolipoamide,C12H22NO2S2,Presence
+2ohed_c,"2-Oxohept-3-ene-1,7-dioate",C7H6O5,Presence
+3odd6coa_c,3 oxo  6Z  dodedecenyl CoA,C33H48N7O18P3S,Presence
+4h2kpi_c,4-Hydroxy-2-ketopimelate,C7H8O6,Presence
+5a2opntn_c,5-Amino-2-oxopentanoate,C5H9NO3,Presence
+R_3hdd6coa_c, 3 hydroxy  6Z  dodedecenyl CoA,C33H50N7O18P3S,Presence
+R_3hdd6e_c, 3 Hydroxydodecanoic 6 en acid,C12H19O3,Presence
+R_3hdd6e_e, 3 Hydroxydodecanoic 6 en acid,C12H19O3,Presence
+R_3hdd6e_p, 3 Hydroxydodecanoic 6 en acid,C12H19O3,Presence
+benzcoa_c,Benzoyl-CoA,C28H40N7O17P3S,Presence
+dec4coa_c,4 cis decenoyl CoA,C31H46N7O17P3S,Presence
+fcmcbtt_e,"Iron(III) chelated carboxymycobactin T (R=8 carbon, final carbon is carboxyl group)",C33FeH48N5O13,Presence
+ibcoa_c,Isobutyryl-CoA,C25H38N7O17P3S,Presence
+orn__D_c,D-Ornithine,C5H13N2O2,Presence
+raffin_c,Raffinose C18H32O16,C18H32O16,Presence
+ribflv_e,Riboflavin C17H20N4O6,C17H22N4O6,Presence
+salc_e,Salicylate,C7H5O3,Presence
+salchs2_e,Salmochelin-S2,C42H48N3O26,Presence
+salchs2_p,Salmochelin-S2,C42H48N3O26,Presence
+sucr_c,Sucrose C12H22O11,C12H22O11,Presence
+R_3hdcoa_c,(R)-Hydroxydecanoyl-CoA,C31H50N7O18P3S,Presence
+2ddara_c,2-dehydro-3-deoxy-D-arabinonate,C5H7O5,Presence
+2dhphaccoa_c,"1,2-Dihydroxy-1,2-dihydrophenylacetyl-CoA",C29H40N7O19P3S,Presence
+2mp2coa_c,2-Methylprop-2-enoyl-CoA,C25H36N7O17P3S,Presence
+3hbcoa__R_c,(R)-3-Hydroxybutyryl-CoA,C25H38N7O18P3S,Presence
+3hibutcoa_c,(S)-3-Hydroxyisobutyryl-CoA,C25H38N7O18P3S,Presence
+3hmp_c,3-Hydroxy-2-methylpropanoate,C4H7O3,Presence
+3hptcoa_c,3-Hydroxypentoyl-CoA,C26H40N7O18P3S,Presence
+cro4_c,Chromate,O2,Absence
+cro4_e,Chromate,O2,Absence
+cro4_p,Chromate,O2,Absence
+dxylnt_c,D-Xylonate,C5H9O6,Presence
+istnt_c,Isethionate C2H5O4S,C2H5O4S,Presence
+istnt_e,Isethionate C2H5O4S,C2H5O4S,Presence
+pt2coa_c,Pent-2-enoyl-CoA,C26H38N7O17P3S,Presence
+4izp_c,4-Imidazolone-5-propanoate,C6H7N2O3,Presence
+forglu_c,N-Formimidoyl-L-glutamate,C6H9N2O4,Presence
+forglu_e,N-Formimidoyl-L-glutamate,C6H9N2O4,Presence
+urcan_c,Urocanate C6H5N2O2,C6H5N2O2,Presence
+sheme_e,Siroheme C42H36FeN4O16,C42H36FeN4O16,Presence
+sheme_p,Siroheme C42H36FeN4O16,C42H36FeN4O16,Presence
+arabl__D_c,Arabl  D c,C5H12O5,Presence
+dextrin_e,Dextrin C12H20O10,C12H20O10,Presence
+hco3_e,Bicarbonate,CHO3,Presence
+starch_e,Starch C12H20O10,C12H20O10,Presence
+cpgn_e,Coprogen,C35H56FeN6O13,Presence
+cpgn_un_e,Coprogen unloaded (no Fe(III)),C35H56N6O13,Presence
+mmet_c,S-Methyl-L-methionine,C6H14NO2S,Presence
+mmet_e,S-Methyl-L-methionine,C6H14NO2S,Presence
+mmet_p,S-Methyl-L-methionine,C6H14NO2S,Presence
+fe3hox_e,Fe(III)hydroxamate,C9H23FeN3O6,Presence
+fe3hox_un_e,"Fe(III)hydoxamate, unloaded",C9H23N3O6,Presence
+23dhbzs3_e,2-3-dihydroxybenzoylserine trimer,C30H28N3O16,Presence
+fol_c,Folate,C19H17N7O6,Presence
+fol_e,Folate,C19H17N7O6,Presence
+r15bp_c,"D-Ribose 1,5-bisphosphate",C5H8O11P2,Presence
+ppac_c,Phosphonoacetate,C2H5O5P,Presence
+sdhlam_c,S Succinyldihydrolipoamide C12H20NO4S2,C12H20NO4S2,Presence
+h2co3_c,Carbonic acid,CH2O3,Presence
+srb__L_c,L Sorbose C6H12O6,C6H14O6,Presence
+srb__L_e,L Sorbose C6H12O6,C6H14O6,Presence
+2maacoa_c,2-Methyl-3-acetoacetyl-CoA,C26H38N7O18P3S,Presence
+2mb2coa_c,Trans-2-Methylbut-2-enoyl-CoA,C26H38N7O17P3S,Presence
+2oxoadp_c,2 Oxoadipate C6H6O5,C6H6O5,Presence
+34dhsa_c,"3,4-Dihydroxy-9,10-secoandrosta-1,3,5(10)-triene-9,17-dione",C19H23O4,Presence
+3hbycoa_c, S  3 Hydroxybutyryl CoA C25H38N7O18P3S,C25H38N7O18P3S,Presence
+3hmbcoa_c,(S)-3-Hydroxy-2-methylbutyryl-CoA,C26H40N7O18P3S,Presence
+3hsa_c,Secophenol,C19H23O3,Presence
+3optcoa_c,3-Ocopentanoyl-CoA,C26H38N7O18P3S,Presence
+49dsha_c,"9,10-disecoandrosta-1(10),2-dien-4-oate",C19H23O6,Presence
+4hoxoh_c,4-Hydroxy-2-oxohexanoic acid,C6H9O4,Presence
+5mtr_e,5-Methylthio-D-ribose,C6H12O4S,Presence
+5mtr_p,5-Methylthio-D-ribose,C6H12O4S,Presence
+5ohhip_c,"3-[(3aS,4S,7aS)-7a-Methyl-1-hydroxy-5-oxo-octahydro-1H-inden-4-yl]propanoic acid",C13H19O4,Presence
+5ohhipcoa_c,"5-hydroxy-3-[(3aS,4S,5R,7aS)-7a-methyl-1,5-dioxo-octahydro-1H-inden-4-yl]propanoyl-CoA",C34H53N7O19P3S,Presence
+9ohadd_c,"9alpha-Hydroxyandrosta-1,4-diene-3,17-dione",C19H23O3,Presence
+S_gtrdhdlp_c,S-Glutaryldihydrolipoamide,C13H22NO4S2,Presence
+abt__L_c,L Arabinitol C5H12O5,C5H12O5,Presence
+andrs14dn317dn_c,"Androsta-1,4-diene-3,17-dione",C19H23O2,Presence
+andrstndn_c,"Androst-4-ene-3,17-dione",C19H25O2,Presence
+btn_p,Biotin,C10H15N2O3S,Presence
+cchol_c,26-Carboxycholest-4-en-3-one,C27H40O3,Presence
+chol4en3one_c,Cholest-4-en-3-one,C27H44O,Presence
+cholc3coa_c,CoA-cholest-4-en-3-one C3 side chain,C43H64N7O18P3S,Presence
+cholc5coa_c,CoA-cholest-4-en-3-one C5 side chain,C45H68N7O18P3S,Presence
+cholc8coa_c,CoA-cholest-4-en-3-one C8 side chain,C48H74N7O18P3S,Presence
+cholenec3coa_c,CoA-20-ene-cholest-4-en-3-one C5 side chain,C43H63N7O18P3S,Presence
+cholenec5coa_c,CoA-22-ene-cholest-4-en-3-one C5 side chain,C45H66N7O18P3S,Presence
+cholenec8coa_c,CoA-24-ene-cholest-4-en-3-one C8 side chain,C48H72N7O18P3S,Presence
+chsterol_c,Chsterol c,C27H46O,Presence
+chsterol_e,Chsterol c,C27H46O,Presence
+ctncoa_c,Crotonyl-CoA,C25H40N7O17P3S,Presence
+dccoa_c,Decanoyl CoA C31H50N7O17P3S,C31H50N7O17P3S,Presence
+ddcoa_c,Dodecanoyl CoA  n C120CoA  C33H54N7O17P3S,C33H54N7O17P3S,Presence
+g6p_A_c,Alpha-D-glucose 6 phosphate,C6H11O9P,Presence
+glc__aD_e,Alpha D-glucose,C6H12O6,Presence
+hchol_c,26-Hydroxycholest-4-en-3-one,C27H42O2,Presence
+hcholc3coa_c,CoA-20-hydroxy-cholest-4-en-3-one C5 side chain,C43H65N7O19P3S,Presence
+hcholc5coa_c,CoA-22-hydroxy-cholest-4-en-3-one C5 side chain,C45H68N7O19P3S,Presence
+hcholc8coa_c,CoA-24-hydroxy-cholest-4-en-3-one C8 side chain,C48H74N7O19P3S,Presence
+hcit_c,2 Hydroxybutane 1 2 4 tricarboxylate C7H7O7,C7H10O7,Presence
+hhd_c,"(2Z,4Z)-2-Hydroxyhexa-2,4-dienoic acid",C6H8O3,Presence
+hia_c,"3-[(3aS,4S,5R,7aS)-5-hydroxy-7a-methyl-1-oxo-octahydro-1H-indene-4-carboxylate",C11H19O4,Presence
+hia_e,"3-[(3aS,4S,5R,7aS)-5-hydroxy-7a-methyl-1-oxo-octahydro-1H-indene-4-carboxylate",C11H19O4,Presence
+hicit_c,Homoisocitrate C7H7O7,C7H10O7,Presence
+hip_c,"3-[(3aS,4S,7aS)-7a-Methyl-1,5-dioxo-octahydro-1H-inden-4-yl]propanoic acid",C13H17O4,Presence
+hipecoa_c,"(2E)-3-[(3aS,4S,5R,7aS)-5-hydroxy-7a-methyl-1-oxo-octahydro-1H-inden-4-yl]prop-2-enoyl-CoA",C34H51N7O19P3S,Presence
+hipocoa_c,"3-[(3aS,4S,5R,7aS)-5-hydroxy-7a-methyl-1-oxo-octahydro-1H-inden-4-yl]-3-oxopropanoyl-CoA",C34H51N7O20P3S,Presence
+hipohcoa_c,"3-[(3aS,4S,5R,7aS)-5-hydroxy-7a-methyl-1-oxo-octahydro-1H-inden-4-yl]-3-hydroxypropanoyl-CoA",C34H53N7O20P3S,Presence
+istfrnA_e,Iron bound extracellular staphyloferrin A,C17FeH24N2O14,Presence
+m2bcoa_c,2-methylbutanoyl-CoA,C26H44N7O17P3S,Presence
+n6all26d_c,"N6-Acetyl-LL-2,6-diaminoheptanedioate",C9H15N2O5,Presence
+nicrns_c,Nicotinate D-ribonucleoside,C11H13NO6,Presence
+ochol_c,26-Oxocholest-4-en-3-one,C27H40O2,Presence
+ocholc5coa_c,CoA-22-one-cholest-4-en-3-one C5 side chain,C45H66N7O19P3S,Presence
+ocholc8coa_c,CoA-24-one-cholest-4-en-3-one C8 side chain,C48H72N7O19P3S,Presence
+pad_c,2 Phenylacetamide C8H9NO,C8H9NO,Presence
+prohisglu_c,Proline-histidine-glutamine tripeptide,C16H24N5O7,Presence
+prohisglu_e,Proline-histidine-glutamine tripeptide,C16H24N5O7,Presence
+pydxn_e,Pyridoxine,C8H11NO3,Presence
+pydxn_p,Pyridoxine,C8H11NO3,Presence
+serglugly_c,Serine-glutamine-glycine tripeptide,C10H18N3O8,Presence
+serglugly_e,Serine-glutamine-glycine tripeptide,C10H18N3O8,Presence
+stfrnA_c,Staphyloferrin A,C17H24N2O14,Presence
+stfrnA_e,Staphyloferrin A,C17H24N2O14,Presence
+trans_dd2coa_c,Trans Dodec 2 enoyl CoA C33H52N7O17P3S,C33H52N7O17P3S,Presence
+vaccoa_c,Vinylacetyl-CoA,C25H36N7O17P3S,Presence
+4abutn_e,4-Aminobutanal,C4H10NO,Presence
+2hymeph_c,2-(Hydroxymethyl)phenol,C7H8O2,Presence
+salcn6p_c,Salicin 6-phosphate,C13H17O10P,Presence
+nal2a6o_c,N-Acetyl-L-2-amino-6-oxopimelate,C9H11NO6,Presence
+ind3ac_c,Indole 3 acetate C10H8NO2,C10H8NO2,Presence
+ind3ac_e,Indole 3 acetate C10H8NO2,C10H8NO2,Presence
+ind3ac_p,Indole 3 acetate C10H8NO2,C10H8NO2,Presence
+33hmeoxobut_c,2-Oxo-3-hydroxyisovalerate,C5H7O4,Presence
+3hmop_c,(R)-3-Hydroxy-3-methyl-2-oxopentanoate,C6H9O4,Presence
+man1p_e,D-Mannose 1-phosphate,C6H11O9P,Presence
+3oxoadp_e,3-Oxoadipate,C6H6O5,Presence
+3oxoadp_p,3-Oxoadipate,C6H6O5,Presence
+5g2oxpt_c,2-Oxoarginine,C6H11N3O3,Presence
+6a2ohxnt_c,6-Amino-2-oxohexanoate,C6H11NO3,Presence
+arg__D_c,D-Arginine,C6H15N4O2,Presence
+lys__D_c,D-Lysine,C6H15N2O2,Presence
+phe__D_c,D-phenylalanine,C9H9NO2,Presence
+5mcsn_e,5-Methylcytosine,C5H7N3O,Presence
+5mcsn_p,5-Methylcytosine,C5H7N3O,Presence
+achms_c,O Acetyl L homoserine C6H11NO4,C6H11NO4,Presence
+frmd_c,Formamide,CH3NO,Presence
+4abz_e,4-Aminobenzoate,C7H6NO2,Presence
+asp__D_e,D-Aspartate,C4H6NO4,Presence
+R_3hcmrs7e_c, 3 hydroxy cis myristol 7 en,C14H25O3,Presence
+R_3hcmrs7e_e, 3 hydroxy cis myristol 7 en,C14H25O3,Presence
+R_3hcmrs7e_p, 3 hydroxy cis myristol 7 en,C14H25O3,Presence
+R_3hcmrs7ecoa_c,(R)-3-hydroxy-cis-myristol-7-eoyl-CoA,C35H56N7O18P3S,Presence
+tde2coa_c,Trans cis tetradeca 2 7 dienoyl CoA,C35H54N7O17P3S,Presence
+amacald_c,Aminoacetaldehyde C2H5NO,C2H6NO,Presence
+pppgpp_c,PppGpp,C10H18N5O20P5,Presence
+L2aadp6sa_c,L 2 Aminoadipate 6 semialdehyde C6H11NO3,C6H11NO3,Presence
+L2aadp_c,L 2 Aminoadipate C6H10NO4,C6H10NO4,Presence
+aad_c,Acetyl-adenylate,C12H14N5O8P,Presence
+cellb_c,Cellobiose,C12H22O11,Presence
+ppad_c,Propionyladenylate,C13H16N5O8P,Presence
+abt__L_e,L Arabinitol C5H12O5,C5H12O5,Presence
+hipcoa_c,"3-[(3aS,4S,7aS)-7a-Methyl-1,5-dioxo-octahydro-1H-inden-4-yl]propanoyl-CoA;",C34H51N7O19P3S,Presence
+h2co3_e,Carbonic acid,CH2O3,Presence
+23dhbzs3_p,2-3-dihydroxybenzoylserine trimer,C30H28N3O16,Presence
+3o6athcoa_c,3 Oxo 6 acetylthiohexanoyl CoA,C23H32N7O16P3S,Presence
+3odd5coa_c,3 oxo  5Z  tetradecenyl CoA,C35H54N7O18P3S,Presence
+3oddccoa_c,3 oxo  5Z  dodedecenyl CoA,C33H51N7O18P3S,Presence
+3ohd58coa_c,3 oxo  5Z 8Z  tetradec dienyl CoA,C35H50N7O18P3S,Presence
+3ohpcoa_c,3 oxoheptanoyl CoA,C28H42N7O18P3S,Presence
+3ononacoa_c,3 Oxononanoyl CoA,C30H44N7O18P3S,Presence
+3opbcoa_c,3 Oxophenylbutanoyl CoA,C31H40N7O18P3S,Presence
+3opdecacoa_c,3 Oxophenyldecanoyl CoA,C37H46N7O18P3S,Presence
+3ophpcoa_c,3 Oxophenylheptanoyl CoA,C34H42N7O18P3S,Presence
+3ophxacoa_c,3 Oxophenylhexanoyl CoA,C33H42N7O18P3S,Presence
+3opnonacoa_c,3 Oxophenylnonanoyl CoA,C36H44N7O18P3S,Presence
+3opoctacoa_c,3 Oxophenyloctanoyl CoA,C35H44N7O18P3S,Presence
+3opptcoa_c,3 Oxophenylpentanoyl CoA,C32H40N7O18P3S,Presence
+3otdccoa_c,3 oxo  7Z  tetradecenyl CoA,C35H54N7O18P3S,Presence
+R_3h6athcoa_c, 3 Hydroxy 6 acetylthiohexanoyl CoA,C23H34N7O16P3S,Presence
+R_3hcddec5ecoa_c,(R)-Hydroxydodecanoyl-5-en-CoA,C33H53N7O18P3S,Presence
+R_3hddcoa_c,(R)-3-Hydroxydodecanoyl-CoA,C33H54N7O18P3S,Presence
+R_3hhcoa_c,(R)-Hydroxyhexanoyl-CoA,C27H42N7O18P3S,Presence
+R_3hhpcoa_c, 3 Hydroxyheptanoyl CoA,C28H44N7O18P3S,Presence
+R_3hmrscoa_c,(R)-3-hydroxytetradecanoyl-coa,C35H58N7O18P3S,Presence
+R_3hnonacoa_c, 3 Hydroxynonanoyl CoA,C30H46N7O18P3S,Presence
+R_3hpbcoa_c, 3 Hydroxyphenylbutanoyl CoA,C31H42N7O18P3S,Presence
+R_3hpdecacoa_c, 3 Hydroxyphenyldecanoyl CoA,C37H48N7O18P3S,Presence
+R_3hphpcoa_c, 3 Hydroxyphenylheptanoyl CoA,C34H44N7O18P3S,Presence
+R_3hphxacoa_c, 3 Hydroxyphenylhexanoyl CoA,C33H44N7O18P3S,Presence
+R_3hpnonacoa_c, 3 Hydroxyphenylnonanoyl CoA,C36H46N7O18P3S,Presence
+R_3hpoctacoa_c, 3 Hydroxyphenyloctanoyl CoA,C35H46N7O18P3S,Presence
+R_3hpptcoa_c, 3 Hydroxyphenylpentanoyl CoA,C32H42N7O18P3S,Presence
+R_3htd58coa_c, 3 hydroxy  5Z 8Z  tetradecedienyl CoA,C35H52N7O18P3S,Presence
+R_3htd5coa_c, 3 hydroxy  5Z  tetradecenyl CoA,C35H56N7O18P3S,Presence
+d5kg_c,2-Deoxy-5-keto-D-gluconic acid,C6H9O6,Presence
+d5kgp_c,2-Deoxy-5-keto-D-gluconic acid 6-phosphate,C6H8O9P,Presence
+dkdi_c,"D-2,3-Diketo 4-deoxy-epi-inositol",C6H8O5,Presence
