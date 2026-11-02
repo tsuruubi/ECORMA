@@ -35,12 +35,21 @@ Tools for metabolic model reconstruction and FBA simulations.
 * **script/**: 
     * `01_Format_cds.Rmd`: R script for FASTA header normalization.
     * `02_Run_Carveme.sh`: Shell script for model reconstruction.
-    * `03_Run_FBA.ipynb`: Jupyter Notebook for FBA.
+    * `03_Run_FBA.ipynb`: Jupyter Notebook for FBA. **Run from the `script/` directory** (e.g. `cd script && jupyter notebook`).
 
 ### 03_Main_Analysis
 Integration and final statistical analysis.
-* **EzClermont/**: Phylogenetic data (phylogroups) for ECOR strains.
-* **Outputs_Main/**: Final processed dataframes for growth rates, phylogeny, and essential reaction matrices.
+* **Carbon_Info/**: `Carbon_name.csv` (copy from 01_Generate_Growth_Profiles/).
+* **EzClermont/**: Phylogenetic data and phylogroup assignments for ECOR strains.
+* **FBA/**: FBA output files copied from 02_Flux_Balance_Analysis/.
+    * `growth_media/`: `Abb_carbon.csv` (abbreviated carbon source names).
+    * `output_rev10/`: Essential reactions and flux distributions.
+* **From_RawOD_to_GrowthProf/**: Growth profile outputs copied from 01_Generate_Growth_Profiles/.
+    * `Output/`: Fitted results (`stat_fit_*.csv`).
+    * `experiment_info.xlsx`: Plate layout and experimental metadata.
+* **Preculture/**: Preculture OD data for ECOR and MA strains.
+    * `Output/`: `preculod_ecor.csv`, `preculod_ma.csv`.
+* **Outputs_Main/**: Final processed dataframes for downstream use.
 * **Main_Analysis.Rmd**: R script for generating figures and performing statistical tests.
 
 ---
