@@ -4,6 +4,14 @@ author: "tsuru"
 date: "2025-12-15"
 output: html_document
 ---
+# READ ME
+```{r}
+# Run this script by knitting, or set working directory to 03_Main_Analysis/:
+# setwd("path/to/ECORMA/03_Main_Analysis")
+```
+
+
+
 # 0 Initial settings 
 ## 0.1 Load R packages
 ```{r, message=FALSE}
@@ -221,7 +229,7 @@ calculate_gem_distances <- function(csv_filename, strain_id) {
   carbon_map <- read_csv(file.path(getwd(), "FBA","growth_media", "Abb_carbon.csv"))
   
   # Load essential reaction list for the specific strain
-  ess_data <- read_csv(file.path(getwd(), "FBA", "output", "essential_by_species", csv_filename))
+  ess_data <- read_csv(file.path(getwd(), "FBA", "output_rev10", "essential_by_species", csv_filename))
   
   # Join with mapping and filter out unassigned carbons
   ess_data <- ess_data %>%
@@ -352,7 +360,7 @@ generate_essential_matrix <- function(csv_filename, strain_id) {
   carbon_map <- read_csv(file.path(getwd(), "FBA", "growth_media","Abb_carbon.csv"))
   
   # Load raw essentiality data
-  raw_data <- read_csv(file.path(getwd(), "FBA", "output", "essential_by_species", csv_filename))
+  raw_data <- read_csv(file.path(getwd(), "FBA", "output_rev10", "essential_by_species", csv_filename))
   
   # Join and filter valid carbon sources
   processed_data <- raw_data %>%
