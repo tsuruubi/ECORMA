@@ -1,0 +1,34 @@
+species,carbon,n_essential_reactions
+ECOR58,Acetate,232
+ECOR58,Alanine,234
+ECOR58,Arabinose,234
+ECOR58,Arginine,235
+ECOR58,Aspartate,230
+ECOR58,Citrate,232
+ECOR58,Fructose,232
+ECOR58,Fumarate,231
+ECOR58,Galactose,240
+ECOR58,GlcNAc,233
+ECOR58,Gluconate,231
+ECOR58,Glucose,232
+ECOR58,Glutamate,234
+ECOR58,Glycerol,236
+ECOR58,Lactose,239
+ECOR58,Lysine,236
+ECOR58,Malic acid,231
+ECOR58,Maltose,232
+ECOR58,Mannitol,232
+ECOR58,Mannose,233
+ECOR58,Melibiose,238
+ECOR58,Proline,234
+ECOR58,Pyruvate,235
+ECOR58,Rhamnose,233
+ECOR58,Ribose,232
+ECOR58,Serine,228
+ECOR58,Sorbitol,232
+ECOR58,Succinate,229
+ECOR58,Sucrose,233
+ECOR58,Threonine,233
+ECOR58,Trehalose,232
+ECOR58,Xylose,233
+ECOR58,lactic acid,235
