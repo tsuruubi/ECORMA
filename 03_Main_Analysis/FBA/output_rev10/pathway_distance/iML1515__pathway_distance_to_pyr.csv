@@ -1,0 +1,35 @@
+Carbon_Source,Steps_to_Pyruvate,Path
+Pyruvate,2.0,pyr_e -> pyr_p -> pyr_c
+Alanine,3.0,ala__L_e -> ala__L_p -> ala__L_c -> pyr_c
+lactic acid,3.0,lac__L_e -> lac__L_p -> lac__L_c -> pyr_c
+Serine,3.0,ser__L_e -> ser__L_p -> ser__L_c -> pyr_c
+Malic acid,3.0,mal__L_e -> mal__L_p -> mal__L_c -> pyr_c
+Fumarate,4.0,fum_e -> fum_p -> fum_c -> mal__L_c -> pyr_c
+Citrate,4.0,cit_e -> cit_p -> cit_c -> oaa_c -> pyr_c
+Succinate,4.0,succ_e -> succ_p -> succ_c -> mal__L_c -> pyr_c
+Glutamate,4.0,glu__L_e -> glu__L_p -> glu__L_c -> akg_c -> pyr_c
+Aspartate,4.0,asp__L_e -> asp__L_p -> asp__L_c -> oaa_c -> pyr_c
+Fructose,5.0,fru_e -> fru_p -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Gluconate,5.0,glcn_e -> glcn_p -> glcn_c -> 6pgc_c -> 2ddg6p_c -> pyr_c
+Threonine,5.0,thr__L_e -> thr__L_p -> thr__L_c -> gly_c -> ser__L_c -> pyr_c
+Glucose,6.0,glc__D_e -> glc__D_p -> g6p_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Ribose,6.0,rib__D_e -> rib__D_p -> rib__D_c -> r5p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Mannitol,6.0,mnl_e -> mnl_p -> mnl1p_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Proline,6.0,pro__L_e -> pro__L_p -> pro__L_c -> 1pyr5c_c -> glu__L_c -> ala__L_c -> pyr_c
+Arginine,6.0,arg__L_e -> arg__L_p -> arg__L_c -> argsuc_c -> fum_c -> mal__L_c -> pyr_c
+Sorbitol,6.0,sbt__D_e -> sbt__D_p -> sbt6p_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Mannose,6.0,man_e -> man_p -> man6p_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Glycerol,7.0,glyc_e -> glyc_p -> glyc_c -> glyc3p_c -> dhap_c -> mthgxl_c -> lac__D_c -> pyr_c
+Lactose,7.0,lcts_e -> lcts_p -> glc__D_p -> g6p_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Rhamnose,7.0,rmn_e -> rmn_p -> rmn_c -> rml_c -> rml1p_c -> lald__L_c -> lac__L_c -> pyr_c
+Trehalose,7.0,tre_e -> tre_p -> tre6p_c -> g6p_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Xylose,7.0,xyl__D_e -> xyl__D_p -> xyl__D_c -> xylu__D_c -> xu5p__D_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+GlcNAc,7.0,acgam_e -> acgam_p -> acgam6p_c -> gam6p_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Acetate,8.0,ac_e -> ac_p -> ac_c -> oxa_c -> for_c -> fgam_c -> glu__L_c -> akg_c -> pyr_c
+Maltose,8.0,malt_e -> malt_p -> malt_c -> glc__D_c -> fru_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Galactose,8.0,gal_e -> gal_p -> gal_c -> gal1p_c -> g1p_c -> dtdpglu_c -> dtdp4d6dg_c -> akg_c -> pyr_c
+Arabinose,8.0,arab__L_e -> arab__L_p -> arab__L_c -> rbl__L_c -> ru5p__L_c -> xu5p__D_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Melibiose,8.0,melib_e -> melib_p -> melib_c -> glc__D_c -> fru_c -> f6p_c -> g3p_c -> 2dh3dgal6p_c -> pyr_c
+Lysine,8.0,lys__L_e -> lys__L_p -> lys__L_c -> frulysp_c -> g6p_c -> f6p_c -> glu__L_c -> ala__L_c -> pyr_c
+Sucrose,,No Path
+Histidine,,No Path
