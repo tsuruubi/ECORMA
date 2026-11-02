@@ -1,0 +1,35 @@
+species,carbon,ex_id,nC,baseline_Z,status
+ECOR38,Succinate,EX_succ_e,4,487.1123876668872,optimal
+ECOR38,Alanine,EX_ala__L_e,3,871.6632883896588,optimal
+ECOR38,Proline,EX_pro__L_e,5,542.1794788121155,optimal
+ECOR38,Acetate,EX_ac_e,2,336.4015404075127,optimal
+ECOR38,Mannitol,EX_mnl_e,6,808.193978774147,optimal
+ECOR38,Citrate,EX_cit_e,6,586.834310774518,optimal
+ECOR38,Glucose,EX_glc__D_e,6,741.7857422207477,optimal
+ECOR38,Ribose,EX_rib__D_e,5,852.3004645640812,optimal
+ECOR38,Glycerol,EX_glyc_e,3,891.6757714183647,optimal
+ECOR38,Serine,EX_ser__L_e,3,768.7799280546061,optimal
+ECOR38,Sorbitol,EX_sbt__D_e,6,808.1939787742085,optimal
+ECOR38,Maltose,EX_malt_e,12,731.7857422207353,optimal
+ECOR38,Galactose,EX_gal_e,6,787.7472820640501,optimal
+ECOR38,Mannose,EX_man_e,6,741.785742220762,optimal
+ECOR38,Trehalose,EX_tre_e,12,726.785742220764,optimal
+ECOR38,Lactose,EX_lcts_e,12,766.1107289731904,optimal
+ECOR38,Melibiose,EX_melib_e,12,766.1107289731864,optimal
+ECOR38,Fructose,EX_fru_e,6,731.7857422207474,optimal
+ECOR38,Arabinose,EX_arab__L_e,5,793.1142337931296,optimal
+ECOR38,Rhamnose,EX_rmn_e,6,611.629408833446,optimal
+ECOR38,Xylose,EX_xyl__D_e,5,781.1142337931373,optimal
+ECOR38,GlcNAc,EX_acgam_e,8,774.1053825863961,optimal
+ECOR38,Sucrose,EX_sucr_e,12,726.7857422207516,optimal
+ECOR38,Gluconate,EX_glcn_e,6,699.0341548436437,optimal
+ECOR38,lactic acid,EX_lac__L_e,3,394.2268387107484,optimal
+ECOR38,Fumarate,EX_fum_e,4,597.8491038684583,optimal
+ECOR38,Malic acid,EX_mal__L_e,4,621.4454576877748,optimal
+ECOR38,Pyruvate,EX_pyr_e,3,758.459548102827,optimal
+ECOR38,Aspartate,EX_asp__L_e,4,582.9116372075192,optimal
+ECOR38,Glutamate,EX_glu__L_e,5,398.57608026304933,optimal
+ECOR38,Threonine,EX_thr__L_e,4,859.5100164894299,optimal
+ECOR38,Arginine,EX_arg__L_e,6,684.7146817628202,optimal
+ECOR38,Histidine,EX_his__L_e,6,581.3381034952879,optimal
+ECOR38,Lysine,EX_lys__L_e,6,618.2303223864201,optimal
