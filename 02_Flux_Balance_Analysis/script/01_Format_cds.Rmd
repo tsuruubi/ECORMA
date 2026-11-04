@@ -29,6 +29,8 @@ createEmptyDf = function( nrow, ncol, colnames = c() ){
 ```{r}
 # 1. Setup metadata and directories
 my_strains <- c("11", "31", "32", "38", "50", "55", "71")
+# my_strains <- sprintf("%02d", seq(1, 72)) # activate this for all ECOR models
+
 my_meta <- data.frame(
   strain = paste0("ECOR", my_strains),
   faa    = paste0("ECOR", my_strains, ".faa")
