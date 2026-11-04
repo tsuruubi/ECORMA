@@ -2842,7 +2842,7 @@ Sys.time()
 
 
 # 2 Phylogenetic tree of ECOR
-## 2.1 load phylogenetic relationship based on core-genome SNP typing using Parsnp (Fig.1a)
+## 2.1 load phylogenetic relationship based on core-genome SNP typing using Parsnp (Fig. 1a)
 ```{r}
 ## Strain typing based on alignmrernt of core genome sequnces using Pansnp
 ## for Parsnp: https://pmc.ncbi.nlm.nih.gov/articles/PMC4262987/
@@ -2952,7 +2952,7 @@ ggtree(sub_tree, layout = "circular") %<+% labdf_sub +
   geom_hilight(node = 123, fill = pgPalette['E'], alpha = 0.6) +
   geom_hilight(node = 76, fill = pgPalette['F'], alpha = 0.6) +
   geom_treescale(x = 0.006, y = 71, offset = 1) +
-  labs(title = "Phylogeny of ECOR strains and MG1655") +
+  labs(title = "") +
   theme(legend.position = "right")
 # TODO ggsave(file="Fig1a.pdf", path=my_outfile,dpi = 300, width = 6, height = 6,bg=NULL)
 
@@ -9156,6 +9156,8 @@ my_dat<-paste(getwd(),"Preculture","Output","preculod_ecor.csv",sep="/") %>%
 colnames(my_dat)<-qw(strain,carbon,precul_od)
 my_df<-left_join(gr_ecor_df,my_dat,by=c("strain","carbon"))
 
+summary(my_dat$precul_od)
+
 # Four Reps
 p<-ggscatter(my_df,x="precul_od",y="mu_max_allrep",color="carbon",alpha=0.2,legend="",
              title="Two reps",
@@ -11603,8 +11605,8 @@ tanglegram(dend_p, dend_t,
            highlight_distinct_edges = FALSE,
            highlight_branches_lwd = FALSE,         
            color_lines = col_vector_p, 
-           main_left = "Phylogeny",
-           main_right = "Trait-based",
+           main_left = "", # Phylogeny
+           main_right = "", # Trait-based
            lab.cex = 0.4,
            columns_width = c(5, 5, 5), 
            margin_inner = 4,           
@@ -11684,8 +11686,8 @@ tanglegram(dend_p, dend_t,
            highlight_distinct_edges = FALSE,
            highlight_branches_lwd = FALSE,
            color_lines = col_vector_p, 
-           main_left = "Phylogeny",
-           main_right = "Trait-based",
+           main_left = "",
+           main_right = "",
            lab.cex = 1,
            lwd = 2,
            columns_width = c(5, 5, 5),
@@ -17936,6 +17938,8 @@ if (nrow(significant_results) == 0) {
 } else {
   print(significant_results)
 }
+
+summary(my_dat$precul_od)  # 
 ```
 
 
